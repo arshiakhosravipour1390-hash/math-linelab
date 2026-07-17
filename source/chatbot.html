@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>🤖 دستیار هوشمند مثلث‌ها | هندسیار</title>
+    <link rel="icon" href="https://cdn.imgurl.ir/uploads/n979716_file_00000000841071f49b295d273da301ac.png">
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/dist/font-face.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/estedad-font@v3.1.0/dist/font-face.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" id="MathJax-script" async></script>
+    <style>
+        :root {
+            --bg: #0b1a2e;
+            --surface: #16283a;
+            --surface-light: #223a4e;
+            --text: #f2f5f7;
+            --text-dim: #a9b7c4;
+            --primary: #f39c12;
+            --primary-ink: #ffb347;
+            --secondary: #1abc9c;
+            --secondary-ink: #3fe0bd;
+            --success: #27ae60;
+            --grad-text: linear-gradient(135deg, var(--primary-ink), var(--secondary-ink));
+            --card-border: rgba(243,156,18,0.12);
+            --card-shadow: 0 12px 30px rgba(0,0,0,0.4);
+            --radius: 28px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Estedad', 'Vazirmatn', 'Tahoma', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+            transition: background 0.3s ease, color 0.3s ease;
+            line-height: 1.8;
+            min-height: 100vh;
+        }
+        .mono { font-family: 'JetBrains Mono', monospace; }
+        .grid-bg {
+            position: fixed; inset: 0; z-index: 0; pointer-events: none;
+            background-image:
+                linear-gradient(rgba(243,156,18,0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(26,188,156,0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+            mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 40%, transparent 90%);
+        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
+
+        body.light {
+            --bg: #f2ede4;
+            --surface: #ffffff;
+            --surface-light: #f7f2ea;
+            --text: #16233a;
+            --text-dim: #55627c;
+            --primary: #f39c12;
+            --primary-ink: #a35d0a;
+            --secondary: #1abc9c;
+            --secondary-ink: #0d7d68;
+            --card-border: rgba(22,35,58,0.09);
+            --card-shadow: 0 10px 26px rgba(22,35,58,0.08);
+        }
+        body.light .grid-bg { opacity: 0.35; }
+        body.light .topbar { background: rgba(242,237,228,0.92); border-bottom-color: rgba(22,35,58,0.06); }
+        body.light .side-menu { border-left-color: rgba(22,35,58,0.06); }
+        body.light .btn-ghost { border-color: rgba(22,35,58,0.16); }
+        body.light .chat-messages { background: #f8fafc; }
+        body.light .chat-input { background: #ffffff; }
+        body.light .bubble.bot { background: #ffffff; border-color: rgba(243,156,18,0.2); }
+        body.light .quick-btn { background: #f0f7ff; }
+        body.light .quick-btn:hover { background: var(--primary); color: #ffffff; }
+
+        .topbar {
+            position: sticky; top: 0; z-index: 50;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 14px 28px;
+            background: rgba(11,26,46,0.92);
+            backdrop-filter: blur(14px);
+            border-bottom: 1px solid rgba(243,156,18,0.1);
+            transition: background 0.3s ease;
+        }
+        .brand { display: flex; align-items: center; gap: 12px; font-size: 1.4rem; font-weight: 800; }
+        .brand .logo {
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+        }
+        .brand .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .theme-toggle, .menu-btn {
+            background: transparent; border: 1px solid rgba(243,156,18,0.18);
+            border-radius: 12px; padding: 6px 14px;
+            color: var(--text); font-size: 1.1rem; cursor: pointer; transition: 0.3s;
+        }
+        .theme-toggle:hover, .menu-btn:hover { background: rgba(243,156,18,0.1); transform: scale(1.04); }
+        .menu-btn { display: flex; flex-direction: column; gap: 5px; padding: 12px 14px; }
+        .menu-btn span { width: 20px; height: 2px; background: var(--text); border-radius: 2px; }
+
+        .side-menu {
+            position: fixed; top: 0; right: -340px; width: 300px; height: 100vh; z-index: 200;
+            background: var(--surface); border-left: 1px solid rgba(243,156,18,0.1);
+            padding: 100px 24px 30px; transition: right .4s cubic-bezier(.34,1.56,.64,1), background .3s ease;
+        }
+        .side-menu.open { right: 0; }
+        .side-menu a {
+            display: flex; align-items: center; gap: 14px; padding: 14px 18px;
+            color: var(--text); text-decoration: none; border-radius: 14px;
+            transition: 0.2s; margin-bottom: 6px;
+        }
+        .side-menu a:hover { background: rgba(243,156,18,0.1); transform: translateX(-6px); }
+        .side-menu-close { position: absolute; top: 20px; left: 20px; background: none; border: none; color: var(--text); font-size: 1.8rem; cursor: pointer; transition: 0.3s; }
+        .side-menu-close:hover { transform: rotate(90deg); }
+        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 150; display: none; backdrop-filter: blur(4px); }
+        .overlay.show { display: block; }
+
+        .chat-container {
+            max-width: 1000px;
+            margin: 30px auto;
+            background: var(--surface);
+            border-radius: var(--radius);
+            overflow: hidden;
+            border: 1px solid var(--card-border);
+            box-shadow: var(--card-shadow);
+            display: flex;
+            flex-direction: column;
+            min-height: 80vh;
+            max-height: 90vh;
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, #0b1a2e, #1a2f3f);
+            padding: 18px 24px;
+            border-bottom: 1px solid var(--card-border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .chat-header-left { display: flex; align-items: center; gap: 14px; }
+        .ai-badge {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #0b1a2e;
+            padding: 4px 14px;
+            border-radius: 30px;
+            font-size: .7rem;
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .chat-header h1 { font-size: 1.4rem; font-weight: 800; color: var(--text); }
+        .chat-header .sub { font-size: .75rem; color: var(--text-dim); }
+        .clear-btn {
+            background: rgba(231,76,60,0.15);
+            border: 1px solid rgba(231,76,60,0.2);
+            color: #e74c3c;
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-size: .8rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Estedad', 'Vazirmatn', sans-serif;
+        }
+        .clear-btn:hover { background: rgba(231,76,60,0.25); transform: scale(1.02); }
+
+        .quick-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 12px 20px;
+            background: var(--surface-light);
+            border-bottom: 1px solid var(--card-border);
+        }
+        .quick-btn {
+            background: rgba(243,156,18,0.08);
+            border: 1px solid rgba(243,156,18,0.15);
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-size: .8rem;
+            cursor: pointer;
+            color: var(--text);
+            transition: all 0.3s;
+            font-family: 'Estedad', 'Vazirmatn', sans-serif;
+            font-weight: 500;
+        }
+        .quick-btn:hover { background: var(--primary); color: #0b1a2e; transform: translateY(-2px); }
+        .quick-btn .icon { margin-left: 6px; }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            background: var(--surface);
+            transition: background 0.3s ease;
+        }
+        .chat-messages::-webkit-scrollbar { width: 5px; }
+        .chat-messages::-webkit-scrollbar-track { background: var(--surface-light); border-radius: 10px; }
+        .chat-messages::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
+
+        .message { display: flex; margin-bottom: 16px; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .message.user { justify-content: flex-end; }
+        .message.bot { justify-content: flex-start; }
+
+        .bubble {
+            max-width: 80%;
+            padding: 14px 20px;
+            border-radius: 20px;
+            font-size: .95rem;
+            line-height: 2;
+            position: relative;
+        }
+        .message.user .bubble {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #0b1a2e;
+            border-bottom-left-radius: 6px;
+        }
+        .message.bot .bubble {
+            background: var(--surface-light);
+            color: var(--text);
+            border-bottom-right-radius: 6px;
+            border: 1px solid var(--card-border);
+        }
+        .bubble strong { color: var(--primary-ink); }
+        .bubble .time {
+            font-size: .6rem;
+            color: var(--text-dim);
+            margin-top: 6px;
+            text-align: left;
+            display: block;
+        }
+
+        .typing-indicator {
+            display: flex;
+            gap: 5px;
+            padding: 12px 18px;
+            background: var(--surface-light);
+            border-radius: 20px;
+            border-bottom-right-radius: 6px;
+            width: fit-content;
+            border: 1px solid var(--card-border);
+        }
+        .typing-indicator span {
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+            animation: typingBounce 1.4s infinite;
+        }
+        .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes typingBounce { 0%, 60%, 100% { transform: translateY(0); opacity: 0.3; } 30% { transform: translateY(-8px); opacity: 1; } }
+
+        .chat-input-area {
+            display: flex;
+            padding: 14px 20px;
+            background: var(--surface);
+            border-top: 1px solid var(--card-border);
+            gap: 12px;
+        }
+        .chat-input {
+            flex: 1;
+            padding: 12px 18px;
+            border: 2px solid var(--card-border);
+            border-radius: 30px;
+            font-size: .95rem;
+            background: var(--surface-light);
+            color: var(--text);
+            font-family: 'Estedad', 'Vazirmatn', sans-serif;
+            outline: none;
+            transition: all 0.3s;
+        }
+        .chat-input:focus { border-color: var(--primary); }
+        .chat-input::placeholder { color: var(--text-dim); }
+        .send-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #0b1a2e;
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .send-btn:hover { transform: scale(1.05); box-shadow: 0 4px 20px rgba(243,156,18,0.3); }
+
+        .status-bar {
+            padding: 6px 20px;
+            font-size: .75rem;
+            text-align: center;
+            color: var(--text-dim);
+            background: var(--surface-light);
+            border-top: 1px solid var(--card-border);
+            transition: all 0.3s;
+        }
+        .status-bar.loading { color: var(--secondary-ink); background: rgba(26,188,156,0.06); }
+        .status-bar.error { color: #e74c3c; background: rgba(231,76,60,0.06); }
+
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            padding: 12px 20px;
+            background: var(--surface);
+            border-top: 1px solid var(--card-border);
+            flex-wrap: wrap;
+        }
+        .nav-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: .85rem;
+            transition: all 0.3s;
+            padding: 6px 16px;
+            border-radius: 30px;
+            border: 1px solid transparent;
+        }
+        .nav-link:hover { color: var(--text); border-color: var(--card-border); }
+        .nav-link.primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #0b1a2e;
+            border-color: transparent;
+        }
+        .nav-link.primary:hover { transform: scale(1.02); }
+
+        mjx-container { overflow-x: auto; overflow-y: hidden; margin: 5px 0; }
+        .bubble table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 10px 0;
+            background: var(--surface);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .bubble th {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #0b1a2e;
+            padding: 8px 12px;
+            border: 1px solid rgba(243,156,18,0.2);
+        }
+        .bubble td {
+            border: 1px solid var(--card-border);
+            padding: 6px 12px;
+            color: var(--text-dim);
+        }
+        .bubble tr:nth-child(even) { background: var(--surface-light); }
+        .bubble h3 { color: var(--primary-ink); margin: 10px 0 4px; font-size: 1rem; }
+        .bubble ul { padding-right: 20px; }
+        .bubble ul li { margin-bottom: 4px; }
+
+        @media (max-width: 768px) {
+            .chat-container { margin: 16px; min-height: 70vh; max-height: 85vh; border-radius: 20px; }
+            .chat-header { padding: 14px 16px; }
+            .chat-header h1 { font-size: 1.1rem; }
+            .quick-btn { font-size: .7rem; padding: 4px 12px; }
+            .bubble { font-size: .85rem; padding: 12px 16px; max-width: 90%; }
+            .chat-input { font-size: .85rem; padding: 10px 14px; }
+            .send-btn { width: 44px; height: 44px; font-size: 1.1rem; }
+            .topbar { padding: 10px 16px; }
+            .brand { font-size: 1.1rem; }
+        }
+        @media (max-width: 480px) {
+            .chat-container { margin: 10px; border-radius: 16px; }
+            .quick-buttons { gap: 4px; padding: 8px 12px; }
+            .quick-btn { font-size: .65rem; padding: 3px 10px; }
+            .bubble { font-size: .8rem; padding: 10px 14px; }
+            .chat-input-area { padding: 10px 12px; gap: 8px; }
+            .send-btn { width: 40px; height: 40px; font-size: 1rem; }
+            .nav-links .nav-link { font-size: .7rem; padding: 4px 10px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="grid-bg"></div>
+
+<div class="topbar">
+    <div class="brand">
+        <span class="logo"><img src="https://cdn.imgurl.ir/uploads/n979716_file_00000000841071f49b295d273da301ac.png" alt="لوگوی هندسیار"></span>
+        هندسیار
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;">
+        <button class="theme-toggle" onclick="toggleTheme()" aria-label="تغییر تم">🌓</button>
+        <div class="menu-btn" id="menuBtn" role="button" tabindex="0" aria-label="باز کردن منو"><span></span><span></span><span></span></div>
+    </div>
+</div>
+
+<div class="overlay" id="overlay"></div>
+<div class="side-menu" id="sideMenu">
+    <button class="side-menu-close" onclick="toggleMenu()" aria-label="بستن منو">✕</button>
+    <a href="../index.html">🏠 صفحه اصلی</a>
+    <a href="../index.html#path">📐 مسیر یادگیری</a>
+    <a href="level8.html">📚 هم‌نهشتی مثلث‌ها</a>
+    <a href="level9.html">🔷 تشابه مثلث‌ها</a>
+    <a href="../Help.html">❓ راهنما</a>
+</div>
+
+<div class="chat-container">
+
+    <div class="chat-header">
+        <div class="chat-header-left">
+            <div class="ai-badge">⚡ Groq · Llama 3.3</div>
+            <h1>🤖 دستیار هندسه</h1>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;">
+            <span class="sub">تخصص: هم‌نهشتی و تشابه</span>
+            <button class="clear-btn" onclick="clearChat()">🗑️ پاک کردن</button>
+        </div>
+    </div>
+
+    <div class="quick-buttons">
+        <button class="quick-btn" data-q="پنج حالت هم‌نهشتی مثلث‌ها را کامل توضیح بده">📊 هم‌نهشتی</button>
+        <button class="quick-btn" data-q="حالت ض ز ض را با مثال توضیح بده">📐 ض ز ض</button>
+        <button class="quick-btn" data-q="حالت ز ض ز را با مثال توضیح بده">📏 ز ض ز</button>
+        <button class="quick-btn" data-q="حالت ض ض ض را توضیح بده">📐 ض ض ض</button>
+        <button class="quick-btn" data-q="حالت وتر و ضلع را در مثلث قائم‌الزاویه توضیح بده">📐 وتر و ضلع</button>
+        <button class="quick-btn" data-q="تفاوت تشابه و هم‌نهشتی چیست">🔄 تفاوت</button>
+        <button class="quick-btn" data-q="مثلث متساوی‌الساقین چه ویژگی‌هایی دارد">🔺 متساوی‌الساقین</button>
+        <button class="quick-btn" onclick="generateRandomProblem()">🎲 مسئله تصادفی</button>
+    </div>
+
+    <div class="chat-messages" id="chatMessages">
+        <div class="message bot">
+            <div class="bubble">
+                <strong>⚡ سلام! من دستیار ریاضی هندسیار هستم ⚡</strong><br><br>
+                📚 تخصص من <strong>هم‌نهشتی</strong> و <strong>تشابه</strong> مثلث‌هاست<br>
+                🎯 می‌تونم ۵ حالت هم‌نهشتی رو برات توضیح بدم<br>
+                💡 هر سوالی داری، بپرس!
+            </div>
+        </div>
+    </div>
+
+    <div class="chat-input-area">
+        <input type="text" class="chat-input" id="chatInput" placeholder="سوال خود را بنویسید..." onkeypress="if(event.key==='Enter') sendMessage()">
+        <button class="send-btn" onclick="sendMessage()">📤</button>
+    </div>
+
+    <div class="status-bar" id="statusBar">🟢 آماده پاسخگویی</div>
+
+    <div class="nav-links">
+        <a href="../index.html" class="nav-link">🏠 صفحه اصلی</a>
+        <a href="level8.html" class="nav-link">📚 آموزش هم‌نهشتی</a>
+        <a href="level9.html" class="nav-link">🔷 تشابه مثلث‌ها</a>
+        <a href="../Help.html" class="nav-link primary">❓ راهنما</a>
+    </div>
+
+</div>
+
+<audio id="bgMusic" loop preload="auto"></audio>
+
+<script>
+    // ===== تم =====
+    function toggleTheme() {
+        document.body.classList.toggle('light');
+        try { localStorage.setItem('theme', document.body.classList.contains('light') ? 'light' : 'dark'); } catch(e){}
+    }
+    var savedTheme = (function() { try { return localStorage.getItem('theme'); } catch(e){ return null; } })();
+    if (savedTheme) { document.body.classList.toggle('light', savedTheme === 'light'); }
+
+    // ===== منو =====
+    var menuBtn = document.getElementById('menuBtn');
+    var sideMenu = document.getElementById('sideMenu');
+    var overlay = document.getElementById('overlay');
+    function toggleMenu() { sideMenu.classList.toggle('open'); overlay.classList.toggle('show'); }
+    menuBtn.addEventListener('click', toggleMenu);
+    overlay.addEventListener('click', toggleMenu);
+
+    // ===== موزیک پلیر =====
+    var bgMusic = document.getElementById('bgMusic');
+    var isMusicPlaying = false;
+    bgMusic.src = "music/music_1.mp3";
+    bgMusic.volume = 0.1;
+    bgMusic.loop = true;
+    bgMusic.play().catch(function() {});
+    isMusicPlaying = true;
+
+    // ===== چت‌بات =====
+    var PROXY_URL = "https://deno-proxy--main.arshiakhosravipour1390-hash.deno.net/v1/chat/completions";
+    var GROQ_API_KEY = "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";
+
+    var conversationHistory = [];
+
+    // ===== بانک پاسخ‌های آموزشی (پرامپت‌های دقیق) =====
+    var questionBank = {
+        "پنج حالت هم نهشتی مثلث ها را کامل توضیح بده": `**🔷 پنج حالت هم‌نهشتی مثلث‌ها (پایه هشتم)**
+
+برای اثبات هم‌نهشتی دو مثلث، پنج حالت وجود دارد:
+
+**۱. حالت (ض ز ض) یا SAS**
+شرط: دو ضلع و زاویهٔ بین آنها در دو مثلث برابر باشد.
+
+**۲. حالت (ز ض ز) یا ASA**
+شرط: دو زاویه و ضلع بین آنها در دو مثلث برابر باشد.
+
+**۳. حالت (ض ض ض) یا SSS**
+شرط: هر سه ضلع یک مثلث با مثلث دیگر برابر باشد.
+
+**۴. حالت (و ض) یا HL (مخصوص مثلث قائم‌الزاویه)**
+شرط: وتر و یک ضلع از دو مثلث قائم‌الزاویه برابر باشد.
+
+**۵. حالت (و ز) یا HA (مخصوص مثلث قائم‌الزاویه)**
+شرط: وتر و یک زاویهٔ حاده از دو مثلث قائم‌الزاویه برابر باشد.
+
+⚠️ نکته مهم: حالت AAA هرگز هم‌نهشتی نمی‌سازد، فقط تشابه ایجاد می‌کند!
+
+❓ **سوال:** چرا در حالت (ض ز ض)، زاویه باید حتماً بین دو ضلع باشد؟`,
+
+        "حالت ض ز ض را با مثال توضیح بده": `**🔷 حالت (ض ز ض) یا SAS**
+
+شرط: اگر دو ضلع و زاویهٔ بین آنها در دو مثلث برابر باشد، آن دو مثلث هم‌نهشت هستند.
+
+مثال عددی:
+- AB = DE = 5 سانتی‌متر
+- ∠A = ∠D = ۵۰ درجه
+- AC = DF = ۵ سانتی‌متر
+
+✅ نتیجه: △ABC ≅ △DEF
+
+❓ **سوال:** در این حالت، اگر زاویه بین دو ضلع نباشد، آیا می‌توان نتیجه گرفت؟`,
+
+        "حالت ز ض ز را با مثال توضیح بده": `**🔷 حالت (ز ض ز) یا ASA**
+
+شرط: اگر دو زاویه و ضلع بین آنها در دو مثلث برابر باشد، آن دو مثلث هم‌نهشت هستند.
+
+مثال عددی:
+- ∠A = ∠D = ۴۵ درجه
+- AB = DE = ۶ سانتی‌متر
+- ∠B = ∠E = ۵۵ درجه
+
+✅ نتیجه: △ABC ≅ △DEF
+
+❓ **سوال:** مجموع زاویه‌های یک مثلث چند درجه است؟`,
+
+        "حالت ض ض ض را توضیح بده": `**🔷 حالت (ض ض ض) یا SSS**
+
+شرط: اگر هر سه ضلع یک مثلث با مثلث دیگر برابر باشد، آن دو مثلث هم‌نهشت هستند.
+
+مثال عددی:
+- AB = DE = ۵ سانتی‌متر
+- BC = EF = ۶ سانتی‌متر
+- AC = DF = ۷ سانتی‌متر
+
+✅ نتیجه: △ABC ≅ △DEF
+
+❓ **سوال:** قوی‌ترین حالت هم‌نهشتی کدام است؟`,
+
+        "حالت وتر و ضلع را در مثلث قائم الزاویه توضیح بده": `**🔷 حالت وتر و یک ضلع (HL)**
+
+این حالت فقط مخصوص مثلث قائم‌الزاویه است.
+
+شرط: اگر وتر و یک ضلع از دو مثلث قائم‌الزاویه برابر باشد، آن دو مثلث هم‌نهشت هستند.
+
+مثال عددی:
+- AB = DE = ۳ سانتی‌متر (یک ضلع قائمه)
+- AC = DF = ۵ سانتی‌متر (وتر)
+
+✅ نتیجه: △ABC ≅ △DEF
+
+❓ **سوال:** چرا این حالت فقط در مثلث قائم‌الزاویه کاربرد دارد؟`,
+
+        "تفاوت تشابه و هم نهشتی چیست": `**🔷 تفاوت تشابه و هم‌نهشتی**
+
+| ویژگی | هم‌نهشتی | تشابه |
+|--------|---------|--------|
+| اضلاع | دقیقاً برابر | متناسب |
+| زاویه‌ها | برابر | برابر |
+| علامت | ≅ | ∼ |
+
+✅ همه مثلث‌های هم‌نهشت مشابه هستند، ولی همه مثلث‌های مشابه هم‌نهشت نیستند.
+
+❓ **سوال:** چرا حالت AAA باعث هم‌نهشتی نمی‌شود؟`,
+
+        "مثلث متساوی الساقین چه ویژگی هایی دارد": `**🔷 مثلث متساوی‌الساقین**
+
+تعریف: مثلثی که دو ضلع آن برابر باشد.
+
+ویژگی‌ها:
+- دو ضلع (ساق‌ها) با هم برابرند
+- دو زاویهٔ پایه با هم برابرند
+- نیمساز زاویهٔ رأس، عمودمنصف قاعده است
+
+❓ **سوال:** اگر در مثلثی دو زاویه برابر باشند، چه نتیجه‌ای می‌گیریم؟`
+    };
+
+    var problemBank = [
+        "در مثلث ABC، AB = 5cm، AC = 5cm و ∠A = 50° است. آیا این مثلث متساوی‌الساقین است؟ چرا؟",
+        "مثلثی با اضلاع 3، 4 و 5 سانتی‌متر داریم. آیا مثلثی با اضلاع 6، 8 و 10 سانتی‌متر با آن مشابه است؟ هم‌نهشت است؟",
+        "در مثلث قائم‌الزاویه‌ای، وتر 10 سانتی‌متر و یک ضلع 6 سانتی‌متر است. ضلع دیگر را محاسبه کن.",
+        "اگر در مثلث ABC داشته باشیم ∠B = ∠C، کدام دو ضلع با هم برابرند؟",
+        "در مثلث ABC، AB = DE = 4cm، ∠A = ∠D = 60° و AC = DF = 4cm. آیا این دو مثلث هم‌نهشت هستند؟ به کدام حالت؟",
+        "تفاوت بین حالت (ض ز ض) و (ز ض ز) چیست؟",
+        "چرا حالت AAA باعث هم‌نهشتی نمی‌شود؟ یک مثال بزن.",
+        "در مثلث متساوی‌الساقین، اگر زاویه رأس 40° باشد، زاویه‌های پایه چقدرند؟"
+    ];
+
+    function generateRandomProblem() {
+        var randomProblem = problemBank[Math.floor(Math.random() * problemBank.length)];
+        sendQuickQuestion(randomProblem);
+    }
+
+    function formatLatex(text) {
+        var result = text;
+        result = result.replace(/\\\[(.*?)\\\]/gs, '$$$1$$');
+        result = result.replace(/\\\((.*?)\\\)/gs, '$$$1$$');
+        result = result.replace(/\\triangle/g, '△');
+        result = result.replace(/\\cong/g, '≅');
+        result = result.replace(/\\angle/g, '∠');
+        result = result.replace(/\\sim/g, '∼');
+        result = result.replace(/\\circ/g, '°');
+        return result;
+    }
+
+    function formatMarkdown(text) {
+        var result = text;
+        result = result.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+        result = result.replace(/^### (.*$)/gm, '<h3>$1</h3>');
+        result = result.replace(/^## (.*$)/gm, '<h2>$1</h2>');
+
+        if (result.includes('|') && result.includes('---')) {
+            var lines = result.split('\n');
+            var tableHtml = '<table style="width:100%; margin:10px 0; border-collapse:collapse;">';
+            var inTable = false, isHeader = true;
+            for (var i = 0; i < lines.length; i++) {
+                var line = lines[i];
+                if (line.startsWith('|') && line.endsWith('|')) {
+                    if (!inTable) inTable = true;
+                    if (line.includes('---')) { isHeader = false; continue; }
+                    var cells = line.split('|').filter(function(c) { return c.trim() !== ''; }).map(function(c) { return c.trim(); });
+                    var tag = isHeader ? 'th' : 'td';
+                    tableHtml += '<tr>';
+                    for (var j = 0; j < cells.length; j++) {
+                        tableHtml += '<' + tag + ' style="border:1px solid #ddd; padding:6px;">' + cells[j] + '</' + tag + '>';
+                    }
+                    tableHtml += '</tr>';
+                }
+            }
+            if (inTable) { tableHtml += '</table>'; result = tableHtml; }
+        }
+        result = formatLatex(result);
+        result = result.replace(/\n/g, '<br>');
+        return result;
+    }
+
+    function getTimeString() {
+        var now = new Date();
+        return now.toLocaleTimeString('fa-IR', { hour: '2-digit', minute: '2-digit' });
+    }
+
+    async function typeText(element, text, speed) {
+        speed = speed || 5;
+        element.innerHTML = '';
+        var formatted = formatMarkdown(text);
+        var tempDiv = document.createElement('div');
+        tempDiv.innerHTML = formatted;
+        var fullText = tempDiv.innerText;
+        element.innerHTML = '';
+        var currentText = '';
+        for (var i = 0; i < fullText.length; i++) {
+            currentText += fullText[i];
+            element.innerHTML = formatMarkdown(currentText);
+            await new Promise(function(r) { setTimeout(r, speed); });
+            document.getElementById('chatMessages').scrollTop = document.getElementById('chatMessages').scrollHeight;
+        }
+        element.innerHTML = formatted;
+        if (window.MathJax) {
+            try { MathJax.typesetPromise([element]).catch(function() {}); } catch(e) {}
+        }
+        var timeSpan = document.createElement('div');
+        timeSpan.className = 'time';
+        timeSpan.innerHTML = '⏱️ ' + getTimeString();
+        element.appendChild(timeSpan);
+    }
+
+    async function getAnswer(question, retryCount) {
+        retryCount = retryCount || 0;
+        var statusBar = document.getElementById('statusBar');
+
+        for (var key in questionBank) {
+            if (question.includes(key)) {
+                statusBar.textContent = "📚 پاسخ از بانک آموزشی...";
+                statusBar.className = "status-bar";
+                return questionBank[key];
+            }
+        }
+
+        statusBar.textContent = "⚡ در حال فکر کردن...";
+        statusBar.className = "status-bar loading";
+
+        try {
+            var messagesToSend = [
+                { role: 'system', content: 'تو یک معلم ریاضی پایه هشتم و نهم هستی. تخصص اصلی تو: هم‌نهشتی و تشابه مثلث‌ها. قوانین: 1. به فارسی روان پاسخ بده 2. از مثال‌های عددی استفاده کن 3. آخر هر پاسخ یک سوال بپرس 4. به سوالات قبلی توجه کن و زمینه مکالمه را حفظ کن 5. اگر سوال خارج از تخصصت بود، بگو "من در این زمینه تخصص ندارم" 6. از اصطلاحات ساده استفاده کن.' }
+            ];
+
+            var recentHistory = conversationHistory.slice(-8);
+            for (var i = 0; i < recentHistory.length; i++) {
+                messagesToSend.push({ role: recentHistory[i].role, content: recentHistory[i].content });
+            }
+            messagesToSend.push({ role: 'user', content: question });
+
+            var response = await fetch(PROXY_URL, {
+                method: 'POST',
+                headers: { 'Authorization': 'Bearer ' + GROQ_API_KEY, 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    model: "llama-3.3-70b-versatile",
+                    messages: messagesToSend,
+                    temperature: 0.3,
+                    max_tokens: 600
+                })
+            });
+
+            if (response.status === 429 && retryCount < 3) {
+                statusBar.textContent = '⏳ سرور شلوغه، تلاش مجدد (' + (retryCount + 1) + '/3)...';
+                await new Promise(function(r) { setTimeout(r, 3000); });
+                return getAnswer(question, retryCount + 1);
+            }
+
+            if (!response.ok) throw new Error('HTTP ' + response.status);
+            var data = await response.json();
+
+            if (data.choices && data.choices[0] && data.choices[0].message) {
+                statusBar.textContent = "🟢 پاسخ دریافت شد";
+                statusBar.className = "status-bar";
+                var answer = data.choices[0].message.content;
+                if (!answer.includes('؟') && !answer.includes('?')) {
+                    answer += '\n\n❓ **حالا تو بگو:** نظرت چیه؟';
+                }
+                return answer;
+            }
+            throw new Error("پاسخی دریافت نشد");
+        } catch (error) {
+            console.error(error);
+            statusBar.textContent = "⚠️ خطا | از دکمه‌های آبی استفاده کن";
+            statusBar.className = "status-bar error";
+            return "⚠️ خطا در ارتباط. لطفاً از دکمه‌های آبی استفاده کن.";
+        }
+    }
+
+    function addMessage(text, isUser) {
+        var messagesDiv = document.getElementById('chatMessages');
+        var messageDiv = document.createElement('div');
+        messageDiv.className = 'message ' + (isUser ? 'user' : 'bot');
+
+        var bubble = document.createElement('div');
+        bubble.className = 'bubble';
+
+        if (isUser) {
+            bubble.innerHTML = text.replace(/\n/g, '<br>');
+            var timeSpan = document.createElement('div');
+            timeSpan.className = 'time';
+            timeSpan.innerHTML = '⏱️ ' + getTimeString();
+            bubble.appendChild(timeSpan);
+        } else {
+            messageDiv.appendChild(bubble);
+            typeText(bubble, text, 5);
+        }
+
+        if (isUser) {
+            messageDiv.appendChild(bubble);
+        }
+        messagesDiv.appendChild(messageDiv);
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+        conversationHistory.push({ role: isUser ? 'user' : 'assistant', content: text });
+        if (conversationHistory.length > 20) conversationHistory.shift();
+    }
+
+    function showTyping() {
+        var messagesDiv = document.getElementById('chatMessages');
+        var typingDiv = document.createElement('div');
+        typingDiv.id = 'typingIndicator';
+        typingDiv.className = 'message bot';
+        typingDiv.innerHTML = '<div class="typing-indicator"><span></span><span></span><span></span></div>';
+        messagesDiv.appendChild(typingDiv);
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+
+    function hideTyping() {
+        var indicator = document.getElementById('typingIndicator');
+        if (indicator) indicator.remove();
+    }
+
+    function clearChat() {
+        var messagesDiv = document.getElementById('chatMessages');
+        messagesDiv.innerHTML = '';
+        conversationHistory = [];
+        var welcomeDiv = document.createElement('div');
+        welcomeDiv.className = 'message bot';
+        welcomeDiv.innerHTML = '<div class="bubble"><strong>🧹 گفتگو پاک شد!</strong><br>سوال جدیدی بپرس.</div>';
+        messagesDiv.appendChild(welcomeDiv);
+    }
+
+    async function sendMessage() {
+        var input = document.getElementById('chatInput');
+        var question = input.value.trim();
+        if (question === "") return;
+        addMessage(question, true);
+        input.value = "";
+        showTyping();
+        var answer = await getAnswer(question);
+        hideTyping();
+        addMessage(answer, false);
+    }
+
+    function sendQuickQuestion(question) {
+        addMessage(question, true);
+        showTyping();
+        getAnswer(question).then(function(answer) {
+            hideTyping();
+            addMessage(answer, false);
+        });
+    }
+
+    document.querySelectorAll('.quick-btn').forEach(function(btn) {
+        if (btn.dataset.q) {
+            btn.addEventListener('click', function() {
+                sendQuickQuestion(btn.dataset.q);
+            });
+        }
+    });
+
+    document.getElementById('chatInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') sendMessage();
+    });
+</script>
+
+</body>
+</html>

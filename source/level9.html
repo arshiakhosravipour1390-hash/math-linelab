@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>تشابه مثلث‌ها - هندسیار</title>
+    <link rel="icon" href="https://cdn.imgurl.ir/uploads/n979716_file_00000000841071f49b295d273da301ac.png">
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/dist/font-face.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/estedad-font@v3.1.0/dist/font-face.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0b1a2e;
+            --surface: #16283a;
+            --surface-light: #223a4e;
+            --text: #f2f5f7;
+            --text-dim: #a9b7c4;
+            --primary: #f39c12;
+            --primary-ink: #ffb347;
+            --secondary: #1abc9c;
+            --secondary-ink: #3fe0bd;
+            --success: #27ae60;
+            --grad-text: linear-gradient(135deg, var(--primary-ink), var(--secondary-ink));
+            --card-border: rgba(243,156,18,0.12);
+            --card-shadow: 0 12px 30px rgba(0,0,0,0.4);
+            --radius: 28px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Estedad', 'Vazirmatn', 'Tahoma', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+            transition: background 0.3s ease, color 0.3s ease;
+            line-height: 1.8;
+            min-height: 100vh;
+        }
+        .mono { font-family: 'JetBrains Mono', monospace; }
+        .grid-bg {
+            position: fixed; inset: 0; z-index: 0; pointer-events: none;
+            background-image:
+                linear-gradient(rgba(243,156,18,0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(26,188,156,0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+            mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 40%, transparent 90%);
+        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
+
+        body.light {
+            --bg: #f2ede4;
+            --surface: #ffffff;
+            --surface-light: #f7f2ea;
+            --text: #16233a;
+            --text-dim: #55627c;
+            --primary: #f39c12;
+            --primary-ink: #a35d0a;
+            --secondary: #1abc9c;
+            --secondary-ink: #0d7d68;
+            --card-border: rgba(22,35,58,0.09);
+            --card-shadow: 0 10px 26px rgba(22,35,58,0.08);
+        }
+        body.light .grid-bg { opacity: 0.35; }
+        body.light .topbar { background: rgba(242,237,228,0.92); border-bottom-color: rgba(22,35,58,0.06); }
+        body.light .side-menu { border-left-color: rgba(22,35,58,0.06); }
+        body.light .btn-ghost { border-color: rgba(22,35,58,0.16); }
+        body.light .definition-section { background: #ffffff; }
+        body.light .cases-section .case-card { background: #ffffff; }
+        body.light .note-section { background: #fef9e7; }
+        body.light .quiz-section { background: #ffffff; }
+        body.light .music-player { background: rgba(255,255,255,0.92); border-color: rgba(22,35,58,0.08); }
+
+        .topbar {
+            position: sticky; top: 0; z-index: 50;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 14px 28px;
+            background: rgba(11,26,46,0.92);
+            backdrop-filter: blur(14px);
+            border-bottom: 1px solid rgba(243,156,18,0.1);
+            transition: background 0.3s ease;
+        }
+        .brand { display: flex; align-items: center; gap: 12px; font-size: 1.4rem; font-weight: 800; }
+        .brand .logo {
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+        }
+        .brand .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .theme-toggle, .menu-btn {
+            background: transparent; border: 1px solid rgba(243,156,18,0.18);
+            border-radius: 12px; padding: 6px 14px;
+            color: var(--text); font-size: 1.1rem; cursor: pointer; transition: 0.3s;
+        }
+        .theme-toggle:hover, .menu-btn:hover { background: rgba(243,156,18,0.1); transform: scale(1.04); }
+        .menu-btn { display: flex; flex-direction: column; gap: 5px; padding: 12px 14px; }
+        .menu-btn span { width: 20px; height: 2px; background: var(--text); border-radius: 2px; }
+
+        .side-menu {
+            position: fixed; top: 0; right: -340px; width: 300px; height: 100vh; z-index: 200;
+            background: var(--surface); border-left: 1px solid rgba(243,156,18,0.1);
+            padding: 100px 24px 30px; transition: right .4s cubic-bezier(.34,1.56,.64,1), background .3s ease;
+        }
+        .side-menu.open { right: 0; }
+        .side-menu a {
+            display: flex; align-items: center; gap: 14px; padding: 14px 18px;
+            color: var(--text); text-decoration: none; border-radius: 14px;
+            transition: 0.2s; margin-bottom: 6px;
+        }
+        .side-menu a:hover { background: rgba(243,156,18,0.1); transform: translateX(-6px); }
+        .side-menu-close { position: absolute; top: 20px; left: 20px; background: none; border: none; color: var(--text); font-size: 1.8rem; cursor: pointer; transition: 0.3s; }
+        .side-menu-close:hover { transform: rotate(90deg); }
+        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 150; display: none; backdrop-filter: blur(4px); }
+        .overlay.show { display: block; }
+
+        .main-container { max-width: 1400px; margin: 0 auto; padding: 30px 24px 60px; }
+
+        .page-header { text-align: center; margin-bottom: 50px; }
+        .page-header .eyebrow {
+            display: inline-flex; align-items: center; gap: 10px;
+            font-family: 'JetBrains Mono', monospace; font-size: .75rem;
+            color: var(--primary-ink); border: 1px solid rgba(243,156,18,0.2);
+            padding: 6px 16px; border-radius: 30px;
+            background: rgba(243,156,18,0.08);
+        }
+        .page-header h1 {
+            font-size: 2.8rem; font-weight: 900;
+            background: var(--grad-text);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            margin-top: 12px;
+        }
+        .page-header p { color: var(--text-dim); font-size: 1.05rem; max-width: 600px; margin: 8px auto 0; }
+
+        .definition-section {
+            background: var(--surface);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius);
+            padding: 40px;
+            margin-bottom: 50px;
+            box-shadow: var(--card-shadow);
+        }
+        .definition-title { font-size: 2rem; color: var(--primary-ink); margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+        .definition-content { font-size: 1.05rem; line-height: 2; color: var(--text-dim); }
+        .definition-content strong { color: var(--text); }
+        .highlight-box {
+            background: rgba(243,156,18,0.08);
+            border-right: 8px solid var(--primary);
+            padding: 20px;
+            border-radius: 20px;
+            margin: 25px 0;
+        }
+        .highlight-box p { font-size: 1.3rem; text-align: center; color: var(--primary-ink); font-family: 'JetBrains Mono', monospace; }
+        .ratio-box {
+            background: rgba(26,188,156,0.08);
+            border-right: 8px solid var(--secondary);
+            padding: 20px;
+            border-radius: 20px;
+            margin: 25px 0;
+            text-align: center;
+        }
+        .ratio-box p { font-size: 1.2rem; color: var(--secondary-ink); font-family: 'JetBrains Mono', monospace; }
+        .shadow-box {
+            background: var(--surface-light);
+            border-radius: 18px;
+            padding: 20px 24px;
+            margin-top: 20px;
+        }
+        .shadow-box .label { font-family: 'JetBrains Mono', monospace; font-size: .7rem; color: var(--primary-ink); margin-bottom: 8px; }
+
+        .animation-section {
+            background: var(--surface);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius);
+            padding: 40px;
+            margin: 50px 0;
+            text-align: center;
+            box-shadow: var(--card-shadow);
+            scroll-margin-top: 80px;
+        }
+        .animation-title { font-size: 1.8rem; margin-bottom: 10px; color: var(--text); }
+        .animation-sub { font-size: .9rem; color: var(--text-dim); margin-bottom: 25px; }
+        .animation-container { display: flex; align-items: center; justify-content: center; gap: 30px; flex-wrap: wrap; margin-bottom: 20px; }
+        .triangle-box { text-align: center; }
+        .triangle-label { font-size: 1.1rem; margin-bottom: 12px; }
+        .triangle-label .blue { color: #3498db; }
+        .triangle-label .green { color: #2ecc71; }
+        .triangle-canvas {
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 10px;
+            width: 280px;
+            height: 230px;
+        }
+        body.light .triangle-canvas { background: #f8fafc; }
+
+        .k-control {
+            max-width: 420px; margin: 20px auto 0;
+            background: var(--surface-light);
+            border-radius: 20px;
+            padding: 18px 26px;
+        }
+        .k-control .k-row { display: flex; align-items: center; gap: 14px; }
+        .k-control input[type="range"] {
+            flex: 1; -webkit-appearance: none; height: 6px; border-radius: 10px;
+            background: linear-gradient(90deg, rgba(243,156,18,0.2), var(--primary));
+            outline: none;
+        }
+        .k-control input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none; width: 20px; height: 20px; border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary)); cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+        .k-control .k-value {
+            font-family: 'JetBrains Mono', monospace; font-weight: 800; font-size: 1.2rem;
+            color: var(--primary-ink); min-width: 60px; text-align: center;
+        }
+        .k-readout { font-size: .95rem; color: var(--text-dim); margin-top: 14px; line-height: 2.2; }
+        .k-readout strong { color: var(--text); font-family: 'JetBrains Mono', monospace; }
+        .aa-note {
+            font-size: .95rem; color: var(--secondary-ink);
+            background: rgba(26,188,156,0.08); padding: 12px 20px; border-radius: 40px;
+            margin-top: 16px; display: inline-block;
+        }
+
+        .cases-section { margin: 50px 0; scroll-margin-top: 80px; }
+        .section-title { font-size: 2rem; color: var(--text); text-align: center; margin-bottom: 30px; }
+        .cases-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; }
+        .case-card {
+            background: var(--surface);
+            border-radius: var(--radius);
+            overflow: hidden;
+            border: 2px solid var(--card-border);
+            transition: all 0.3s;
+            box-shadow: var(--card-shadow);
+        }
+        .case-card:hover { transform: translateY(-6px); border-color: var(--primary); box-shadow: 0 20px 40px rgba(243,156,18,0.15); }
+        .case-header { padding: 18px; color: white; text-align: center; font-size: 1.5rem; font-weight: bold; font-family: 'JetBrains Mono', monospace; }
+        .case-header.aa { background: linear-gradient(135deg, #3498db, #2980b9); }
+        .case-header.sss { background: linear-gradient(135deg, #e67e22, #d35400); }
+        .case-header.sas { background: linear-gradient(135deg, #27ae60, #2ecc71); }
+        .case-body { padding: 22px; }
+        .case-name { font-size: 1.3rem; color: var(--primary-ink); margin-bottom: 8px; text-align: center; }
+        .case-desc { color: var(--text-dim); line-height: 1.8; margin-bottom: 12px; text-align: center; font-size: .9rem; }
+        .case-formula {
+            background: rgba(243,156,18,0.06);
+            padding: 15px;
+            border-radius: 15px;
+            font-size: 1rem;
+            text-align: center;
+            color: var(--text);
+            border-right: 4px solid var(--primary);
+            font-family: 'JetBrains Mono', monospace;
+            line-height: 2;
+        }
+
+        .note-section {
+            background: rgba(243,156,18,0.04);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius);
+            padding: 35px;
+            margin: 50px 0;
+            box-shadow: var(--card-shadow);
+        }
+        .note-title { font-size: 1.6rem; color: var(--secondary-ink); margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
+        .note-content { font-size: 1rem; line-height: 2; color: var(--text-dim); }
+        .note-content strong { color: var(--text); }
+        .callback-box {
+            background: rgba(26,188,156,0.08);
+            border: 2px solid var(--secondary);
+            border-radius: 25px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .callback-box p { color: var(--secondary-ink); font-weight: bold; font-size: 1.05rem; }
+        .warning-box {
+            background: rgba(231,76,60,0.08);
+            border: 2px solid #e74c3c;
+            border-radius: 25px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .warning-box p { color: #e74c3c; font-weight: bold; font-size: 1.05rem; }
+
+        .quiz-section {
+            background: var(--surface);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius);
+            padding: 40px;
+            margin: 50px 0;
+            box-shadow: var(--card-shadow);
+        }
+        .quiz-title { font-size: 1.8rem; color: var(--primary-ink); margin-bottom: 25px; display: flex; align-items: center; gap: 10px; }
+        .quiz-question { background: var(--surface-light); border-radius: 20px; padding: 25px; margin-bottom: 25px; }
+        .question-text { font-size: 1.05rem; color: var(--text); margin-bottom: 15px; line-height: 1.8; }
+        .quiz-options { display: flex; gap: 12px; flex-wrap: wrap; }
+        .quiz-option {
+            padding: 12px 25px; border: 2px solid var(--card-border); border-radius: 14px;
+            font-size: .95rem; font-weight: 600; cursor: pointer;
+            background: var(--surface); color: var(--text);
+            transition: all 0.2s; flex: 1; min-width: 180px;
+        }
+        .quiz-option:hover { border-color: var(--primary); transform: scale(1.02); }
+        .quiz-option.correct { background: var(--success); color: white; border-color: var(--success); }
+        .quiz-option.wrong { background: #e74c3c; color: white; border-color: #e74c3c; }
+        .quiz-feedback {
+            margin-top: 12px; padding: 15px; border-radius: 12px;
+            display: none; font-size: .95rem; line-height: 1.8;
+        }
+        .quiz-feedback.correct { background: rgba(39,174,96,0.15); color: var(--success); display: block; }
+        .quiz-feedback.wrong { background: rgba(231,76,60,0.15); color: #e74c3c; display: block; }
+
+        .btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 12px 28px;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: .95rem;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            transition: all .3s cubic-bezier(.34,1.56,.64,1);
+            font-family: 'Estedad', 'Vazirmatn', sans-serif;
+        }
+        .btn-ghost { background: transparent; border: 2px solid var(--card-border); color: var(--text); }
+        .btn-ghost:hover { border-color: var(--primary); transform: translateY(-3px); }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #0b1a2e;
+            border: none;
+            box-shadow: 0 6px 24px rgba(243,156,18,0.25);
+        }
+        .btn-primary:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 14px 36px rgba(243,156,18,0.3); }
+        .btn-success {
+            background: linear-gradient(135deg, var(--secondary), var(--success));
+            color: #0b1a2e;
+            border: none;
+        }
+        .btn-success:hover { transform: translateY(-3px); box-shadow: 0 14px 36px rgba(26,188,156,0.3); }
+
+        .nav-links { display: flex; justify-content: space-between; gap: 16px; margin-top: 30px; flex-wrap: wrap; }
+        .nav-links .btn { flex: 1; justify-content: center; min-width: 160px; }
+
+        footer { text-align: center; color: var(--text-dim); margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--card-border); font-size: .8rem; }
+
+        .music-player {
+            position: fixed; bottom: 30px; left: 30px; z-index: 100;
+            background: rgba(22,40,58,0.9); backdrop-filter: blur(16px);
+            border: 1px solid rgba(243,156,18,0.2); border-radius: 50%;
+            width: 52px; height: 52px;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            cursor: pointer;
+            overflow: hidden;
+        }
+        body.light .music-player { background: rgba(255,255,255,0.92); border-color: rgba(22,35,58,0.08); }
+        .music-player.open {
+            width: 280px; border-radius: 40px; padding: 8px 18px 8px 14px;
+            justify-content: space-between;
+        }
+        .music-player .toggle-icon { font-size: 1.3rem; color: var(--primary-ink); transition: all 0.3s; flex-shrink: 0; }
+        .music-player .toggle-icon:hover { transform: scale(1.08); }
+        .music-player .inner { display: none; align-items: center; gap: 10px; width: 100%; }
+        .music-player.open .inner { display: flex; }
+        .music-player.open .toggle-icon { font-size: 1rem; }
+        .music-btn {
+            background: transparent; border: none; font-size: 1rem; cursor: pointer;
+            color: var(--primary-ink); transition: all 0.3s; width: 30px; height: 30px;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+        }
+        .music-btn:hover { background: rgba(243,156,18,0.12); transform: scale(1.08); }
+        .music-btn.play-btn { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: #0b1a2e; }
+        .music-btn.play-btn:hover { transform: scale(1.08); box-shadow: 0 4px 16px rgba(243,156,18,0.3); }
+        .music-info { display: flex; flex-direction: column; min-width: 60px; }
+        .music-name { font-size: .65rem; color: var(--text); font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 80px; }
+        .music-bars { display: flex; align-items: center; gap: 2px; margin: 0 4px; }
+        .music-bar { width: 3px; height: 14px; background: var(--primary-ink); border-radius: 2px; animation: musicPulse 0.8s ease-in-out infinite alternate; }
+        .music-bar:nth-child(2) { animation-delay: 0.2s; height: 20px; }
+        .music-bar:nth-child(3) { animation-delay: 0.4s; height: 12px; }
+        .music-bar:nth-child(4) { animation-delay: 0.6s; height: 16px; }
+        @keyframes musicPulse { 0% { height: 6px; opacity: 0.3; } 100% { height: 20px; opacity: 1; } }
+        .music-player.paused .music-bar { animation-play-state: paused; opacity: 0.2; height: 6px; }
+        .music-volume {
+            -webkit-appearance: none; width: 40px; height: 3px;
+            background: rgba(255,255,255,0.15); border-radius: 4px; outline: none;
+            flex-shrink: 0;
+        }
+        body.light .music-volume { background: rgba(22,35,58,0.12); }
+        .music-volume::-webkit-slider-thumb {
+            -webkit-appearance: none; width: 10px; height: 10px; border-radius: 50%;
+            background: var(--primary); cursor: pointer;
+        }
+
+        @media (max-width: 1000px) { .cases-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 768px) {
+            .cases-grid { grid-template-columns: 1fr; }
+            .page-header h1 { font-size: 2rem; }
+            .topbar { padding: 12px 16px; }
+            .brand { font-size: 1.1rem; }
+            .main-container { padding: 20px 16px; }
+            .nav-links .btn { min-width: 120px; font-size: .85rem; padding: 10px 16px; }
+            .animation-container { gap: 15px; }
+            .triangle-canvas { width: 240px; height: 200px; }
+            .music-player { bottom: 16px; left: 16px; }
+            .music-player.open { width: 240px; }
+            .music-volume { width: 30px; }
+            .music-name { max-width: 60px; font-size: .6rem; }
+        }
+        @media (max-width: 480px) {
+            .definition-section { padding: 24px; }
+            .animation-section { padding: 24px; }
+            .quiz-section { padding: 24px; }
+            .case-card .case-body { padding: 16px; }
+            .nav-links .btn { min-width: 100%; }
+            .k-control { padding: 16px; }
+            .music-player { bottom: 12px; left: 12px; width: 44px; height: 44px; }
+            .music-player.open { width: 200px; padding: 6px 12px; }
+            .music-volume { width: 24px; }
+            .music-name { max-width: 45px; font-size: .55rem; }
+            .music-btn { width: 24px; height: 24px; font-size: .8rem; }
+            .music-bars { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="grid-bg"></div>
+
+<div class="topbar">
+    <div class="brand">
+        <span class="logo"><img src="https://cdn.imgurl.ir/uploads/n979716_file_00000000841071f49b295d273da301ac.png" alt="لوگوی هندسیار"></span>
+        هندسیار
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;">
+        <button class="theme-toggle" onclick="toggleTheme()" aria-label="تغییر تم">🌓</button>
+        <div class="menu-btn" id="menuBtn" role="button" tabindex="0" aria-label="باز کردن منو"><span></span><span></span><span></span></div>
+    </div>
+</div>
+
+<div class="overlay" id="overlay"></div>
+<div class="side-menu" id="sideMenu">
+    <button class="side-menu-close" onclick="toggleMenu()" aria-label="بستن منو">✕</button>
+    <a href="../index.html">🏠 صفحه اصلی</a>
+    <a href="../index.html#path">📐 مسیر یادگیری</a>
+    <a href="level8.html">📚 هم‌نهشتی مثلث‌ها</a>
+    <a href="chatbot.html">🤖 دستیار هوشمند</a>
+    <a href="level9_quiz.html">📝 تمرین‌های تشابه</a>
+</div>
+
+<div class="music-player" id="musicPlayer">
+    <span class="toggle-icon" id="musicToggleIcon" onclick="toggleMusicPlayer()">▶</span>
+    <div class="inner" id="musicInner">
+        <button class="music-btn play-btn" id="musicPlayBtn" onclick="togglePlay()">▶</button>
+        <div class="music-info">
+            <span class="music-name" id="trackName">قطعه ۱</span>
+        </div>
+        <div class="music-bars" id="musicBars">
+            <span class="music-bar"></span>
+            <span class="music-bar"></span>
+            <span class="music-bar"></span>
+            <span class="music-bar"></span>
+        </div>
+        <input type="range" class="music-volume" id="volumeSlider" min="0" max="1" step="0.01" value="0.1" aria-label="تنظیم صدا">
+        <button class="music-btn" id="nextTrackBtn" onclick="nextTrack()" aria-label="آهنگ بعدی">⏩</button>
+    </div>
+</div>
+
+<div class="main-container">
+
+    <div class="page-header">
+        <div class="eyebrow">📘 پایه نهم</div>
+        <h1>تشابه مثلث‌ها</h1>
+        <p>وقتی دو مثلث فقط اندازه‌شون فرق داره ولی شکل‌شون یکیه — با اسکرول‌بار نسبت تشابه رو خودت امتحان کن.</p>
+    </div>
+
+    <div class="definition-section" id="definition">
+        <h2 class="definition-title"><span>🔺</span> تشابه یعنی چی؟</h2>
+        <div class="definition-content">
+            <p>دو مثلث را <strong>متشابه</strong> گویند، اگر زاویه‌های متناظرشان برابر و اضلاع متناظرشان <strong>متناسب</strong> (نه لزوماً برابر) باشند. یعنی یکی می‌تواند بزرگ‌نمایی یا کوچک‌نمایی‌شده‌ی دیگری باشد.</p>
+            <div class="highlight-box"><p>مثلث ABC ∼ مثلث DEF</p></div>
+            <p>عددی که نشان می‌دهد مثلث دوم چند برابر مثلث اول است را <strong>نسبت تشابه</strong> می‌نامیم و با <strong>k</strong> نشان می‌دهیم:</p>
+            <div class="ratio-box"><p>k = AB ∕ DE = BC ∕ EF = CA ∕ FD</p></div>
+            <div class="shadow-box">
+                <div class="label">☀️ کاربرد واقعی: روش تالس</div>
+                <p style="color:var(--text-dim);">تالس فیلسوف یونانی با اندازه‌گیری سایه‌ی یک چوب کوتاه و مقایسه با سایه‌ی هرم، ارتفاع اهرام مصر را حساب کرد؛ چون مثلثِ چوب-سایه با مثلثِ هرم-سایه متشابه‌اند. امروز هم می‌تونی ارتفاع هر چیزی (یه درخت، یه ساختمون) رو با همین روش و یه متر و سایه‌اش پیدا کنی.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="animation-section" id="animation">
+        <h2 class="animation-title">🔄 اسکرول‌بار نسبت تشابه (k) را حرکت بده</h2>
+        <p class="animation-sub">مثلث ABC ثابته؛ مثلث DEF با نسبت k بزرگ یا کوچیک می‌شه — ولی زاویه‌هاش همیشه با ABC برابر می‌مونه.</p>
+        <div class="animation-container">
+            <div class="triangle-box">
+                <div class="triangle-label"><span class="blue">مثلث ثابت (ABC)</span></div>
+                <canvas id="triangleFixed" class="triangle-canvas" width="280" height="230"></canvas>
+            </div>
+            <div class="triangle-box">
+                <div class="triangle-label"><span class="green">مثلث با نسبت k (DEF)</span></div>
+                <canvas id="triangleScaled" class="triangle-canvas" width="280" height="230"></canvas>
+            </div>
+        </div>
+        <div class="k-control">
+            <div class="k-row">
+                <span class="mono" style="color:var(--text-dim);font-size:.8rem;">۰.۵</span>
+                <input type="range" id="kSlider" min="0.5" max="1.8" step="0.1" value="1.3">
+                <span class="mono" style="color:var(--text-dim);font-size:.8rem;">۱.۸</span>
+            </div>
+            <div class="k-value mono" id="kValue" style="margin-top:10px;">k = ۱.۳</div>
+            <div class="k-readout" id="kReadout"></div>
+        </div>
+        <div class="aa-note">👀 دقت کن: با هر مقدار k، زاویه‌های A و C همیشه هم‌رنگ و هم‌اندازه‌اند — این یعنی حالت زاویه-زاویه (AA)!</div>
+    </div>
+
+    <div class="cases-section" id="cases">
+        <h2 class="section-title">📐 حالت‌های اثبات تشابه مثلث‌ها</h2>
+        <div class="cases-grid">
+            <div class="case-card">
+                <div class="case-header aa">ز ز</div>
+                <div class="case-body">
+                    <div class="case-name">دو زاویه (AA)</div>
+                    <div class="case-desc">اگر دو زاویه از یک مثلث با دو زاویه‌ی متناظر در مثلث دیگر برابر باشد، دو مثلث متشابه‌اند (زاویه‌ی سوم هم خودش برابر می‌شود).</div>
+                    <div class="case-formula">زاویه A = زاویه D<br>زاویه B = زاویه E<br>⇒ مثلث ABC ∼ مثلث DEF</div>
+                </div>
+            </div>
+            <div class="case-card">
+                <div class="case-header sss">ض ض ض</div>
+                <div class="case-body">
+                    <div class="case-name">سه ضلع متناسب</div>
+                    <div class="case-desc">اگر هر سه ضلع یک مثلث با نسبت یکسانی متناسب با سه ضلع مثلث دیگر باشند، دو مثلث متشابه‌اند.</div>
+                    <div class="case-formula">AB/DE = BC/EF = CA/FD</div>
+                </div>
+            </div>
+            <div class="case-card">
+                <div class="case-header sas">ض ز ض</div>
+                <div class="case-body">
+                    <div class="case-name">دو ضلع متناسب و زاویه بین</div>
+                    <div class="case-desc">اگر دو ضلع یک مثلث متناسب با دو ضلع مثلث دیگر باشد و زاویه‌ی بین آن دو ضلع برابر باشد، دو مثلث متشابه‌اند.</div>
+                    <div class="case-formula">AB/DE = AC/DF<br>زاویه A = زاویه D</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="note-section">
+        <h2 class="note-title"><span>💡</span> یه یادآوری جالب از صفحه‌ی هم‌نهشتی</h2>
+        <div class="note-content">
+            <p>یادته گفتیم <strong>AAA (برابری هر سه زاویه) برای هم‌نهشتی کافی نیست</strong>؟ چون هم‌نهشتی به برابری کامل اضلاع هم نیاز داره.</p>
+            <p>ولی برای <strong>تشابه</strong>، همون AAA (که در واقع همون AA است، چون زاویه‌ی سوم خودکار برابر می‌شود) کاملاً کافیه!</p>
+        </div>
+        <div class="callback-box">
+            <p>✅ AAA / AA → برای تشابه کافیه، اما فقط تشابه رو ثابت می‌کنه، نه هم‌نهشتی</p>
+        </div>
+        <div class="warning-box">
+            <p>❌ دو ضلع متناسب و یک زاویه‌ی غیر بین (SSA~) → برای اثبات تشابه کافی نیست</p>
+        </div>
+    </div>
+
+    <div class="quiz-section" id="quiz">
+        <h2 class="quiz-title"><span>📝</span> خودت رو امتحان کن</h2>
+        <div class="quiz-question" id="q1">
+            <p class="question-text">۱. تفاوت اصلی بین تشابه و هم‌نهشتی مثلث‌ها چیست؟</p>
+            <div class="quiz-options">
+                <button class="quiz-option" onclick="checkAnswer(1, '1', this)">هیچ فرقی ندارند، فقط اسمشون فرق داره.</button>
+                <button class="quiz-option" onclick="checkAnswer(1, '2', this)">در تشابه فقط زاویه‌ها باید برابر باشند و اضلاع فقط با هم متناسبند؛ در هم‌نهشتی اضلاع هم باید کاملاً برابر باشند.</button>
+                <button class="quiz-option" onclick="checkAnswer(1, '3', this)">در هم‌نهشتی فقط زاویه‌ها مهم است.</button>
+                <button class="quiz-option" onclick="checkAnswer(1, '4', this)">تشابه فقط برای مثلث‌های قائم‌الزاویه تعریف می‌شود.</button>
+            </div>
+            <div class="quiz-feedback" id="feedback1">در تشابه، اضلاع فقط با یک نسبت k متناسبند؛ در هم‌نهشتی، آن نسبت باید دقیقاً ۱ باشد (یعنی برابر).</div>
+        </div>
+        <div class="quiz-question" id="q2">
+            <p class="question-text">۲. کدام یک از حالت‌های زیر برای اثبات تشابه دو مثلث کافی نیست؟</p>
+            <div class="quiz-options">
+                <button class="quiz-option" onclick="checkAnswer(2, '1', this)">ز ز (AA)</button>
+                <button class="quiz-option" onclick="checkAnswer(2, '2', this)">ض ض ض (نسبت اضلاع)</button>
+                <button class="quiz-option" onclick="checkAnswer(2, '3', this)">ض ز ض (نسبت دو ضلع و زاویه بین)</button>
+                <button class="quiz-option" onclick="checkAnswer(2, '4', this)">دو ضلع متناسب و یک زاویه‌ی غیر بین</button>
+            </div>
+            <div class="quiz-feedback" id="feedback2">درست مثل هم‌نهشتی، اگر زاویه‌ی برابر بین دو ضلع متناسب نباشد، تشابه تضمین نمی‌شود.</div>
+        </div>
+        <div class="quiz-question" id="q3">
+            <p class="question-text">۳. چرا حالت AAA برای اثبات تشابه کافی است، در حالی که برای هم‌نهشتی کافی نبود؟</p>
+            <div class="quiz-options">
+                <button class="quiz-option" onclick="checkAnswer(3, '1', this)">چون در تشابه فقط برابری زاویه‌ها لازم است، نه اندازه‌ی واقعی اضلاع.</button>
+                <button class="quiz-option" onclick="checkAnswer(3, '2', this)">چون AAA اصلاً درست نیست و در تشابه هم کافی نیست.</button>
+                <button class="quiz-option" onclick="checkAnswer(3, '3', this)">چون تشابه فقط برای مثلث‌های متساوی‌الاضلاع تعریف می‌شود.</button>
+                <button class="quiz-option" onclick="checkAnswer(3, '4', this)">چون AAA فقط در مثلث قائم‌الزاویه کار می‌کند.</button>
+            </div>
+            <div class="quiz-feedback" id="feedback3">دقیقاً! تشابه فقط به شکل مثلث کار داره (یعنی زاویه‌ها)، نه اندازه‌ی واقعیش.</div>
+        </div>
+    </div>
+
+    <div class="nav-links">
+        <a href="level8.html" class="btn btn-ghost">↩ هم‌نهشتی مثلث‌ها</a>
+        <a href="../index.html" class="btn btn-ghost">🏠 صفحه اصلی</a>
+        <a href="level9_quiz.html" class="btn btn-success">📝 تمرین‌های تشابه ←</a>
+    </div>
+
+    <footer><p>🧪 هندسیار — جشنواره نوجوان خوارزمی | محور ریاضی و فناوری اطلاعات</p></footer>
+
+</div>
+
+<audio id="bgMusic" loop preload="auto"></audio>
+
+<script>
+    // ===== ثبت مرحله ۴ در localStorage =====
+    (function markStep4() {
+        try {
+            const STORAGE_KEY = 'hendesyar_completed';
+            const completed = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+            if (!completed['step4']) {
+                completed['step4'] = true;
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(completed));
+            }
+        } catch(e) {}
+    })();
+
+    // ===== تم =====
+    function toggleTheme() {
+        document.body.classList.toggle('light');
+        try { localStorage.setItem('theme', document.body.classList.contains('light') ? 'light' : 'dark'); } catch(e){}
+    }
+    const savedTheme = (() => { try { return localStorage.getItem('theme'); } catch(e){ return null; } })();
+    if (savedTheme) { document.body.classList.toggle('light', savedTheme === 'light'); }
+
+    // ===== منو =====
+    const menuBtn = document.getElementById('menuBtn');
+    const sideMenu = document.getElementById('sideMenu');
+    const overlay = document.getElementById('overlay');
+    function toggleMenu() { sideMenu.classList.toggle('open'); overlay.classList.toggle('show'); }
+    menuBtn.addEventListener('click', toggleMenu);
+    overlay.addEventListener('click', toggleMenu);
+
+    // ===== موزیک پلیر =====
+    const bgMusic = document.getElementById('bgMusic');
+    const musicPlayBtn = document.getElementById('musicPlayBtn');
+    const nextTrackBtn = document.getElementById('nextTrackBtn');
+    const trackNameSpan = document.getElementById('trackName');
+    const volumeSlider = document.getElementById('volumeSlider');
+    const musicPlayer = document.getElementById('musicPlayer');
+    const musicToggleIcon = document.getElementById('musicToggleIcon');
+    let currentTrackIndex = 0;
+    let isMusicPlaying = false;
+
+    const playlist = [
+        { name: "قطعه ۱", url: "https://v.delgarm.com/mp3/843/2024/10/13/670bbc143c867.mp3" },
+        { name: "قطعه ۲", url: "https://dl.musicdel.ir/tag/music/1400/08/06/%20-%20Instrumental%205%20(320).mp3" },
+        { name: "قطعه ۳", url: "https://dl.boxmusics.ir/songs/400/5/Chris%20Embers%20-%20Alive.mp3" },
+        { name: "قطعه ۴", url: "https://dl5.download1music.ir/Music/2021/Piano/Piano%20-%20Jane%20Maryam%20128.mp3" }
+    ];
+
+    function loadTrack(index) {
+        const track = playlist[index];
+        bgMusic.src = track.url;
+        trackNameSpan.textContent = track.name;
+        if (isMusicPlaying) {
+            bgMusic.play().catch(() => {});
+        }
+    }
+
+    function nextTrack() {
+        currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
+        loadTrack(currentTrackIndex);
+        if (!isMusicPlaying) {
+            togglePlay();
+        }
+    }
+
+    bgMusic.addEventListener('ended', () => { nextTrack(); });
+
+    function toggleMusicPlayer() {
+        musicPlayer.classList.toggle('open');
+        musicToggleIcon.textContent = musicPlayer.classList.contains('open') ? '✕' : '▶';
+    }
+
+    function togglePlay() {
+        if (isMusicPlaying) {
+            bgMusic.pause();
+            musicPlayBtn.innerHTML = '▶';
+            musicPlayBtn.classList.remove('play-btn');
+            musicPlayer.classList.add('paused');
+        } else {
+            if (!bgMusic.src || bgMusic.src === window.location.href) {
+                loadTrack(0);
+            }
+            bgMusic.play().catch(() => {});
+            musicPlayBtn.innerHTML = '⏸';
+            musicPlayBtn.classList.add('play-btn');
+            musicPlayer.classList.remove('paused');
+        }
+        isMusicPlaying = !isMusicPlaying;
+    }
+
+    nextTrackBtn.addEventListener('click', nextTrack);
+
+    volumeSlider.addEventListener('input', (e) => {
+        const vol = parseFloat(e.target.value);
+        bgMusic.volume = vol;
+    });
+
+    bgMusic.volume = 0.1;
+    volumeSlider.value = 0.1;
+    loadTrack(0);
+
+    // ===== fa digits =====
+    function fa(num) {
+        const map = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
+        return String(num).split('').map(ch => /[0-9]/.test(ch) ? map[+ch] : (ch === '.' ? '.' : ch)).join('');
+    }
+
+    // ===== دو مثلث: ثابت + با نسبت k =====
+    const UNIT = 12;
+    const basePts = [
+        { x: 0,  y: 0 },
+        { x: 6 * UNIT, y: 0 },
+        { x: 6 * UNIT, y: 8 * UNIT }
+    ];
+
+    function layout(pts, canvasW, canvasH) {
+        const xs = pts.map(p => p.x), ys = pts.map(p => p.y);
+        const minX = Math.min(...xs), maxX = Math.max(...xs);
+        const minY = Math.min(...ys), maxY = Math.max(...ys);
+        const w = maxX - minX, h = maxY - minY;
+        const offsetX = (canvasW - w) / 2 - minX;
+        const offsetY = (canvasH - h) / 2 - minY;
+        return pts.map(p => ({ x: p.x + offsetX, y: p.y + offsetY }));
+    }
+
+    function drawAngleArc(ctx, vertex, p1, p2, radius, color, width) {
+        let a1 = Math.atan2(p1.y - vertex.y, p1.x - vertex.x);
+        let a2 = Math.atan2(p2.y - vertex.y, p2.x - vertex.x);
+        let s = Math.min(a1, a2), e = Math.max(a1, a2);
+        if (e - s > Math.PI) { const t = s; s = e; e = t + 2 * Math.PI; }
+        ctx.beginPath();
+        ctx.arc(vertex.x, vertex.y, radius, s, e);
+        ctx.strokeStyle = color;
+        ctx.lineWidth = width;
+        ctx.stroke();
+    }
+
+    function drawTri(ctx, W, H, pts, color, labels, angleColor1, angleColor2) {
+        ctx.clearRect(0, 0, W, H);
+        const P = layout(pts, W, H);
+        ctx.beginPath();
+        ctx.moveTo(P[0].x, P[0].y); ctx.lineTo(P[1].x, P[1].y); ctx.lineTo(P[2].x, P[2].y); ctx.closePath();
+        ctx.fillStyle = color + '22';
+        ctx.fill();
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 3;
+        ctx.stroke();
+
+        drawAngleArc(ctx, P[0], P[1], P[2], 22, angleColor1 || '#e74c3c', 3);
+        drawAngleArc(ctx, P[2], P[0], P[1], 18, angleColor2 || '#9b59b6', 3);
+
+        const dirBA = { x: (P[0].x - P[1].x), y: (P[0].y - P[1].y) };
+        const lenBA = Math.hypot(dirBA.x, dirBA.y) || 1;
+        const dirBC = { x: (P[2].x - P[1].x), y: (P[2].y - P[1].y) };
+        const lenBC = Math.hypot(dirBC.x, dirBC.y) || 1;
+        const ux = dirBA.x / lenBA, uy = dirBA.y / lenBA;
+        const vx = dirBC.x / lenBC, vy = dirBC.y / lenBC;
+        const s1 = { x: P[1].x + ux * 14, y: P[1].y + uy * 14 };
+        const s2 = { x: s1.x + vx * 14, y: s1.y + vy * 14 };
+        const s3 = { x: P[1].x + vx * 14, y: P[1].y + vy * 14 };
+        ctx.beginPath();
+        ctx.moveTo(s1.x, s1.y); ctx.lineTo(s2.x, s2.y); ctx.lineTo(s3.x, s3.y);
+        ctx.strokeStyle = '#e74c3c'; ctx.lineWidth = 2; ctx.stroke();
+
+        // ===== رفع مشکل نمایش برچسب‌ها در حالت روز =====
+        const isLight = document.body.classList.contains('light');
+        ctx.fillStyle = isLight ? '#16233a' : '#ffffff';
+        ctx.font = 'bold 16px Estedad, Vazirmatn, sans-serif';
+        ctx.shadowBlur = isLight ? 0 : 3;
+        ctx.shadowColor = 'rgba(0,0,0,0.5)';
+        
+        [0, 1, 2].forEach((i, idx) => {
+            const ox = idx === 0 ? -22 : (idx === 1 ? 12 : 10);
+            const oy = idx === 2 ? -10 : 20;
+            ctx.fillText(labels[idx], P[i].x + ox, P[i].y + oy);
+        });
+        ctx.shadowBlur = 0;
+        return P;
+    }
+
+    const canvasFixed = document.getElementById('triangleFixed');
+    const canvasScaled = document.getElementById('triangleScaled');
+    const ctxFixed = canvasFixed.getContext('2d');
+    const ctxScaled = canvasScaled.getContext('2d');
+    const kSlider = document.getElementById('kSlider');
+    const kValueEl = document.getElementById('kValue');
+    const kReadoutEl = document.getElementById('kReadout');
+
+    function render(k) {
+        drawTri(ctxFixed, 280, 230, basePts, '#3498db', ['A', 'B', 'C'], '#e74c3c', '#9b59b6');
+        const scaledPts = basePts.map(p => ({ x: p.x * k, y: p.y * k }));
+        drawTri(ctxScaled, 280, 230, scaledPts, '#2ecc71', ['D', 'E', 'F'], '#e74c3c', '#9b59b6');
+
+        const AB = 6, BC = 8, CA = 10;
+        kValueEl.textContent = 'k = ' + fa(k.toFixed(1));
+        kReadoutEl.innerHTML =
+            `مثلث ABC: AB=<strong>${fa(AB)}</strong> &nbsp; BC=<strong>${fa(BC)}</strong> &nbsp; CA=<strong>${fa(CA)}</strong><br>` +
+            `مثلث DEF: DE=<strong>${fa((AB*k).toFixed(1))}</strong> &nbsp; EF=<strong>${fa((BC*k).toFixed(1))}</strong> &nbsp; FD=<strong>${fa((CA*k).toFixed(1))}</strong>`;
+    }
+
+    kSlider.addEventListener('input', () => render(parseFloat(kSlider.value)));
+    render(parseFloat(kSlider.value));
+
+    function checkAnswer(qNum, answer, element) {
+        const correct = { 1: '2', 2: '4', 3: '1' };
+        const fb = document.getElementById(`feedback${qNum}`);
+        document.querySelectorAll(`#q${qNum} .quiz-option`).forEach(btn => btn.classList.remove('correct', 'wrong'));
+        const isCorrect = answer === correct[qNum];
+        element.classList.add(isCorrect ? 'correct' : 'wrong');
+        fb.className = `quiz-feedback ${isCorrect ? 'correct' : 'wrong'}`;
+    }
+</script>
+</body>
+</html>
