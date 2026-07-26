@@ -51,7 +51,6 @@
         @media (prefers-reduced-motion: reduce) {
             *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
         }
-
         body.light {
             --bg: #f2ede4;
             --surface: #ffffff;
@@ -71,7 +70,6 @@
         body.light .btn-ghost { border-color: rgba(22,35,58,0.16); }
         body.light .progress-bar { background: rgba(22,35,58,0.08); }
         body.light .theme-toggle, body.light .menu-btn { border-color: rgba(22,35,58,0.14); }
-
         .topbar {
             position: sticky; top: 0; z-index: 50;
             display: flex; align-items: center; justify-content: space-between;
@@ -105,7 +103,6 @@
         .theme-toggle:hover, .menu-btn:hover { background: rgba(243,156,18,0.1); transform: scale(1.04); }
         .menu-btn { display: flex; flex-direction: column; gap: 5px; padding: 12px 14px; }
         .menu-btn span { width: 20px; height: 2px; background: var(--text); border-radius: 2px; }
-
         .side-menu {
             position: fixed; top: 0; right: -340px; width: 300px; height: 100vh; z-index: 200;
             background: var(--surface); border-left: 1px solid rgba(243,156,18,0.1);
@@ -127,12 +124,10 @@
         .side-menu-close:hover { transform: rotate(90deg); }
         .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 150; display: none; backdrop-filter: blur(4px); }
         .overlay.show { display: block; }
-
         .progress-track { max-width: 1200px; margin: 12px auto 0; padding: 0 24px; }
         .progress-bar { width: 100%; height: 6px; background: rgba(255,255,255,0.08); border-radius: 10px; overflow: hidden; }
         .progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--primary), var(--secondary)); border-radius: 10px; transition: width .5s ease; }
         .progress-label { display: flex; justify-content: space-between; font-size: .72rem; color: var(--text-dim); margin-top: 4px; }
-
         .hero { max-width: 1200px; margin: 0 auto; padding: 50px 24px 20px; display: grid; grid-template-columns: 1.05fr .95fr; gap: 40px; align-items: center; }
         .eyebrow {
             display: inline-flex; align-items: center; gap: 10px;
@@ -158,7 +153,6 @@
         .badge:hover { transform: translateY(-3px); box-shadow: 0 6px 16px rgba(243,156,18,0.1); }
         .badge.gold { border-color: rgba(243,156,18,0.3); color: var(--primary-ink); }
         .hero-cta { display: flex; gap: 14px; margin-top: 28px; flex-wrap: wrap; }
-
         .btn {
             display: inline-flex; align-items: center; gap: 10px; padding: 14px 30px;
             border-radius: 16px; font-weight: 700; font-size: .95rem;
@@ -170,7 +164,6 @@
         .btn-primary:hover { transform: translateY(-4px) scale(1.02); box-shadow: 0 14px 36px rgba(243,156,18,0.3); }
         .btn-ghost { background: transparent; border: 1px solid rgba(255,255,255,0.14); color: var(--text); }
         .btn-ghost:hover { border-color: var(--secondary-ink); color: var(--secondary-ink); transform: translateY(-4px); }
-
         .music-player {
             position: fixed; bottom: 30px; left: 30px; z-index: 100;
             background: rgba(22,40,58,0.9); backdrop-filter: blur(16px);
@@ -220,7 +213,6 @@
             -webkit-appearance: none; width: 10px; height: 10px; border-radius: 50%;
             background: var(--primary); cursor: pointer;
         }
-
         .tri-stage { background: var(--surface); border: 1px solid var(--card-border); border-radius: var(--radius); padding: 20px; box-shadow: var(--card-shadow); transition: background 0.3s ease, border-color .3s ease; }
         .tri-stage .cap { display: flex; justify-content: space-between; font-family: 'JetBrains Mono', monospace; font-size: .7rem; color: var(--text-dim); margin-bottom: 12px; }
         .tri-stage .cap .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--secondary); display: inline-block; margin-inline-end: 8px; }
@@ -228,19 +220,16 @@
         #triCanvas:active { cursor: grabbing; }
         .tri-hint { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-top: 12px; font-size: .8rem; color: var(--text-dim); }
         .tri-type { font-family: 'JetBrains Mono', monospace; font-size: .7rem; color: var(--primary-ink); background: rgba(243,156,18,0.08); border: 1px solid rgba(243,156,18,0.18); padding: 4px 12px; border-radius: 20px; }
-
         .stats-live { display: flex; justify-content: center; gap: 40px; max-width: 1200px; margin: 0 auto; padding: 16px 24px 8px; flex-wrap: wrap; }
         .stat-card { text-align: center; padding: 10px 16px; border-radius: 20px; background: var(--surface); border: 1px solid var(--card-border); transition: all .3s ease; cursor: default; min-width: 80px; box-shadow: var(--card-shadow); }
         .stat-card:hover { transform: translateY(-4px); border-color: var(--primary); }
         .stat-icon { font-size: 1.3rem; display: block; margin-bottom: 2px; }
         .stat-number { font-size: 2.2rem; font-weight: 800; background: var(--grad-text); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-family: 'JetBrains Mono', monospace; }
         .stat-label { font-size: .72rem; color: var(--text-dim); margin-top: 2px; }
-
         section { max-width: 1200px; margin: 0 auto; padding: 50px 24px; }
         .section-head { margin-bottom: 32px; }
         .section-head h2 { font-size: 2.2rem; font-weight: 900; background: var(--grad-text); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
         .section-head .sub { color: var(--text-dim); margin-top: 8px; font-size: .95rem; max-width: 60ch; }
-
         .path-main { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px; }
         .path-hero { background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: var(--radius); padding: 32px 28px; color: #0b1a2e; box-shadow: 0 12px 30px rgba(243,156,18,0.18); transition: all .3s ease; grid-row: span 2; }
         .path-hero:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(243,156,18,0.24); }
@@ -251,7 +240,6 @@
         .path-hero .btn:hover { background: rgba(11,26,46,0.22); transform: translateY(-3px); }
         .path-hero .cert-btn { display: none; margin-top: 14px; width: 100%; justify-content: center; background: rgba(11,26,46,0.16); color: #0b1a2e; border: 1px dashed rgba(11,26,46,0.3); }
         .path-hero .cert-btn.show { display: inline-flex; }
-
         .path-list { display: flex; flex-direction: column; gap: 10px; }
         .path-item {
             background: var(--surface); border: 1px solid var(--card-border);
@@ -268,7 +256,6 @@
         .path-item.completed { border-color: var(--success); background: rgba(39,174,96,0.08); }
         .path-item.completed .step { background: var(--success); color: #ffffff; }
         .path-item.completed .arrow { color: var(--success); }
-
         .path-ai {
             background: var(--surface); border: 1px solid var(--card-border);
             border-radius: 18px; padding: 16px 18px;
@@ -279,7 +266,6 @@
         .path-ai .ic { font-size: 1.6rem; }
         .path-ai .label { font-weight: 700; font-size: .95rem; }
         .path-ai .desc { font-size: .75rem; color: var(--text-dim); }
-
         .path-line { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; position: relative; grid-column: 1 / -1; }
         .path-line::before {
             content: ''; position: absolute; top: 50%; left: 5%; right: 5%; height: 2px;
@@ -303,14 +289,12 @@
         .path-dot.completed { border-color: var(--success); }
         .path-dot.completed .num { background: var(--success); color: #ffffff; }
         .path-dot.active .num { box-shadow: 0 0 20px rgba(243,156,18,0.35); }
-
         .cards-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 20px; }
         .qcard { background: var(--surface); border: 1px solid var(--card-border); border-radius: var(--radius); padding: 26px 20px; cursor: pointer; transition: all .3s cubic-bezier(.34,1.56,.64,1); color: var(--text); text-align: center; box-shadow: var(--card-shadow); }
         .qcard:hover { border-color: var(--secondary); transform: translateY(-8px) scale(1.02); }
         .qcard .ic { font-size: 1.8rem; margin-bottom: 10px; display: inline-block; }
         .qcard h3 { font-size: 1.05rem; margin-bottom: 6px; }
         .qcard p { color: var(--text-dim); font-size: .8rem; line-height: 1.7; }
-
         .apps-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 18px; }
         .app { background: var(--surface); border-radius: 22px; overflow: hidden; border: 1px solid var(--card-border); transition: 0.3s; color: var(--text); box-shadow: var(--card-shadow); }
         .app:hover { transform: translateY(-6px); }
@@ -320,7 +304,6 @@
         .app .body { padding: 16px 16px 18px; }
         .app h4 { font-size: .95rem; color: var(--primary-ink); margin-bottom: 5px; }
         .app p { font-size: .78rem; color: var(--text-dim); line-height: 1.75; }
-
         .domain-card {
             background: var(--surface); border: 1px solid var(--card-border); border-radius: var(--radius);
             padding: 42px 30px; text-align: center; box-shadow: var(--card-shadow);
@@ -346,7 +329,6 @@
         .domain-qr-wrap { position: relative; display: flex; flex-direction: column; align-items: center; gap: 8px; }
         .domain-qr-wrap img { border-radius: 12px; background: #fff; padding: 6px; box-shadow: var(--card-shadow); }
         .domain-qr-wrap span { font-size: .75rem; color: var(--text-dim); }
-
         .future-plan { background: rgba(243,156,18,0.04); border: 1px solid var(--card-border); border-radius: var(--radius); padding: 28px 32px; margin-top: 30px; }
         .future-plan h3 { font-size: 1.2rem; background: var(--grad-text); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 12px; }
         .future-plan .grid { display: grid; grid-template-columns: repeat(5,1fr); gap: 14px; }
@@ -354,7 +336,6 @@
         .future-plan .item:hover { transform: translateY(-4px); border-color: var(--primary); }
         .future-plan .item .ic { font-size: 1.4rem; display: block; margin-bottom: 4px; }
         .future-plan .item .lbl { font-size: .7rem; }
-
         .testimonial-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
         .testimonial { background: var(--surface); border-radius: var(--radius); padding: 24px; border: 1px solid var(--card-border); transition: 0.3s; color: var(--text); box-shadow: var(--card-shadow); }
         .testimonial:hover { transform: translateY(-4px); border-color: var(--primary); }
@@ -363,22 +344,18 @@
         .quote::after { content: '"'; color: var(--primary-ink); font-size: 1.6rem; font-family: Georgia, serif; margin-inline-start: 4px; }
         .author { margin-top: 12px; display: flex; align-items: center; gap: 10px; color: var(--text-dim); font-size: .8rem; font-weight: 500; }
         .author .avatar { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'JetBrains Mono', monospace; font-size: .65rem; font-weight: 800; color: #0b1a2e; background: linear-gradient(135deg, var(--primary), var(--secondary)); }
-
         .docs-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; }
         .doc { background: var(--surface); border: 1px solid var(--card-border); border-radius: var(--radius); padding: 22px; text-align: center; cursor: pointer; transition: all .3s cubic-bezier(.34,1.56,.64,1); color: var(--text); box-shadow: var(--card-shadow); }
         .doc:hover { border-color: var(--primary); transform: translateY(-6px) scale(1.02); }
         .doc .ic { font-size: 1.6rem; margin-bottom: 8px; display: inline-block; }
         .doc h4 { font-size: .9rem; }
-
         .back-top { position: fixed; bottom: 30px; right: 30px; z-index: 100; width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--secondary)); color: #0b1a2e; border: none; font-size: 1.3rem; cursor: pointer; box-shadow: 0 6px 18px rgba(243,156,18,0.25); transition: all .3s; opacity: 0; pointer-events: none; }
         .back-top.show { opacity: 1; pointer-events: auto; }
         .back-top:hover { transform: scale(1.08); }
-
         footer { text-align: center; padding: 36px 24px 20px; color: var(--text-dim); font-size: .75rem; border-top: 1px solid var(--card-border); }
         .footer-links { display: flex; justify-content: center; gap: 18px; margin-bottom: 14px; flex-wrap: wrap; }
         .footer-links a { color: var(--text-dim); text-decoration: none; font-size: .8rem; transition: 0.3s; }
         .footer-links a:hover { color: var(--primary-ink); }
-
         .cert-overlay {
             position: fixed; inset: 0; background: rgba(0,0,0,0.65); z-index: 300;
             display: none; align-items: center; justify-content: center; padding: 20px;
@@ -416,7 +393,6 @@
             .cert-card { position: fixed; inset: 0; margin: auto; border-width: 14px; box-shadow: none; }
             .cert-close, .cert-actions { display: none !important; }
         }
-
         .tour-overlay { position: fixed; inset: 0; z-index: 400; display: none; }
         .tour-overlay.show { display: block; }
         .tour-dim { position: absolute; inset: 0; background: rgba(0,0,0,0.55); }
@@ -431,7 +407,6 @@
         .tour-tip .tour-skip { background: none; border: none; color: var(--text-dim); font-size: .8rem; cursor: pointer; text-decoration: underline; }
         .tour-tip .tour-next { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: #0b1a2e; border: none; padding: 8px 20px; border-radius: 12px; font-weight: 700; cursor: pointer; font-family: 'Estedad','Vazirmatn',sans-serif; }
         .tour-highlight { box-shadow: 0 0 0 6px rgba(243,156,18,0.55), 0 0 40px rgba(243,156,18,0.4); border-radius: 18px; }
-
         .tour-ask-overlay {
             position: fixed; inset: 0; z-index: 450; display: none; align-items: center; justify-content: center;
             padding: 20px; background: rgba(0,0,0,0.6); backdrop-filter: blur(6px);
@@ -446,14 +421,12 @@
         .tour-ask-card h3 { font-size: 1.2rem; margin-bottom: 10px; }
         .tour-ask-card p { font-size: .88rem; color: var(--text-dim); margin-bottom: 22px; line-height: 1.8; }
         .tour-ask-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
-
         .video-section { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
         .video-card { background: var(--surface); border: 1px solid var(--card-border); border-radius: var(--radius); padding: 28px 30px; text-align: center; box-shadow: var(--card-shadow); margin-bottom: 30px; }
         .video-card h2 { display: flex; align-items: center; justify-content: center; gap: 12px; font-size: 1.8rem; background: var(--grad-text); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 10px; }
         .video-card p { color: var(--text-dim); margin-bottom: 20px; }
         .video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 24px; box-shadow: var(--card-shadow); background: var(--surface-light); }
         .video-wrapper video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 24px; }
-
         @media (max-width: 900px) {
             .hero { grid-template-columns: 1fr; padding-top: 30px; }
             .path-main { grid-template-columns: 1fr; }
@@ -495,9 +468,7 @@
     </style>
 </head>
 <body>
-
 <div class="grid-bg"></div>
-
 <div class="topbar">
     <div class="brand">
         <span class="logo"><img src="https://cdn.imgurl.ir/uploads/n979716_file_00000000841071f49b295d273da301ac.png" alt="لوگوی هندسیار"></span>
@@ -508,7 +479,6 @@
         <div class="menu-btn" id="menuBtn" role="button" tabindex="0" aria-label="باز کردن منو"><span></span><span></span><span></span></div>
     </div>
 </div>
-
 <div class="overlay" id="overlay"></div>
 <div class="side-menu" id="sideMenu">
     <button class="side-menu-close" onclick="toggleMenu()" aria-label="بستن منو">✕</button>
@@ -521,7 +491,6 @@
     <a href="#docs">📄 مستندات</a>
     <a href="Help.html">❓ راهنما</a>
 </div>
-
 <div class="tour-ask-overlay" id="tourAskOverlay">
     <div class="tour-ask-card">
         <div class="tour-ask-icon">🧭</div>
@@ -533,7 +502,6 @@
         </div>
     </div>
 </div>
-
 <div class="tour-overlay" id="tourOverlay">
     <div class="tour-dim"></div>
     <div class="tour-tip" id="tourTip">
@@ -545,7 +513,6 @@
         </div>
     </div>
 </div>
-
 <div class="cert-overlay" id="certOverlay">
     <div class="cert-card">
         <button class="cert-close" onclick="closeCert()" aria-label="بستن">✕</button>
@@ -563,7 +530,6 @@
         </div>
     </div>
 </div>
-
 <div class="music-player" id="musicPlayer">
     <span class="toggle-icon" id="musicToggleIcon" onclick="toggleMusicPlayer()">▶</span>
     <div class="inner" id="musicInner">
@@ -581,14 +547,11 @@
         <button class="music-btn" id="nextTrackBtn" onclick="nextTrack()" aria-label="آهنگ بعدی">⏩</button>
     </div>
 </div>
-
 <main>
-
     <div class="progress-track">
         <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
         <div class="progress-label"><span>پیشرفت شما</span><span id="progressText">۰٪</span></div>
     </div>
-
     <div class="hero" id="home">
         <div>
             <div class="eyebrow">⚡ هندسیار · آزمایشگاه تعاملی هندسه</div>
@@ -613,7 +576,6 @@
             </div>
         </div>
     </div>
-
     <div class="video-section">
         <div class="video-card">
             <h2>🎬 معرفی پروژه</h2>
@@ -626,7 +588,6 @@
             </div>
         </div>
     </div>
-
     <div class="stats-live" id="stats">
         <div class="stat-card"><span class="stat-icon">⏱️</span><span class="stat-number" data-target="75">0</span><span class="stat-label">ساعت کار</span></div>
         <div class="stat-card"><span class="stat-icon">📐</span><span class="stat-number" data-target="100">0</span><span class="stat-label">٪ آموزش کامل هندسه</span></div>
@@ -634,7 +595,6 @@
         <div class="stat-card"><span class="stat-icon">🤖</span><span class="stat-number" data-target="1">0</span><span class="stat-label">دستیار هوشمند</span></div>
         <div class="stat-card"><span class="stat-icon">🏆</span><span class="stat-number" data-target="2">0</span><span class="stat-label">مرحله قهرمانی</span></div>
     </div>
-
     <section id="path">
         <div class="section-head">
             <div class="eyebrow">📍 نقشه مسیر</div>
@@ -677,7 +637,6 @@
                 </div>
             </div>
         </div>
-
         <div class="path-line" id="pathDots">
             <div class="path-dot" data-step="1" onclick="selectStep(1)"><div class="num">۱</div><span class="lbl">تبدیل‌ها</span></div>
             <div class="path-dot" data-step="2" onclick="selectStep(2)"><div class="num">۲</div><span class="lbl">هم‌نهشتی</span></div>
@@ -686,7 +645,6 @@
             <div class="path-dot" data-step="5" onclick="selectStep(5)"><div class="num">۵</div><span class="lbl">تمرین تشابه</span></div>
         </div>
     </section>
-
     <section id="apps">
         <div class="section-head">
             <div class="eyebrow">💡 کاربرد در دنیای واقعی</div>
@@ -711,7 +669,6 @@
             </div>
         </div>
     </section>
-
     <section id="domain">
         <div class="section-head">
             <div class="eyebrow">🌐 حالا رسمی‌ایم</div>
@@ -735,7 +692,6 @@
             </div>
         </div>
     </section>
-
     <div style="max-width:1200px;margin:0 auto;padding:0 24px;">
         <div class="future-plan">
             <h3>🚀 برنامه برای مرحله کشوری</h3>
@@ -763,7 +719,6 @@
             </div>
         </div>
     </div>
-
     <section id="testimonials">
         <div class="section-head">
             <div class="eyebrow">💬 نظر دانش‌آموزان</div>
@@ -775,7 +730,6 @@
             <div class="testimonial"><div class="quote">این که می‌تونم شکل رو بکشم و بچرخونم، باعث میشه مفاهیم انتزاعی مثل دوران رو واقعاً درک کنم.</div><div class="author"><span class="avatar">ع</span> علی، پایه هفتم</div></div>
         </div>
     </section>
-
     <section id="docs">
         <div class="section-head">
             <div class="eyebrow">📄 مستندات</div>
@@ -787,11 +741,8 @@
             <div class="doc" onclick="location.href='Help.html'"><div class="ic">❓</div><h4>راهنما</h4></div>
         </div>
     </section>
-
 </main>
-
 <button class="back-top" id="backTop">↑</button>
-
 <footer>
     <div class="footer-links">
         <a href="#home">صفحه اصلی</a>
@@ -804,15 +755,12 @@
     <p>🧪 هندسیار — جشنواره نوجوان خوارزمی | محور ریاضی و فناوری اطلاعات</p>
     <p style="margin-top:4px;">✨ ساخته شده توسط عرشیا خسروی‌پور ✨</p>
 </footer>
-
 <audio id="bgMusic" loop preload="auto"></audio>
-
 <script>
     function toggleTheme() {
         document.body.classList.toggle('light');
         try { localStorage.setItem('theme', document.body.classList.contains('light') ? 'light' : 'dark'); } catch(e){}
     }
-
     function setAutoTheme() {
         var hour = new Date().getHours();
         var isDay = hour >= 6 && hour < 18;
@@ -823,14 +771,12 @@
         }
         try { localStorage.setItem('theme', isDay ? 'light' : 'dark'); } catch(e){}
     }
-
     var savedTheme = (function() { try { return localStorage.getItem('theme'); } catch(e){ return null; } })();
     if (savedTheme) {
         document.body.classList.toggle('light', savedTheme === 'light');
     } else {
         setAutoTheme();
     }
-
     var menuBtn = document.getElementById('menuBtn');
     var sideMenu = document.getElementById('sideMenu');
     var overlay = document.getElementById('overlay');
@@ -838,12 +784,10 @@
     menuBtn.addEventListener('click', toggleMenu);
     menuBtn.addEventListener('keydown', function(e) { if (e.key === 'Enter' || e.key === ' ') toggleMenu(); });
     overlay.addEventListener('click', toggleMenu);
-
     function fa(num) {
         var map = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
         return String(num).split('').map(function(ch) { return /[0-9]/.test(ch) ? map[+ch] : ch; }).join('');
     }
-
     var STEPS = [
         { id: 'step1', name: 'تبدیل‌های هندسی', link: 'source/level7.html' },
         { id: 'step2', name: 'هم‌نهشتی مثلث‌ها', link: 'source/level8.html' },
@@ -853,7 +797,6 @@
     ];
     var STORAGE_KEY = 'hendesyar_completed';
     var previewStep = null;
-
     function getCompletionMap() {
         try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch(e) { return {}; }
     }
@@ -868,7 +811,6 @@
         return STEPS.length;
     }
     function allStepsDone() { return STEPS.every(function(s) { return isCompleted(s.id); }); }
-
     function selectStep(n) {
         var step = STEPS[n - 1];
         if (!step) return;
@@ -885,16 +827,13 @@
         markCompleted(step.id);
         location.href = step.link;
     }
-
     window.addEventListener('storage', function(e) { if (e.key === STORAGE_KEY) render(); });
-
     function render() {
         var current = firstIncompleteStep();
         var doneCount = STEPS.filter(function(s) { return isCompleted(s.id); }).length;
         var pct = Math.round((doneCount / STEPS.length) * 100);
         document.getElementById('progressFill').style.width = pct + '%';
         document.getElementById('progressText').textContent = fa(pct) + '٪';
-
         document.querySelectorAll('.path-item').forEach(function(el, i) {
             var n = i + 1, done = isCompleted(STEPS[i].id);
             el.classList.toggle('completed', done);
@@ -902,14 +841,12 @@
             el.querySelector('.step').textContent = done ? '✅ مشاهده شد' : ('مرحله ' + fa(n));
             el.querySelector('.arrow').textContent = done ? '✓' : '←';
         });
-
         document.querySelectorAll('.path-dot').forEach(function(el, i) {
             var n = i + 1, done = isCompleted(STEPS[i].id);
             el.classList.toggle('completed', done);
             el.classList.toggle('active', !done && n === current);
             el.querySelector('.num').textContent = done ? '✓' : fa(n);
         });
-
         var showStep = (previewStep && isCompleted(STEPS[previewStep - 1].id)) ? previewStep : current;
         var stepData = STEPS[showStep - 1];
         var done = isCompleted(stepData.id);
@@ -917,7 +854,6 @@
         var textEl = document.getElementById('currentStepText');
         var btnEl = document.getElementById('pathHeroBtn');
         var certBtn = document.getElementById('certBtn');
-
         if (allStepsDone() && !previewStep) {
             titleEl.textContent = '🎉 تبریک! مسیر را کامل کردی';
             textEl.textContent = 'همه‌ی مراحل را مشاهده کرده‌ای. می‌تونی دوباره هر کدوم رو مرور کنی.';
@@ -926,7 +862,6 @@
             certBtn.classList.add('show');
             return;
         }
-
         titleEl.textContent = 'مرحله ' + fa(showStep) + ': ' + stepData.name;
         if (done) {
             textEl.textContent = '✅ شما این مرحله را انجام داده‌اید.';
@@ -938,7 +873,6 @@
         btnEl.onclick = function() { openStep(showStep); };
         certBtn.classList.remove('show');
     }
-
     function openCert() {
         var nameInput = document.getElementById('certName');
         var savedName = (function() { try { return localStorage.getItem('hendesyar_cert_name') || ''; } catch(e) { return ''; } })();
@@ -953,7 +887,6 @@
         document.getElementById('certOverlay').classList.add('show');
     }
     function closeCert() { document.getElementById('certOverlay').classList.remove('show'); }
-
     function copyDomain() {
         var btn = document.getElementById('domainCopyBtn');
         var text = 'https://hendesyar.ir';
@@ -969,7 +902,6 @@
             done();
         }
     }
-
     var TOUR_ASKED_KEY = 'hendesyar_tour_asked';
     var tourSteps = [
         { target: '.tri-stage', text: 'این مثلث زنده‌ست! رأس‌هاش رو با موس یا انگشت بکش و ببین اسمش چطور عوض می‌شه.' },
@@ -982,60 +914,48 @@
     ];
     var tourIndex = 0;
     var tourTimeout = null;
-
     function clearTourHighlight() {
         document.querySelectorAll('.tour-highlight').forEach(function(el) { el.classList.remove('tour-highlight'); });
     }
-
     function positionTourTip(targetEl) {
         var tip = document.getElementById('tourTip');
         if (!tip) return;
-        
         var rect = targetEl.getBoundingClientRect();
         var tipWidth = Math.min(320, window.innerWidth - 32);
         var tipHeight = 200;
-        
         var top = rect.bottom + 20;
         var left = rect.left + rect.width / 2 - tipWidth / 2;
         left = Math.max(16, Math.min(left, window.innerWidth - tipWidth - 16));
-        
         if (top + tipHeight + 30 > window.innerHeight) {
             top = rect.top - tipHeight - 20;
         }
-        
         if (top < 20 || top + tipHeight > window.innerHeight - 20) {
             top = window.innerHeight / 2 - tipHeight / 2;
             left = window.innerWidth / 2 - tipWidth / 2;
         }
-        
         tip.style.top = Math.max(10, top) + 'px';
         tip.style.left = Math.max(10, left) + 'px';
         tip.style.display = 'block';
         tip.style.position = 'fixed';
         tip.style.zIndex = '9999';
     }
-
     function showTourStep(i) {
         clearTourHighlight();
         if (tourTimeout) {
             clearTimeout(tourTimeout);
             tourTimeout = null;
         }
-        
         var step = tourSteps[i];
         var targetEl = document.querySelector(step.target);
         if (!targetEl) {
             endTour();
             return;
         }
-        
         targetEl.classList.add('tour-highlight');
         document.getElementById('tourStepCount').textContent = fa(i + 1) + ' از ' + fa(tourSteps.length);
         document.getElementById('tourText').textContent = step.text;
         document.getElementById('tourNextBtn').textContent = (i === tourSteps.length - 1) ? 'باشه، شروع کن ✓' : 'بعدی ←';
-        
         targetEl.scrollIntoView({ block: 'center', behavior: 'smooth' });
-        
         tourTimeout = setTimeout(function() {
             var freshTarget = document.querySelector(step.target);
             if (freshTarget) {
@@ -1044,7 +964,6 @@
             tourTimeout = null;
         }, 500);
     }
-
     function nextTourStep() {
         var tip = document.getElementById('tourTip');
         tip.style.display = 'none';
@@ -1055,7 +974,6 @@
         }
         showTourStep(tourIndex);
     }
-
     function endTour() {
         document.getElementById('tourOverlay').classList.remove('show');
         clearTourHighlight();
@@ -1067,11 +985,9 @@
         }
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-
     function markTourAsked() {
         try { localStorage.setItem(TOUR_ASKED_KEY, '1'); } catch(e){}
     }
-
     function acceptTour() {
         document.getElementById('tourAskOverlay').classList.remove('show');
         markTourAsked();
@@ -1079,19 +995,16 @@
         document.getElementById('tourOverlay').classList.add('show');
         showTourStep(0);
     }
-
     function declineTour() {
         document.getElementById('tourAskOverlay').classList.remove('show');
         markTourAsked();
     }
-
     function askForTour() {
         var asked = false;
         try { asked = !!localStorage.getItem(TOUR_ASKED_KEY); } catch(e){}
         if (asked) return;
         document.getElementById('tourAskOverlay').classList.add('show');
     }
-
     window.addEventListener('resize', function() {
         if (document.getElementById('tourOverlay').classList.contains('show')) {
             var activeStep = tourSteps[tourIndex];
@@ -1103,7 +1016,6 @@
             }
         }
     });
-
     window.addEventListener('scroll', function() {
         if (document.getElementById('tourOverlay').classList.contains('show')) {
             var activeStep = tourSteps[tourIndex];
@@ -1115,7 +1027,6 @@
             }
         }
     });
-
     function animateStats() {
         document.querySelectorAll('.stat-number').forEach(function(el) {
             var target = parseInt(el.dataset.target);
@@ -1132,17 +1043,14 @@
         entries.forEach(function(entry) { if (entry.isIntersecting) { animateStats(); statsObserver.disconnect(); } });
     }, { threshold: 0.3 });
     statsObserver.observe(document.getElementById('stats'));
-
     var backBtn = document.getElementById('backTop');
     window.addEventListener('scroll', function() { backBtn.classList.toggle('show', window.scrollY > 400); });
     backBtn.addEventListener('click', function() { window.scrollTo({ top: 0, behavior: 'smooth' }); });
-
     var canvas = document.getElementById('triCanvas');
     var ctx = canvas.getContext('2d');
     var readout = document.getElementById('triReadout');
     var typeReadout = document.getElementById('triType');
     var W = 520, H = 300, pts = [{x:0.22,y:0.75},{x:0.78,y:0.75},{x:0.5,y:0.18}], dragIdx = -1;
-
     function resize() {
         var rect = canvas.getBoundingClientRect();
         W = rect.width; H = rect.height;
@@ -1150,7 +1058,6 @@
         ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
         draw();
     }
-
     function toPx(p) { return { x: p.x * W, y: p.y * H }; }
     function dist(a,b) { return Math.hypot(a.x-b.x, a.y-b.y); }
     function angleAt(A,B,C) {
@@ -1179,7 +1086,6 @@
         }
         return sideType ? angleType + ' · ' + sideType : angleType;
     }
-
     function draw() {
         ctx.clearRect(0,0,W,H);
         var P = pts.map(toPx);
@@ -1205,7 +1111,6 @@
         readout.innerHTML = 'AB=' + AB + ' &nbsp; BC=' + BC + ' &nbsp; CA=' + CA + ' &nbsp; A=' + aStr + ' &nbsp; B=' + bStr + ' &nbsp; C=' + cStr;
         typeReadout.textContent = classifyTriangle(dist(A,B)*10, dist(B,C)*10, dist(C,A)*10, angA, angB, angC);
     }
-
     function getPos(e) {
         var rect = canvas.getBoundingClientRect();
         var cx = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
@@ -1224,7 +1129,6 @@
         draw(); e.preventDefault();
     }
     function up(){ dragIdx=-1; canvas.style.cursor='grab'; }
-
     canvas.addEventListener('mousedown',down);
     window.addEventListener('mousemove',move);
     window.addEventListener('mouseup',up);
@@ -1233,7 +1137,6 @@
     window.addEventListener('touchend',up);
     window.addEventListener('resize',resize);
     resize();
-
     var bgMusic = document.getElementById('bgMusic');
     var musicPlayBtn = document.getElementById('musicPlayBtn');
     var nextTrackBtn = document.getElementById('nextTrackBtn');
@@ -1243,14 +1146,12 @@
     var musicToggleIcon = document.getElementById('musicToggleIcon');
     var currentTrackIndex = 0;
     var isMusicPlaying = false;
-
     var playlist = [
         { name: "قطعه ۱", url: "source/music/music_1.mp3" },
         { name: "قطعه ۲", url: "source/music/music_2.mp3" },
         { name: "قطعه ۳", url: "source/music/music_3.mp3" },
         { name: "قطعه ۴", url: "source/music/music_4.mp3" }
     ];
-
     function loadTrack(index) {
         var track = playlist[index];
         bgMusic.src = track.url;
@@ -1259,7 +1160,6 @@
             bgMusic.play().catch(function() {});
         }
     }
-
     function nextTrack() {
         currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
         loadTrack(currentTrackIndex);
@@ -1267,16 +1167,13 @@
             togglePlay();
         }
     }
-
     bgMusic.addEventListener('ended', function() {
         nextTrack();
     });
-
     function toggleMusicPlayer() {
         musicPlayer.classList.toggle('open');
         musicToggleIcon.textContent = musicPlayer.classList.contains('open') ? '✕' : '▶';
     }
-
     function togglePlay() {
         if (isMusicPlaying) {
             bgMusic.pause();
@@ -1294,16 +1191,13 @@
         }
         isMusicPlaying = !isMusicPlaying;
     }
-
     volumeSlider.addEventListener('input', function(e) {
         var vol = parseFloat(e.target.value);
         bgMusic.volume = vol;
     });
-
     bgMusic.volume = 0.1;
     volumeSlider.value = 0.1;
     loadTrack(0);
-
     render();
     setTimeout(askForTour, 600);
 </script>

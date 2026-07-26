@@ -14,7 +14,6 @@
             box-sizing: border-box;
             font-family: 'Estedad', 'Vazirmatn', 'Tahoma', sans-serif;
         }
-
         :root {
             --bg: #0b1a2e;
             --surface: #16283a;
@@ -31,14 +30,12 @@
             --card-shadow: 0 12px 30px rgba(0,0,0,0.4);
             --radius: 28px;
         }
-
         body {
             background: var(--bg);
             min-height: 100vh;
             padding: 30px;
             transition: background 0.3s ease, color 0.3s ease;
         }
-
         body.light {
             --bg: #f2ede4;
             --surface: #ffffff;
@@ -52,7 +49,6 @@
             --card-border: rgba(22,35,58,0.09);
             --card-shadow: 0 10px 26px rgba(22,35,58,0.08);
         }
-
         .grid-bg {
             position: fixed; inset: 0; z-index: 0; pointer-events: none;
             background-image:
@@ -62,7 +58,6 @@
             mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 40%, transparent 90%);
         }
         body.light .grid-bg { opacity: 0.3; }
-
         .container {
             max-width: 1000px;
             margin: 0 auto;
@@ -75,7 +70,6 @@
             z-index: 1;
             transition: background 0.3s ease, border-color 0.3s ease;
         }
-
         .topbar {
             display: flex;
             align-items: center;
@@ -87,7 +81,6 @@
             transition: background 0.3s ease;
         }
         body.light .topbar { background: rgba(242,237,228,0.92); border-bottom-color: rgba(22,35,58,0.06); }
-
         .brand { display: flex; align-items: center; gap: 12px; font-size: 1.2rem; font-weight: 800; color: var(--text); }
         .brand .logo {
             width: 36px; height: 36px;
@@ -103,7 +96,6 @@
             color: var(--text); font-size: 1.1rem; cursor: pointer; transition: 0.3s;
         }
         .theme-toggle:hover { background: rgba(243,156,18,0.1); transform: scale(1.04); }
-
         .header {
             padding: 35px 30px 30px;
             text-align: center;
@@ -122,9 +114,7 @@
             gap: 12px;
         }
         .header p { color: var(--text-dim); font-size: 1rem; margin-top: 6px; }
-
         .content { padding: 35px; }
-
         .start-box {
             background: rgba(39,174,96,0.06);
             border: 1px solid rgba(39,174,96,0.15);
@@ -137,7 +127,6 @@
         .start-box h2 { color: var(--success); margin-bottom: 12px; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 1.4rem; }
         .start-box p { color: var(--text-dim); line-height: 1.8; font-size: 1.05rem; margin-bottom: 18px; }
         .start-box p strong { color: var(--text); }
-
         .btn {
             display: inline-flex; align-items: center; gap: 10px;
             padding: 12px 30px; border-radius: 50px;
@@ -152,7 +141,6 @@
             box-shadow: 0 6px 24px rgba(243,156,18,0.25);
         }
         .btn-primary:hover { transform: translateY(-4px) scale(1.02); box-shadow: 0 14px 36px rgba(243,156,18,0.3); }
-
         .intro-box {
             background: rgba(243,156,18,0.04);
             border: 1px solid var(--card-border);
@@ -182,7 +170,6 @@
             background-size: 18px;
             color: var(--text-dim);
         }
-
         .badge-container {
             display: flex;
             flex-wrap: wrap;
@@ -199,7 +186,6 @@
             color: var(--primary-ink);
             font-family: 'JetBrains Mono', monospace;
         }
-
         .docs-cards {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -223,7 +209,6 @@
         .doc-icon { font-size: 2.8rem; margin-bottom: 8px; }
         .doc-card h4 { font-size: 1.1rem; color: var(--text); margin-bottom: 4px; }
         .doc-card p { color: var(--text-dim); font-size: .8rem; line-height: 1.6; }
-
         .future-box {
             background: var(--surface-light);
             border: 1px solid var(--card-border);
@@ -265,7 +250,6 @@
             transition: all 0.3s;
         }
         .future-link:hover { background: var(--primary); color: #0b1a2e; }
-
         .folder-box {
             background: var(--surface-light);
             border: 1px solid var(--card-border);
@@ -292,7 +276,6 @@
         .folder-structure .file { color: #2ecc71; }
         .folder-structure .comment { color: #7f8c8d; }
         .folder-structure .highlight-file { color: #e74c3c; font-weight: 700; }
-
         .note-box {
             background: rgba(243,156,18,0.06);
             border-right: 5px solid var(--primary);
@@ -302,7 +285,6 @@
         }
         .note-box p { color: var(--text-dim); line-height: 1.8; font-size: .9rem; }
         .note-box p strong { color: var(--text); }
-
         .steps-title {
             font-size: 1.5rem;
             font-weight: 700;
@@ -314,7 +296,6 @@
             border-right: 5px solid var(--primary);
             padding-right: 16px;
         }
-
         .step {
             display: flex;
             gap: 18px;
@@ -349,7 +330,6 @@
             font-size: .8rem;
             color: var(--text-dim);
         }
-
         .buttons-guide {
             background: var(--surface-light);
             border-radius: 18px;
@@ -370,7 +350,6 @@
         .btn-home-sample { background: #7f8c8d; color: white; }
         .buttons-guide p { color: var(--text-dim); font-size: .85rem; margin-top: 12px; line-height: 2; }
         .buttons-guide p strong { color: var(--text); }
-
         .home-button { text-align: center; margin-top: 30px; padding-top: 20px; border-top: 2px dashed var(--card-border); }
         .home-btn {
             display: inline-flex; align-items: center; gap: 12px;
@@ -383,7 +362,6 @@
             font-family: 'Estedad', 'Vazirmatn', sans-serif;
         }
         .home-btn:hover { transform: scale(1.05); box-shadow: 0 12px 30px rgba(243,156,18,0.3); }
-
         .footer {
             background: var(--bg);
             color: var(--text-dim);
@@ -394,7 +372,6 @@
             transition: background 0.3s ease, color 0.3s ease;
         }
         .footer .gold { color: var(--primary-ink); }
-
         @media (max-width: 700px) {
             .content { padding: 20px; }
             .step { flex-direction: column; align-items: center; text-align: center; }
@@ -423,9 +400,7 @@
     </style>
 </head>
 <body>
-
 <div class="grid-bg"></div>
-
 <div class="container">
     <div class="topbar">
         <div class="brand">
@@ -434,7 +409,6 @@
         </div>
         <button class="theme-toggle" onclick="toggleTheme()" aria-label="تغییر تم روشن و تاریک">🌓</button>
     </div>
-
     <div class="header">
         <h1>
             <span>📖</span>
@@ -443,9 +417,7 @@
         </h1>
         <p>آزمایشگاه تعاملی هندسه | پایه هفتم تا نهم</p>
     </div>
-
     <div class="content">
-
         <div class="start-box">
             <h2>🚀 چگونه شروع کنیم؟</h2>
             <p>
@@ -456,7 +428,6 @@
                 🎯 کلیک کنید تا وارد پروژه شوید 🚀
             </a>
         </div>
-
         <div class="intro-box">
             <h3><span>🧪</span> درباره پروژه هندسیار</h3>
             <p>
@@ -479,7 +450,6 @@
                 <span class="badge-item">🌐 hendesyar.ir</span>
             </div>
         </div>
-
         <div class="docs-cards">
             <div class="doc-card" onclick="window.open('source/notebook.html', '_self')">
                 <div class="doc-icon">📓</div>
@@ -492,14 +462,13 @@
                 <p>مشخصات کامل پروژه، دانش‌آموز و مشاور<br>مطابق با شیوه‌نامه جشنواره</p>
             </div>
         </div>
-
         <div class="future-box">
             <h3><span>🌐</span> نسخه تحت وب و آینده‌نگری <span>🚀</span></h3>
             <p>
                 این پروژه علاوه بر نسخه محلی، به صورت <strong>سایت اینترنتی</strong> نیز منتشر شده است و در حال حاضر از طریق آدرس زیر قابل دسترسی می‌باشد:
             </p>
             <p style="direction: ltr; font-size: .9rem; word-break: break-all; background: rgba(255,255,255,0.04); padding: 8px; border-radius: 10px; color: var(--primary-ink); font-family: 'JetBrains Mono', monospace;">
-                🔗 <strong>https://hendesyar.ir</strong>
+                🔗 <strong>https:
             </p>
             <p style="font-size: .8rem; color: var(--text-dim);">
                 <span>🔒 اتصال امن (HTTPS)</span> &nbsp;|&nbsp; <span>📱 سازگار با موبایل و تبلت</span>
@@ -514,7 +483,6 @@
             </div>
             <a href="https://hendesyar.ir" target="_blank" class="future-link">🌐 مشاهده سایت پروژه</a>
         </div>
-
         <div class="folder-box">
             <h3>📁 ساختار فایل‌های پروژه</h3>
             <div class="folder-structure">
@@ -540,9 +508,7 @@
                 <p style="margin-top: 8px;">🌐 <strong>دامنه اختصاصی:</strong> پروژه از طریق <strong>hendesyar.ir</strong> نیز در دسترس است.</p>
             </div>
         </div>
-
         <h2 class="steps-title"><span>📌</span> نحوه استفاده از هندسیار</h2>
-
         <div class="step">
             <div class="step-num">۱</div>
             <div class="step-content">
@@ -555,7 +521,6 @@
                 </div>
             </div>
         </div>
-
         <div class="step">
             <div class="step-num">۲</div>
             <div class="step-content">
@@ -564,7 +529,6 @@
                 <div class="example-box">تبدیل‌های هندسی → هم‌نهشتی → تمرین هم‌نهشتی → تشابه → تمرین تشابه</div>
             </div>
         </div>
-
         <div class="step">
             <div class="step-num">۳</div>
             <div class="step-content">
@@ -572,7 +536,6 @@
                 <p>با ورود به صفحه، از شما پرسیده می‌شود که آیا تور راهنما را می‌خواهید یا نه. این تور ۷ مرحله‌ای مهم‌ترین بخش‌های سایت را به شما نشان می‌دهد.</p>
             </div>
         </div>
-
         <div class="step">
             <div class="step-num">۴</div>
             <div class="step-content">
@@ -580,7 +543,6 @@
                 <p>اگر در حل سوالات یا درک مفاهیم مشکل دارید، از چت‌بات هوشمند که با Groq API کار می‌کند کمک بگیرید.</p>
             </div>
         </div>
-
         <div class="step">
             <div class="step-num">۵</div>
             <div class="step-content">
@@ -588,7 +550,6 @@
                 <p>پس از تکمیل تمام ۵ مرحله، می‌توانید <strong>گواهی تکمیل</strong> را با نام خود دریافت و چاپ کنید.</p>
             </div>
         </div>
-
         <div class="buttons-guide">
             <h3>🎮 دکمه‌های موجود در سوالات:</h3>
             <div>
@@ -604,7 +565,6 @@
                 🏠 <strong>برگشت به خانه:</strong> به صفحه اصلی بازمی‌گردد
             </p>
         </div>
-
         <div class="home-button">
             <a href="index.html" class="home-btn">
                 <span>🏠</span>
@@ -613,7 +573,6 @@
             </a>
         </div>
     </div>
-
     <div class="footer">
         <p>طراحی شده برای دوازدهمین دوره جشنواره نوجوان خوارزمی | محور ریاضی و فناوری اطلاعات</p>
         <p style="margin-top: 4px;">✨ منطبق بر ۱۶ شاخص داوری - دارای چت‌بات هوشمند ✨</p>
@@ -621,13 +580,11 @@
         <p style="margin-top: 8px; font-size: .65rem;">🧪 ساخته شده توسط <span class="gold">عرشیا خسروی پور</span></p>
     </div>
 </div>
-
 <script>
     function toggleTheme() {
         document.body.classList.toggle('light');
         try { localStorage.setItem('theme', document.body.classList.contains('light') ? 'light' : 'dark'); } catch(e){}
     }
-
     var savedTheme = (function() { try { return localStorage.getItem('theme'); } catch(e){ return null; } })();
     if (savedTheme) {
         document.body.classList.toggle('light', savedTheme === 'light');

@@ -47,7 +47,6 @@
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: var(--bg); }
         ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
-
         body.light {
             --bg: #f2ede4;
             --surface: #ffffff;
@@ -66,7 +65,6 @@
         body.light .side-menu { border-left-color: rgba(22,35,58,0.06); }
         body.light .btn-ghost { border-color: rgba(22,35,58,0.16); }
         body.light .lesson-card { background: #ffffff; }
-
         .topbar {
             position: sticky; top: 0; z-index: 50;
             display: flex; align-items: center; justify-content: space-between;
@@ -100,7 +98,6 @@
         .theme-toggle:hover, .menu-btn:hover { background: rgba(243,156,18,0.1); transform: scale(1.04); }
         .menu-btn { display: flex; flex-direction: column; gap: 5px; padding: 12px 14px; }
         .menu-btn span { width: 20px; height: 2px; background: var(--text); border-radius: 2px; }
-
         .side-menu {
             position: fixed; top: 0; right: -340px; width: 300px; height: 100vh; z-index: 200;
             background: var(--surface); border-left: 1px solid rgba(243,156,18,0.1);
@@ -117,9 +114,7 @@
         .side-menu-close:hover { transform: rotate(90deg); }
         .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 150; display: none; backdrop-filter: blur(4px); }
         .overlay.show { display: block; }
-
         .main-container { max-width: 1200px; margin: 0 auto; padding: 30px 24px 60px; }
-
         .page-header { text-align: center; margin-bottom: 40px; }
         .page-header .eyebrow {
             display: inline-flex; align-items: center; gap: 10px;
@@ -135,7 +130,6 @@
             margin-top: 12px;
         }
         .page-header p { color: var(--text-dim); font-size: 1.05rem; max-width: 600px; margin: 8px auto 0; }
-
         .lesson-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -201,7 +195,6 @@
             z-index: 5;
         }
         .play-btn-anim:hover { transform: scale(1.1); background: var(--primary); }
-
         .video-card {
             background: var(--surface);
             border: 1px solid var(--card-border);
@@ -238,7 +231,6 @@
             height: 100%;
             border-radius: 20px;
         }
-
         .btn {
             display: inline-flex; align-items: center; gap: 8px;
             padding: 12px 28px;
@@ -260,7 +252,6 @@
             box-shadow: 0 6px 24px rgba(243,156,18,0.25);
         }
         .btn-primary:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 14px 36px rgba(243,156,18,0.3); }
-
         .nav-links {
             display: flex;
             justify-content: space-between;
@@ -269,9 +260,7 @@
             flex-wrap: wrap;
         }
         .nav-links .btn { flex: 1; justify-content: center; min-width: 160px; }
-
         footer { text-align: center; color: var(--text-dim); margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--card-border); font-size: .8rem; }
-
         .music-player {
             position: fixed; bottom: 30px; left: 30px; z-index: 100;
             background: rgba(22,40,58,0.9); backdrop-filter: blur(16px);
@@ -321,8 +310,6 @@
             -webkit-appearance: none; width: 10px; height: 10px; border-radius: 50%;
             background: var(--primary); cursor: pointer;
         }
-
-        /* ===== بخش نکات کلیدی ===== */
         .notes-box {
             background: var(--surface);
             border: 1px solid var(--card-border);
@@ -351,7 +338,6 @@
             background-size: 16px;
         }
         .notes-box ul li strong { color: var(--text); }
-
         @media (max-width: 900px) {
             .lesson-grid { grid-template-columns: 1fr 1fr; }
             .page-header h1 { font-size: 2rem; }
@@ -375,9 +361,7 @@
     </style>
 </head>
 <body>
-
 <div class="grid-bg"></div>
-
 <div class="topbar">
     <div class="brand">
         <span class="logo"><img src="https://cdn.imgurl.ir/uploads/n979716_file_00000000841071f49b295d273da301ac.png" alt="لوگوی هندسیار"></span>
@@ -388,7 +372,6 @@
         <div class="menu-btn" id="menuBtn" role="button" tabindex="0" aria-label="باز کردن منو"><span></span><span></span><span></span></div>
     </div>
 </div>
-
 <div class="overlay" id="overlay"></div>
 <div class="side-menu" id="sideMenu">
     <button class="side-menu-close" onclick="toggleMenu()" aria-label="بستن منو">✕</button>
@@ -399,7 +382,6 @@
     <a href="chatbot.html">🤖 دستیار هوشمند</a>
     <a href="../Help.html">❓ راهنما</a>
 </div>
-
 <div class="music-player" id="musicPlayer">
     <span class="toggle-icon" id="musicToggleIcon" onclick="toggleMusicPlayer()">▶</span>
     <div class="inner" id="musicInner">
@@ -417,16 +399,12 @@
         <button class="music-btn" id="nextTrackBtn" onclick="nextTrack()" aria-label="آهنگ بعدی">⏩</button>
     </div>
 </div>
-
 <div class="main-container">
-
     <div class="page-header">
         <div class="eyebrow">📘 پایه هفتم · فصل چهارم</div>
         <h1>🔄 تبدیل‌های هندسی</h1>
         <p>با ویدیو و انیمیشن‌های تعاملی، مفاهیم انتقال، تقارن و دوران را یاد بگیر.</p>
     </div>
-
-    <!-- ===== بخش ویدیو ===== -->
     <div class="video-card">
         <h2>🎬 ویدیو آموزشی تبدیل‌های هندسی</h2>
         <p>در این ویدیو، سه تبدیل اصلی هندسی (انتقال، تقارن و دوران) را به صورت کامل یاد بگیرید.</p>
@@ -437,10 +415,7 @@
             </video>
         </div>
     </div>
-
-    <!-- ===== درسنامه با انیمیشن ===== -->
     <div class="lesson-grid">
-        <!-- انتقال -->
         <div class="lesson-card">
             <span class="icon">↔️</span>
             <h3>انتقال</h3>
@@ -451,8 +426,6 @@
             </div>
             <div class="example">مثال: جابجایی یک شکل روی کاغذ شفاف</div>
         </div>
-
-        <!-- تقارن -->
         <div class="lesson-card">
             <span class="icon">🪞</span>
             <h3>تقارن (قرینه)</h3>
@@ -463,8 +436,6 @@
             </div>
             <div class="example">مثال: تا کردن کاغذ روی خط تقارن</div>
         </div>
-
-        <!-- دوران -->
         <div class="lesson-card">
             <span class="icon">🔄</span>
             <h3>دوران</h3>
@@ -476,8 +447,6 @@
             <div class="example">مثال: چرخاندن شکل حول مرکز</div>
         </div>
     </div>
-
-    <!-- ===== نکات کلیدی ===== -->
     <div class="notes-box">
         <h2>💡 نکات کلیدی</h2>
         <ul>
@@ -486,37 +455,26 @@
             <li><strong>دوران:</strong> در ۱۸۰ درجه جهت مهم نیست، در ۹۰ درجه جهت مهم است.</li>
         </ul>
     </div>
-
-    <!-- ===== ناوبری ===== -->
     <div class="nav-links">
         <a href="../index.html" class="btn btn-ghost">🏠 صفحه اصلی</a>
         <a href="level8.html" class="btn btn-primary">📚 رفتن به هم‌نهشتی ←</a>
     </div>
-
     <footer><p>🧪 هندسیار — جشنواره نوجوان خوارزمی | محور ریاضی و فناوری اطلاعات</p></footer>
-
 </div>
-
 <audio id="bgMusic" loop preload="auto"></audio>
-
 <script>
-    // ===== تم =====
     function toggleTheme() {
         document.body.classList.toggle('light');
         try { localStorage.setItem('theme', document.body.classList.contains('light') ? 'light' : 'dark'); } catch(e){}
     }
     var savedTheme = (function() { try { return localStorage.getItem('theme'); } catch(e){ return null; } })();
     if (savedTheme) { document.body.classList.toggle('light', savedTheme === 'light'); }
-
-    // ===== منو =====
     var menuBtn = document.getElementById('menuBtn');
     var sideMenu = document.getElementById('sideMenu');
     var overlay = document.getElementById('overlay');
     function toggleMenu() { sideMenu.classList.toggle('open'); overlay.classList.toggle('show'); }
     menuBtn.addEventListener('click', toggleMenu);
     overlay.addEventListener('click', toggleMenu);
-
-    // ===== موزیک پلیر =====
     var bgMusic = document.getElementById('bgMusic');
     var musicPlayBtn = document.getElementById('musicPlayBtn');
     var nextTrackBtn = document.getElementById('nextTrackBtn');
@@ -526,14 +484,12 @@
     var musicToggleIcon = document.getElementById('musicToggleIcon');
     var currentTrackIndex = 0;
     var isMusicPlaying = false;
-
     var playlist = [
         { name: "قطعه ۱", url: "music/music_1.mp3" },
         { name: "قطعه ۲", url: "music/music_2.mp3" },
         { name: "قطعه ۳", url: "music/music_3.mp3" },
         { name: "قطعه ۴", url: "music/music_4.mp3" }
     ];
-
     function loadTrack(index) {
         var track = playlist[index];
         bgMusic.src = track.url;
@@ -542,7 +498,6 @@
             bgMusic.play().catch(function() {});
         }
     }
-
     function nextTrack() {
         currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
         loadTrack(currentTrackIndex);
@@ -550,16 +505,13 @@
             togglePlay();
         }
     }
-
     bgMusic.addEventListener('ended', function() {
         nextTrack();
     });
-
     function toggleMusicPlayer() {
         musicPlayer.classList.toggle('open');
         musicToggleIcon.textContent = musicPlayer.classList.contains('open') ? '✕' : '▶';
     }
-
     function togglePlay() {
         if (isMusicPlaying) {
             bgMusic.pause();
@@ -577,19 +529,14 @@
         }
         isMusicPlaying = !isMusicPlaying;
     }
-
     nextTrackBtn.addEventListener('click', nextTrack);
-
     volumeSlider.addEventListener('input', function(e) {
         var vol = parseFloat(e.target.value);
         bgMusic.volume = vol;
     });
-
     bgMusic.volume = 0.1;
     volumeSlider.value = 0.1;
     loadTrack(0);
-
-    // ===== ثبت مرحله ۱ در localStorage =====
     (function markStep1() {
         try {
             var storageKey = 'hendesyar_completed';
@@ -600,10 +547,6 @@
             }
         } catch(e) {}
     })();
-
-    // ===== انیمیشن‌ها =====
-
-    // 1. انیمیشن انتقال
     var canvasT = document.getElementById('animTranslate');
     var ctxT = canvasT.getContext('2d');
     var rectT = canvasT.getBoundingClientRect();
@@ -612,10 +555,8 @@
     var shapeT = [{x:50,y:50},{x:90,y:30},{x:70,y:80}];
     var tOff = 0, tDir = 1;
     var tAnimId = null, tRunning = false;
-
     function drawTranslate(off) {
         ctxT.clearRect(0,0,Wt,Ht);
-        // رسم شکل اصلی (کم رنگ)
         ctxT.beginPath();
         ctxT.moveTo(shapeT[0].x, shapeT[0].y);
         ctxT.lineTo(shapeT[1].x, shapeT[1].y);
@@ -629,8 +570,6 @@
         ctxT.fillStyle = 'rgba(243,156,18,0.3)';
         ctxT.font = '10px Estedad';
         ctxT.fillText('قبلی', 30, 25);
-
-        // رسم شکل منتقل شده
         var pts = shapeT.map(p => ({x: p.x + off, y: p.y}));
         ctxT.beginPath();
         ctxT.moveTo(pts[0].x, pts[0].y);
@@ -642,14 +581,12 @@
         ctxT.strokeStyle = '#f39c12';
         ctxT.lineWidth = 2.5;
         ctxT.stroke();
-        // نقطه‌ها
         pts.forEach(p => {
             ctxT.beginPath();
             ctxT.arc(p.x,p.y,4,0,2*Math.PI);
             ctxT.fillStyle = '#f39c12';
             ctxT.fill();
         });
-        // خط راهنما
         ctxT.setLineDash([4,4]);
         ctxT.strokeStyle = 'rgba(243,156,18,0.2)';
         ctxT.lineWidth = 1;
@@ -662,34 +599,27 @@
         ctxT.font = '10px Estedad';
         ctxT.fillText('بعدی', pts[0].x-10, pts[0].y-10);
     }
-
     function animateTranslate() {
         tOff += 0.6 * tDir;
         if (tOff > 60 || tOff < 0) tDir *= -1;
         drawTranslate(tOff);
         if (tRunning) tAnimId = requestAnimationFrame(animateTranslate);
     }
-
     function playTranslate() {
         if (tRunning) { tRunning = false; cancelAnimationFrame(tAnimId); return; }
         tRunning = true; animateTranslate();
     }
-
-    // 2. انیمیشن تقارن (اصلاح شده - شکل‌ها از خط تقارن فاصله دارند)
     var canvasR = document.getElementById('animReflect');
     var ctxR = canvasR.getContext('2d');
     var rectR = canvasR.getBoundingClientRect();
     var Wr = canvasR.width = rectR.width || 260;
     var Hr = canvasR.height = rectR.height || 140;
     var midX = Wr / 2;
-    // شکل اصلی در سمت راست (با فاصله از خط تقارن)
     var shapeR = [{x: midX + 40, y: 30}, {x: midX + 70, y: 70}, {x: midX + 20, y: 80}];
     var reflectProgress = 0, rDir = 1;
     var rAnimId = null, rRunning = false;
-
     function drawReflect(prog) {
         ctxR.clearRect(0,0,Wr,Hr);
-        // خط تقارن (عمودی در وسط)
         ctxR.setLineDash([6,6]);
         ctxR.strokeStyle = 'rgba(26,188,156,0.5)';
         ctxR.lineWidth = 1.5;
@@ -701,8 +631,6 @@
         ctxR.fillStyle = 'rgba(26,188,156,0.3)';
         ctxR.font = '9px Estedad';
         ctxR.fillText('خط تقارن', midX-20, 20);
-
-        // شکل اصلی (سمت راست)
         var alpha = 1 - prog * 0.5;
         ctxR.globalAlpha = alpha;
         ctxR.beginPath();
@@ -719,8 +647,6 @@
         ctxR.font = '9px Estedad';
         ctxR.fillText('اصلی', shapeR[0].x-12, shapeR[0].y-12);
         ctxR.globalAlpha = 1;
-
-        // شکل قرینه (سمت چپ) - با فاصله از خط تقارن
         var reflected = shapeR.map(p => ({x: 2*midX - p.x, y: p.y}));
         var rAlpha = prog;
         ctxR.globalAlpha = rAlpha;
@@ -739,20 +665,16 @@
         ctxR.fillText('قرینه', reflected[0].x-14, reflected[0].y-12);
         ctxR.globalAlpha = 1;
     }
-
     function animateReflect() {
         reflectProgress += 0.02 * rDir;
         if (reflectProgress > 1 || reflectProgress < 0) rDir *= -1;
         drawReflect(reflectProgress);
         if (rRunning) rAnimId = requestAnimationFrame(animateReflect);
     }
-
     function playReflect() {
         if (rRunning) { rRunning = false; cancelAnimationFrame(rAnimId); return; }
         rRunning = true; animateReflect();
     }
-
-    // 3. انیمیشن دوران
     var canvasO = document.getElementById('animRotate');
     var ctxO = canvasO.getContext('2d');
     var rectO = canvasO.getBoundingClientRect();
@@ -762,10 +684,8 @@
     var shapeO = [{x: centerO.x+30, y: centerO.y-40},{x: centerO.x+50, y: centerO.y+10},{x: centerO.x+10, y: centerO.y+20}];
     var angleO = 0, oDir = 1;
     var oAnimId = null, oRunning = false;
-
     function drawRotate(ang) {
         ctxO.clearRect(0,0,Wo,Ho);
-        // مرکز دوران
         ctxO.beginPath();
         ctxO.arc(centerO.x, centerO.y, 6, 0, 2*Math.PI);
         ctxO.fillStyle = 'rgba(26,188,156,0.6)';
@@ -780,8 +700,6 @@
         ctxO.fillStyle = 'rgba(26,188,156,0.3)';
         ctxO.font = '9px Estedad';
         ctxO.fillText('مرکز دوران', centerO.x-25, centerO.y-14);
-
-        // شکل اصلی (کم رنگ)
         ctxO.globalAlpha = 0.3;
         ctxO.beginPath();
         ctxO.moveTo(shapeO[0].x, shapeO[0].y);
@@ -794,8 +712,6 @@
         ctxO.lineWidth = 1.5;
         ctxO.stroke();
         ctxO.globalAlpha = 1;
-
-        // شکل چرخیده
         var cosA = Math.cos(ang), sinA = Math.sin(ang);
         var rotated = shapeO.map(p => ({
             x: centerO.x + (p.x - centerO.x)*cosA - (p.y - centerO.y)*sinA,
@@ -821,49 +737,38 @@
         ctxO.font = '9px Estedad';
         ctxO.fillText('چرخیده', rotated[0].x-12, rotated[0].y-12);
     }
-
     function animateRotate() {
         angleO += 0.025 * oDir;
         if (angleO > 1.2 || angleO < 0) oDir *= -1;
         drawRotate(angleO);
         if (oRunning) oAnimId = requestAnimationFrame(animateRotate);
     }
-
     function playRotate() {
         if (oRunning) { oRunning = false; cancelAnimationFrame(oAnimId); return; }
         oRunning = true; animateRotate();
     }
-
-    // ===== تنظیم مجدد اندازه کانواس‌ها هنگام تغییر اندازه =====
     function resizeCanvases() {
         var rectT2 = canvasT.getBoundingClientRect();
         canvasT.width = rectT2.width || 260; canvasT.height = rectT2.height || 140;
         Wt = canvasT.width; Ht = canvasT.height;
         if (!tRunning) drawTranslate(tOff);
-
         var rectR2 = canvasR.getBoundingClientRect();
         canvasR.width = rectR2.width || 260; canvasR.height = rectR2.height || 140;
         Wr = canvasR.width; Hr = canvasR.height;
         midX = Wr / 2;
-        // به‌روزرسانی موقعیت شکل تقارن با خط جدید
         shapeR = [{x: midX + 40, y: 30}, {x: midX + 70, y: 70}, {x: midX + 20, y: 80}];
         if (!rRunning) drawReflect(reflectProgress);
-
         var rectO2 = canvasO.getBoundingClientRect();
         canvasO.width = rectO2.width || 260; canvasO.height = rectO2.height || 140;
         Wo = canvasO.width; Ho = canvasO.height;
         centerO = {x: Wo/2, y: Ho/2};
         if (!oRunning) drawRotate(angleO);
     }
-
     window.addEventListener('resize', resizeCanvases);
     setTimeout(resizeCanvases, 100);
-
-    // ===== رسم اولیه =====
     drawTranslate(0);
     drawReflect(0);
     drawRotate(0);
 </script>
-
 </body>
 </html>
