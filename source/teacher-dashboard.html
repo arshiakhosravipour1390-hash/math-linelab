@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>📊 داشبورد معلم | هندسیار</title>
+    <link rel="icon" href="https://cdn.imgurl.ir/uploads/n979716_file_00000000841071f49b295d273da301ac.png">
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/dist/font-face.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/estedad-font@v3.1.0/dist/font-face.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="school-data.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --bg: #0b1a2e;
+            --surface: #16283a;
+            --surface-light: #223a4e;
+            --text: #f2f5f7;
+            --text-dim: #a9b7c4;
+            --primary: #f39c12;
+            --primary-ink: #ffb347;
+            --secondary: #1abc9c;
+            --secondary-ink: #3fe0bd;
+            --success: #27ae60;
+            --danger: #e74c3c;
+            --grad-text: linear-gradient(135deg, var(--primary-ink), var(--secondary-ink));
+            --card-border: rgba(243,156,18,0.12);
+            --card-shadow: 0 12px 30px rgba(0,0,0,0.4);
+            --radius: 28px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Estedad', 'Vazirmatn', 'Tahoma', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+            transition: background 0.3s ease, color 0.3s ease;
+            line-height: 1.8;
+            min-height: 100vh;
+        }
+        .mono { font-family: 'JetBrains Mono', monospace; }
+        .grid-bg {
+            position: fixed; inset: 0; z-index: 0; pointer-events: none;
+            background-image:
+                linear-gradient(rgba(243,156,18,0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(26,188,156,0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+            mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 40%, transparent 90%);
+        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
+        body.light {
+            --bg: #f2ede4;
+            --surface: #ffffff;
+            --surface-light: #f7f2ea;
+            --text: #16233a;
+            --text-dim: #55627c;
+            --primary: #f39c12;
+            --primary-ink: #a35d0a;
+            --secondary: #1abc9c;
+            --secondary-ink: #0d7d68;
+            --card-border: rgba(22,35,58,0.09);
+            --card-shadow: 0 10px 26px rgba(22,35,58,0.08);
+        }
+        body.light .grid-bg { opacity: 0.35; }
+        body.light .topbar { background: rgba(242,237,228,0.92); border-bottom-color: rgba(22,35,58,0.06); }
+        body.light .side-menu { border-left-color: rgba(22,35,58,0.06); }
+        body.light .stat-card { background: #f8fafc; }
+        body.light .student-item { background: #f8fafc; }
+        body.light .filter-bar { background: #f8fafc; }
+        .topbar {
+            position: sticky; top: 0; z-index: 50;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 14px 28px;
+            background: rgba(11,26,46,0.92);
+            backdrop-filter: blur(14px);
+            border-bottom: 1px solid rgba(243,156,18,0.1);
+            transition: background 0.3s ease;
+        }
+        .brand { display: flex; align-items: center; gap: 12px; font-size: 1.4rem; font-weight: 800; }
+        .brand .logo {
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+        }
+        .brand .logo img {
+            width: 100%; height: 100%; object-fit: cover; display: block;
+        }
+        .theme-toggle, .menu-btn {
+            background: transparent; border: 1px solid rgba(243,156,18,0.18);
+            border-radius: 12px; padding: 6px 14px;
+            color: var(--text); font-size: 1.1rem; cursor: pointer; transition: 0.3s;
+        }
+        .theme-toggle:hover, .menu-btn:hover { background: rgba(243,156,18,0.1); transform: scale(1.04); }
+        .menu-btn { display: flex; flex-direction: column; gap: 5px; padding: 12px 14px; }
+        .menu-btn span { width: 20px; height: 2px; background: var(--text); border-radius: 2px; }
+        .side-menu {
+            position: fixed; top: 0; right: -340px; width: 300px; height: 100vh; z-index: 200;
+            background: var(--surface); border-left: 1px solid rgba(243,156,18,0.1);
+            padding: 100px 24px 30px; transition: right .4s cubic-bezier(.34,1.56,.64,1), background .3s ease;
+        }
+        .side-menu.open { right: 0; }
+        .side-menu a {
+            display: flex; align-items: center; gap: 14px; padding: 14px 18px;
+            color: var(--text); text-decoration: none; border-radius: 14px;
+            transition: 0.2s; margin-bottom: 6px;
+        }
+        .side-menu a:hover { background: rgba(243,156,18,0.1); transform: translateX(-6px); }
+        .side-menu-close { position: absolute; top: 20px; left: 20px; background: none; border: none; color: var(--text); font-size: 1.8rem; cursor: pointer; transition: 0.3s; }
+        .side-menu-close:hover { transform: rotate(90deg); }
+        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 150; display: none; backdrop-filter: blur(4px); }
+        .overlay.show { display: block; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 30px 24px 60px; }
+        .header-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+        .header-section h1 {
+            font-size: 2.2rem;
+            font-weight: 900;
+            background: var(--grad-text);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .header-section .school-info {
+            color: var(--text-dim);
+            font-size: .9rem;
+        }
+        .header-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 10px 22px;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: .9rem;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            transition: all .3s cubic-bezier(.34,1.56,.64,1);
+            font-family: 'Estedad', 'Vazirmatn', sans-serif;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #0b1a2e;
+            box-shadow: 0 6px 24px rgba(243,156,18,0.25);
+        }
+        .btn-primary:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 14px 36px rgba(243,156,18,0.3); }
+        .btn-danger { background: var(--danger); color: white; }
+        .btn-danger:hover { transform: translateY(-3px); }
+        .btn-success { background: var(--success); color: white; }
+        .btn-success:hover { transform: translateY(-3px); }
+        .btn-ghost { background: transparent; border: 2px solid var(--card-border); color: var(--text); }
+        .btn-ghost:hover { border-color: var(--primary); transform: translateY(-3px); }
+        .btn-sm { padding: 6px 14px; font-size: .8rem; }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+        .stat-card {
+            background: var(--surface);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s;
+        }
+        .stat-card:hover { transform: translateY(-4px); border-color: var(--primary); }
+        .stat-card .icon { font-size: 2rem; display: block; margin-bottom: 4px; }
+        .stat-card .number {
+            font-size: 2.2rem;
+            font-weight: 900;
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--grad-text);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .stat-card .label { font-size: .8rem; color: var(--text-dim); margin-top: 2px; }
+        .filter-bar {
+            background: var(--surface);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 16px 20px;
+            margin-bottom: 25px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+            box-shadow: var(--card-shadow);
+        }
+        .filter-bar select, .filter-bar input {
+            padding: 8px 14px;
+            border-radius: 12px;
+            border: 2px solid var(--card-border);
+            background: var(--surface-light);
+            color: var(--text);
+            font-family: inherit;
+            font-size: .85rem;
+            outline: none;
+            transition: 0.3s;
+        }
+        .filter-bar select:focus, .filter-bar input:focus { border-color: var(--primary); }
+        .filter-bar .search-input { flex: 1; min-width: 150px; }
+        .filter-bar .filter-label { color: var(--text-dim); font-size: .8rem; }
+        .chart-section {
+            background: var(--surface);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius);
+            padding: 24px;
+            margin-bottom: 30px;
+            box-shadow: var(--card-shadow);
+        }
+        .chart-section h3 {
+            color: var(--primary-ink);
+            font-size: 1.2rem;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .chart-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+        }
+        .chart-box { height: 280px; position: relative; }
+        .chart-box canvas { width: 100% !important; height: 100% !important; }
+        .students-section h3 {
+            color: var(--primary-ink);
+            font-size: 1.3rem;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .students-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+        }
+        .student-item {
+            background: var(--surface);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 18px 20px;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s;
+        }
+        .student-item:hover { transform: translateY(-4px); border-color: var(--primary); }
+        .student-item .name {
+            font-size: 1.1rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .student-item .code { font-size: .7rem; color: var(--text-dim); font-family: 'JetBrains Mono', monospace; }
+        .student-item .class-badge {
+            background: rgba(243,156,18,0.12);
+            color: var(--primary-ink);
+            padding: 2px 12px;
+            border-radius: 20px;
+            font-size: .7rem;
+            font-weight: 600;
+        }
+        .student-item .progress-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 10px;
+        }
+        .student-item .progress-bar {
+            flex: 1;
+            height: 6px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .student-item .progress-fill {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.5s ease;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+        .student-item .progress-text { font-size: .75rem; font-weight: 700; min-width: 36px; }
+        .student-item .score { font-size: .8rem; color: var(--success); font-weight: 700; }
+        .student-item .weakness {
+            font-size: .75rem;
+            color: var(--danger);
+            margin-top: 6px;
+            background: rgba(231,76,60,0.06);
+            padding: 4px 12px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+        .student-item .actions {
+            display: flex;
+            gap: 6px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+        .student-item .actions .btn { padding: 4px 12px; font-size: .7rem; }
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-dim);
+        }
+        .empty-state .icon { font-size: 4rem; display: block; margin-bottom: 16px; }
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 500;
+            backdrop-filter: blur(8px);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .modal-overlay.show { display: flex; }
+        .modal {
+            background: var(--surface);
+            border: 2px solid var(--primary);
+            border-radius: 30px;
+            max-width: 500px;
+            width: 100%;
+            padding: 32px 30px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.6);
+            position: relative;
+        }
+        .modal h2 {
+            color: var(--primary-ink);
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .modal .form-group { margin-bottom: 14px; }
+        .modal .form-group label {
+            display: block;
+            color: var(--text-dim);
+            font-size: .85rem;
+            margin-bottom: 4px;
+        }
+        .modal .form-group input, .modal .form-group select {
+            width: 100%;
+            padding: 10px 14px;
+            border-radius: 14px;
+            border: 2px solid var(--card-border);
+            background: var(--surface-light);
+            color: var(--text);
+            font-family: inherit;
+            font-size: .95rem;
+            outline: none;
+            transition: 0.3s;
+        }
+        .modal .form-group input:focus, .modal .form-group select:focus { border-color: var(--primary); }
+        .modal .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .modal .form-actions { display: flex; gap: 12px; justify-content: flex-end; margin-top: 20px; }
+        .modal .close-modal {
+            position: absolute;
+            top: 16px;
+            left: 20px;
+            background: none;
+            border: none;
+            color: var(--text-dim);
+            font-size: 1.4rem;
+            cursor: pointer;
+        }
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+            background: var(--surface);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 14px 24px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            display: none;
+            animation: slideUp .3s ease;
+        }
+        .toast.show { display: flex; align-items: center; gap: 12px; }
+        .toast.success { border-color: var(--success); }
+        .toast.error { border-color: var(--danger); }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+        @media (max-width: 1000px) {
+            .stats-grid { grid-template-columns: repeat(3, 1fr); }
+            .chart-grid { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 700px) {
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .header-section h1 { font-size: 1.6rem; }
+            .students-grid { grid-template-columns: 1fr; }
+            .filter-bar { flex-direction: column; align-items: stretch; }
+            .modal .form-row { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 480px) {
+            .stats-grid { grid-template-columns: 1fr 1fr; }
+            .stat-card .number { font-size: 1.6rem; }
+            .topbar { padding: 10px 14px; }
+            .container { padding: 16px; }
+            .modal { padding: 24px 18px; }
+        }
+    </style>
+</head>
+<body>
+<div class="grid-bg"></div>
+<div class="topbar">
+    <div class="brand">
+        <span class="logo"><img src="https://cdn.imgurl.ir/uploads/n979716_file_00000000841071f49b295d273da301ac.png" alt="هندسیار"></span>
+        هندسیار
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;">
+        <span style="font-size:.75rem;color:var(--text-dim);" id="teacherNameDisplay">👨‍🏫 معلم</span>
+        <button class="theme-toggle" onclick="toggleTheme()">🌓</button>
+        <button class="menu-btn" id="menuBtn"><span></span><span></span><span></span></button>
+    </div>
+</div>
+<div class="overlay" id="overlay"></div>
+<div class="side-menu" id="sideMenu">
+    <button class="side-menu-close" onclick="toggleMenu()">✕</button>
+    <a href="../index.html">🏠 صفحه اصلی</a>
+    <a href="teacher-dashboard.html">📊 داشبورد</a>
+    <a href="#" onclick="logoutTeacher(); return false;">🚪 خروج</a>
+</div>
+<div class="container">
+    <div class="header-section">
+        <div>
+            <h1>📊 داشبورد معلم</h1>
+            <div class="school-info" id="schoolDisplay">🏫 در حال بارگذاری...</div>
+        </div>
+        <div class="header-actions">
+            <button class="btn btn-primary" onclick="openAddStudentModal()">➕ افزودن دانش‌آموز</button>
+            <button class="btn btn-success" onclick="downloadReport()">📥 گزارش کلاس</button>
+            <button class="btn btn-ghost" onclick="refreshData()">🔄 بروزرسانی</button>
+        </div>
+    </div>
+    <div class="stats-grid">
+        <div class="stat-card"><span class="icon">👨‍🎓</span><div class="number" id="statTotal">0</div><div class="label">کل دانش‌آموزان</div></div>
+        <div class="stat-card"><span class="icon">✅</span><div class="number" id="statCompleted">0</div><div class="label">تکمیل‌کنندگان</div></div>
+        <div class="stat-card"><span class="icon">📊</span><div class="number" id="statAvg">0</div><div class="label">میانگین امتیاز</div></div>
+        <div class="stat-card"><span class="icon">⚠️</span><div class="number" id="statWeak">0</div><div class="label">نیاز به تلاش</div></div>
+        <div class="stat-card"><span class="icon">📈</span><div class="number" id="statProgress">0%</div><div class="label">پیشرفت کلی</div></div>
+    </div>
+    <div class="filter-bar">
+        <span class="filter-label">🔍 فیلتر:</span>
+        <select id="filterClass">
+            <option value="all">همه پایه‌ها</option>
+            <option value="هفتم">هفتم</option>
+            <option value="هشتم">هشتم</option>
+            <option value="نهم">نهم</option>
+        </select>
+        <input class="search-input" id="searchInput" placeholder="جستجوی نام یا کد..." type="text">
+        <button class="btn btn-sm btn-ghost" onclick="applyFilters()">اعمال فیلتر</button>
+        <button class="btn btn-sm btn-ghost" onclick="resetFilters()">نمایش همه</button>
+    </div>
+    <div class="chart-section">
+        <h3>📈 تحلیل پیشرفت کلاس</h3>
+        <div class="chart-grid">
+            <div class="chart-box"><canvas id="progressChart"></canvas></div>
+            <div class="chart-box"><canvas id="classChart"></canvas></div>
+        </div>
+    </div>
+    <div class="students-section">
+        <h3>📋 لیست دانش‌آموزان <span style="font-size:.8rem;color:var(--text-dim);" id="studentCountLabel">(0 نفر)</span></h3>
+        <div class="students-grid" id="studentsGrid"></div>
+    </div>
+</div>
+<div class="modal-overlay" id="addStudentModal">
+    <div class="modal">
+        <button class="close-modal" onclick="closeModal('addStudentModal')">✕</button>
+        <h2>➕ افزودن دانش‌آموز جدید</h2>
+        <div class="form-group">
+            <label>👤 نام و نام خانوادگی</label>
+            <input id="newStudentName" placeholder="مثال: علی احمدی">
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>📚 پایه</label>
+                <select id="newStudentClass">
+                    <option value="هفتم">هفتم</option>
+                    <option value="هشتم" selected>هشتم</option>
+                    <option value="نهم">نهم</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>🔑 کد دانش‌آموزی (اختیاری)</label>
+                <input id="newStudentCode" placeholder="خالی = خودکار">
+            </div>
+        </div>
+        <div class="form-group">
+            <label>🔐 رمز عبور پیش‌فرض</label>
+            <input id="newStudentPassword" value="123456" type="text">
+        </div>
+        <div class="form-actions">
+            <button class="btn btn-ghost" onclick="closeModal('addStudentModal')">لغو</button>
+            <button class="btn btn-primary" onclick="addStudent()">✅ افزودن</button>
+        </div>
+    </div>
+</div>
+<div class="toast" id="toast"><span id="toastIcon">✅</span><span id="toastText">عملیات موفق</span></div>
+<script>
+var supabase = window.supabase.createClient(
+    'https://cvltwxxfkfckbixwhnhl.supabase.co',
+    'sb_publishable_wv9niqm-nwI8Gpfaoi_fKg_pHa-FocS'
+);
+var currentTeacher = null;
+var allStudents = [];
+var filteredStudents = [];
+var progressChart = null;
+var classChart = null;
+function toggleTheme() {
+    document.body.classList.toggle('light');
+    try { localStorage.setItem('theme', document.body.classList.contains('light') ? 'light' : 'dark'); } catch(e){}
+}
+var savedTheme = (function() { try { return localStorage.getItem('theme'); } catch(e){ return null; } })();
+if (savedTheme) { document.body.classList.toggle('light', savedTheme === 'light'); }
+var menuBtn = document.getElementById('menuBtn');
+var sideMenu = document.getElementById('sideMenu');
+var overlay = document.getElementById('overlay');
+function toggleMenu() { sideMenu.classList.toggle('open'); overlay.classList.toggle('show'); }
+menuBtn.addEventListener('click', toggleMenu);
+overlay.addEventListener('click', toggleMenu);
+function getSchoolName(schoolId) {
+    try {
+        if (typeof schoolData === 'undefined' || !schoolData || !schoolData.schools) {
+            return 'مدرسه (داده‌ها در حال بارگذاری...)';
+        }
+        var school = schoolData.schools.find(function(s) { 
+            return s.id === schoolId; 
+        });
+        return school ? school.name : 'مدرسه (شناسه: ' + schoolId + ')';
+    } catch(e) {
+        return 'مدرسه';
+    }
+}
+function logoutTeacher() {
+    localStorage.removeItem('hendesyar_current_teacher');
+    window.location.href = 'teacher-login.html';
+}
+function showToast(text, type) {
+    var toast = document.getElementById('toast');
+    var icon = document.getElementById('toastIcon');
+    var textEl = document.getElementById('toastText');
+    icon.textContent = type === 'error' ? '❌' : '✅';
+    textEl.textContent = text;
+    toast.className = 'toast show ' + (type === 'error' ? 'error' : 'success');
+    clearTimeout(toast._timeout);
+    toast._timeout = setTimeout(function() { toast.classList.remove('show'); }, 4000);
+}
+function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+function openAddStudentModal() {
+    document.getElementById('addStudentModal').classList.add('show');
+    document.getElementById('newStudentName').focus();
+}
+async function addStudent() {
+    var name = document.getElementById('newStudentName').value.trim();
+    var classVal = document.getElementById('newStudentClass').value;
+    var code = document.getElementById('newStudentCode').value.trim();
+    var password = document.getElementById('newStudentPassword').value.trim();
+    if (!currentTeacher || !currentTeacher.school_id) {
+        showToast('⚠️ اطلاعات معلم یافت نشد! دوباره وارد شوید.', 'error');
+        window.location.href = 'teacher-login.html';
+        return;
+    }
+    if (!name) { 
+        showToast('لطفاً نام دانش‌آموز را وارد کنید!', 'error'); 
+        return; 
+    }
+    if (!password || password.length < 4) { 
+        showToast('رمز عبور باید حداقل ۴ کاراکتر باشد!', 'error'); 
+        return; 
+    }
+    try {
+        var studentCode = code || ('S' + Date.now().toString().slice(-6));
+        var { data: existing } = await supabase
+            .from('students')
+            .select('student_code')
+            .eq('student_code', studentCode)
+            .maybeSingle();
+        if (existing) { 
+            studentCode = 'S' + Date.now().toString().slice(-8); 
+        }
+        var { data, error } = await supabase
+            .from('students')
+            .insert([{
+                student_code: studentCode,
+                password: password,
+                name: name,
+                class: classVal,
+                school_id: currentTeacher.school_id,
+                progress: { 
+                    completed: 0, 
+                    total: 5, 
+                    score: 0, 
+                    weakness: '-' 
+                }
+            }])
+            .select();
+        if (error) { 
+            showToast('خطا: ' + error.message, 'error'); 
+            return; 
+        }
+        showToast('✅ دانش‌آموز ' + name + ' با کد ' + studentCode + ' اضافه شد!', 'success');
+        closeModal('addStudentModal');
+        document.getElementById('newStudentName').value = '';
+        document.getElementById('newStudentCode').value = '';
+        loadDashboard();
+    } catch(err) {
+        showToast('خطا در افزودن دانش‌آموز: ' + err.message, 'error');
+        console.error(err);
+    }
+}
+async function loadDashboard() {
+    try {
+        var teacherData = localStorage.getItem('hendesyar_current_teacher');
+        if (!teacherData) { 
+            window.location.href = 'teacher-login.html'; 
+            return; 
+        }
+        currentTeacher = JSON.parse(teacherData);
+        if (!currentTeacher || !currentTeacher.school_id) {
+            showToast('⚠️ اطلاعات معلم ناقص است! دوباره وارد شوید.', 'error');
+            localStorage.removeItem('hendesyar_current_teacher');
+            setTimeout(function() {
+                window.location.href = 'teacher-login.html';
+            }, 1500);
+            return;
+        }
+        document.getElementById('teacherNameDisplay').textContent = '👨‍🏫 ' + (currentTeacher.name || 'معلم');
+        document.getElementById('schoolDisplay').textContent = '🏫 ' + getSchoolName(currentTeacher.school_id);
+        await loadStudents();
+        updateStats();
+        updateCharts();
+        renderStudents();
+    } catch(e) {
+        console.error('Error loading dashboard:', e);
+        showToast('خطا در بارگذاری داشبورد: ' + e.message, 'error');
+    }
+}
+async function loadStudents() {
+    try {
+        if (!currentTeacher || !currentTeacher.school_id) {
+            allStudents = [];
+            filteredStudents = [];
+            document.getElementById('studentCountLabel').textContent = '(0 نفر)';
+            return;
+        }
+        var { data: students, error } = await supabase
+            .from('students')
+            .select('*')
+            .eq('school_id', currentTeacher.school_id)
+            .order('name');
+        if (error) { 
+            console.error('Supabase error:', error);
+            allStudents = [];
+            filteredStudents = [];
+        } else {
+            allStudents = students || [];
+            filteredStudents = [...allStudents];
+        }
+        document.getElementById('studentCountLabel').textContent = '(' + allStudents.length + ' نفر)';
+    } catch(e) {
+        console.error('loadStudents error:', e);
+        allStudents = [];
+        filteredStudents = [];
+    }
+}
+function updateStats() {
+    var total = allStudents.length;
+    var completed = allStudents.filter(function(s) { return s.progress && s.progress.completed === 5; }).length;
+    var avgScore = total > 0 ? Math.round(allStudents.reduce(function(sum, s) {
+        return sum + (s.progress ? s.progress.score : 0);
+    }, 0) / total) : 0;
+    var weak = allStudents.filter(function(s) { return s.progress && s.progress.completed < 3; }).length;
+    var progress = total > 0 ? Math.round(allStudents.reduce(function(sum, s) {
+        return sum + ((s.progress ? s.progress.completed : 0) / 5 * 100);
+    }, 0) / total) : 0;
+    document.getElementById('statTotal').textContent = total;
+    document.getElementById('statCompleted').textContent = completed;
+    document.getElementById('statAvg').textContent = avgScore;
+    document.getElementById('statWeak').textContent = weak;
+    document.getElementById('statProgress').textContent = progress + '%';
+}
+function updateCharts() {
+    var ctx1 = document.getElementById('progressChart').getContext('2d');
+    var ctx2 = document.getElementById('classChart').getContext('2d');
+    var steps = ['مرحله ۱', 'مرحله ۲', 'مرحله ۳', 'مرحله ۴', 'مرحله ۵'];
+    var counts = [0, 0, 0, 0, 0];
+    allStudents.forEach(function(s) {
+        var c = s.progress ? s.progress.completed : 0;
+        for (var i = 0; i < c; i++) { counts[i]++; }
+    });
+    if (progressChart) { progressChart.destroy(); }
+    progressChart = new Chart(ctx1, {
+        type: 'bar',
+        data: {
+            labels: steps,
+            datasets: [{
+                label: 'تعداد دانش‌آموزان تکمیل‌کننده',
+                data: counts,
+                backgroundColor: ['#f39c12', '#1abc9c', '#27ae60', '#3498db', '#9b59b6'],
+                borderRadius: 8
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: { 
+                y: { beginAtZero: true, ticks: { color: '#a9b7c4' } }, 
+                x: { ticks: { color: '#a9b7c4' } } 
+            }
+        }
+    });
+    var classData = { هفتم: 0, هشتم: 0, نهم: 0 };
+    allStudents.forEach(function(s) { if (classData[s.class] !== undefined) classData[s.class]++; });
+    if (classChart) { classChart.destroy(); }
+    classChart = new Chart(ctx2, {
+        type: 'doughnut',
+        data: {
+            labels: ['هفتم', 'هشتم', 'نهم'],
+            datasets: [{
+                data: [classData.هفتم, classData.هشتم, classData.نهم],
+                backgroundColor: ['#3498db', '#f39c12', '#27ae60']
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { position: 'bottom', labels: { color: '#a9b7c4' } } }
+        }
+    });
+}
+function renderStudents() {
+    var grid = document.getElementById('studentsGrid');
+    var filterClass = document.getElementById('filterClass').value;
+    var search = document.getElementById('searchInput').value.trim().toLowerCase();
+    filteredStudents = allStudents.filter(function(s) {
+        var matchClass = filterClass === 'all' || s.class === filterClass;
+        var matchSearch = !search || s.name.includes(search) || s.student_code.includes(search);
+        return matchClass && matchSearch;
+    });
+    if (filteredStudents.length === 0) {
+        grid.innerHTML = '<div class="empty-state"><span class="icon">📭</span><p>هیچ دانش‌آموزی با این فیلترها یافت نشد.</p></div>';
+        return;
+    }
+    grid.innerHTML = filteredStudents.map(function(s) {
+        var progress = s.progress || { completed: 0, total: 5, score: 0, weakness: '-' };
+        var pct = Math.round((progress.completed / progress.total) * 100);
+        var isCompleted = progress.completed === progress.total;
+        var weaknessText = (progress.weakness && progress.weakness !== '-') ? progress.weakness : '';
+        return '<div class="student-item">' +
+            '<div class="name">' + s.name +
+            '<span class="class-badge">' + s.class + '</span>' +
+            '<span class="code">' + s.student_code + '</span></div>' +
+            '<div class="progress-row">' +
+            '<div class="progress-bar"><div class="progress-fill" style="width:' + pct + '%;"></div></div>' +
+            '<span class="progress-text">' + pct + '%</span></div>' +
+            '<div style="display:flex;justify-content:space-between;margin-top:4px;">' +
+            '<span class="score">⭐ ' + progress.score + ' امتیاز</span>' +
+            '<span style="font-size:.7rem;color:' + (isCompleted ? 'var(--success)' : 'var(--text-dim)') + ';">' + (isCompleted ? '✅ کامل' : '⏳ در حال پیشرفت') + '</span></div>' +
+            (weaknessText ? '<div class="weakness">⚠️ ' + weaknessText + '</div>' : '') +
+            '<div class="actions">' +
+            '<button class="btn btn-sm btn-primary" onclick="viewStudent(\'' + s.student_code + '\')">👁️ جزئیات</button>' +
+            '<button class="btn btn-sm btn-danger" onclick="deleteStudent(\'' + s.student_code + '\')">🗑️</button></div></div>';
+    }).join('');
+}
+function applyFilters() { renderStudents(); }
+function resetFilters() {
+    document.getElementById('filterClass').value = 'all';
+    document.getElementById('searchInput').value = '';
+    renderStudents();
+}
+function viewStudent(code) {
+    var student = allStudents.find(function(s) { return s.student_code === code; });
+    if (!student) return;
+    var progress = student.progress || { completed: 0, total: 5, score: 0, weakness: '-' };
+    showToast('👤 ' + student.name + '\n📚 ' + student.class + '\n📊 پیشرفت: ' + progress.completed + '/' + progress.total + '\n⭐ امتیاز: ' + progress.score + '\n⚠️ نقطه ضعف: ' + (progress.weakness || '-'), 'success');
+}
+async function deleteStudent(code) {
+    if (!confirm('آیا از حذف این دانش‌آموز مطمئن هستید؟')) return;
+    try {
+        var { error } = await supabase.from('students').delete().eq('student_code', code);
+        if (error) { showToast('خطا در حذف: ' + error.message, 'error'); return; }
+        showToast('✅ دانش‌آموز حذف شد!', 'success');
+        loadDashboard();
+    } catch(e) {
+        showToast('خطا در حذف: ' + e.message, 'error');
+    }
+}
+function downloadReport() {
+    if (allStudents.length === 0) { showToast('هیچ دانش‌آموزی برای گزارش وجود ندارد!', 'error'); return; }
+    var report = '📊 گزارش کلاس هندسیار\n';
+    report += '========================\n';
+    report += '🏫 مدرسه: ' + getSchoolName(currentTeacher.school_id) + '\n';
+    report += '👨‍🏫 معلم: ' + currentTeacher.name + '\n';
+    report += '📅 تاریخ: ' + new Date().toLocaleDateString('fa-IR') + '\n';
+    report += '========================\n\n';
+    report += '👨‍🎓 لیست دانش‌آموزان:\n\n';
+    allStudents.forEach(function(s, i) {
+        var p = s.progress || { completed: 0, total: 5, score: 0, weakness: '-' };
+        report += (i+1) + '. ' + s.name + ' (' + s.student_code + ')\n';
+        report += '   پایه: ' + s.class + ' | پیشرفت: ' + p.completed + '/' + p.total + ' | امتیاز: ' + p.score + '\n';
+        if (p.weakness && p.weakness !== '-') report += '   ⚠️ نقطه ضعف: ' + p.weakness + '\n';
+        report += '\n';
+    });
+    report += '========================\n';
+    report += '📊 آمار کلی:\n';
+    report += 'کل دانش‌آموزان: ' + allStudents.length + '\n';
+    var completed = allStudents.filter(function(s) { return s.progress && s.progress.completed === 5; }).length;
+    report += 'تکمیل‌کنندگان: ' + completed + '\n';
+    var avg = allStudents.length > 0 ? Math.round(allStudents.reduce(function(sum, s) { return sum + (s.progress ? s.progress.score : 0); }, 0) / allStudents.length) : 0;
+    report += 'میانگین امتیاز: ' + avg + '\n';
+    var blob = new Blob([report], { type: 'text/plain;charset=utf-8' });
+    var link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'گزارش_کلاس_' + new Date().toISOString().slice(0,10) + '.txt';
+    link.click();
+    showToast('📥 گزارش دانلود شد!', 'success');
+}
+function refreshData() {
+    showToast('🔄 در حال بروزرسانی...', 'success');
+    loadDashboard();
+}
+document.getElementById('filterClass').addEventListener('change', renderStudents);
+document.getElementById('searchInput').addEventListener('input', renderStudents);
+document.addEventListener('DOMContentLoaded', function() {
+    if (!localStorage.getItem('hendesyar_current_teacher')) {
+        window.location.href = 'teacher-login.html';
+        return;
+    }
+    loadDashboard();
+});
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        closeModal('addStudentModal');
+    }
+});
+</script>
+</body>
+</html>

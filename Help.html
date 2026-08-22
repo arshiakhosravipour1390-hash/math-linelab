@@ -141,6 +141,11 @@
             box-shadow: 0 6px 24px rgba(243,156,18,0.25);
         }
         .btn-primary:hover { transform: translateY(-4px) scale(1.02); box-shadow: 0 14px 36px rgba(243,156,18,0.3); }
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+        .btn-success:hover { transform: translateY(-4px) scale(1.02); box-shadow: 0 14px 36px rgba(39,174,96,0.3); }
         .intro-box {
             background: rgba(243,156,18,0.04);
             border: 1px solid var(--card-border);
@@ -186,6 +191,70 @@
             color: var(--primary-ink);
             font-family: 'JetBrains Mono', monospace;
         }
+        .badge-item.green {
+            border-color: rgba(39,174,96,0.3);
+            color: var(--success);
+        }
+        .section-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--text);
+            margin: 35px 0 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-right: 5px solid var(--primary);
+            padding-right: 16px;
+        }
+        .section-title .icon {
+            font-size: 1.8rem;
+        }
+        .guide-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin: 20px 0 30px;
+        }
+        .guide-card {
+            background: var(--surface-light);
+            border: 1px solid var(--card-border);
+            border-radius: 18px;
+            padding: 22px 24px;
+            transition: all 0.3s;
+        }
+        .guide-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--primary);
+            box-shadow: var(--card-shadow);
+        }
+        .guide-card .icon {
+            font-size: 2.2rem;
+            display: block;
+            margin-bottom: 6px;
+        }
+        .guide-card h4 {
+            font-size: 1.1rem;
+            color: var(--primary-ink);
+            margin-bottom: 6px;
+        }
+        .guide-card p {
+            color: var(--text-dim);
+            font-size: .9rem;
+            line-height: 1.9;
+        }
+        .guide-card .step-list {
+            list-style: none;
+            padding-right: 0;
+            margin-top: 8px;
+        }
+        .guide-card .step-list li {
+            padding: 3px 0;
+            padding-right: 22px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="%231abc9c" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>') right center no-repeat;
+            background-size: 14px;
+            color: var(--text-dim);
+            font-size: .85rem;
+        }
         .docs-cards {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -209,47 +278,40 @@
         .doc-icon { font-size: 2.8rem; margin-bottom: 8px; }
         .doc-card h4 { font-size: 1.1rem; color: var(--text); margin-bottom: 4px; }
         .doc-card p { color: var(--text-dim); font-size: .8rem; line-height: 1.6; }
-        .future-box {
+        .feature-box {
             background: var(--surface-light);
             border: 1px solid var(--card-border);
             border-radius: 20px;
             padding: 25px;
             margin: 30px 0;
-            text-align: center;
             transition: background 0.3s ease;
         }
-        .future-box h3 { color: var(--primary-ink); margin-bottom: 12px; font-size: 1.3rem; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .future-box p { color: var(--text-dim); line-height: 1.8; }
-        .future-box p strong { color: var(--text); }
-        .future-grid {
+        .feature-box h3 {
+            color: var(--primary-ink);
+            margin-bottom: 16px;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .feature-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin: 14px 0 18px;
+            gap: 12px;
         }
-        .future-item {
+        .feature-item {
             background: var(--surface);
             border-radius: 14px;
-            padding: 12px;
-            font-size: .8rem;
+            padding: 14px;
+            text-align: center;
             border: 1px solid var(--card-border);
             color: var(--text-dim);
             transition: 0.3s;
+            font-size: .85rem;
         }
-        .future-item:hover { border-color: var(--primary); }
-        .future-item .icon { font-size: 1.4rem; display: block; margin-bottom: 4px; }
-        .future-link {
-            display: inline-block;
-            background: rgba(243,156,18,0.1);
-            padding: 8px 22px;
-            border-radius: 30px;
-            color: var(--primary-ink);
-            text-decoration: none;
-            font-size: .9rem;
-            border: 1px solid rgba(243,156,18,0.2);
-            transition: all 0.3s;
-        }
-        .future-link:hover { background: var(--primary); color: #0b1a2e; }
+        .feature-item:hover { border-color: var(--primary); }
+        .feature-item .ficon { font-size: 1.6rem; display: block; margin-bottom: 4px; }
+        .feature-item strong { color: var(--text); display: block; }
         .folder-box {
             background: var(--surface-light);
             border: 1px solid var(--card-border);
@@ -312,7 +374,9 @@
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: #0b1a2e;
             border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-size: 1.2rem; font-weight: 800;
             flex-shrink: 0;
             font-family: 'JetBrains Mono', monospace;
@@ -348,6 +412,7 @@
         .btn-solution-sample { background: #2980b9; color: white; }
         .btn-reset-sample { background: #e74c3c; color: white; }
         .btn-home-sample { background: #7f8c8d; color: white; }
+        .btn-login-sample { background: #3498db; color: white; }
         .buttons-guide p { color: var(--text-dim); font-size: .85rem; margin-top: 12px; line-height: 2; }
         .buttons-guide p strong { color: var(--text); }
         .home-button { text-align: center; margin-top: 30px; padding-top: 20px; border-top: 2px dashed var(--card-border); }
@@ -379,7 +444,8 @@
             .header h1 { font-size: 1.6rem; flex-wrap: wrap; }
             .folder-structure { font-size: .6rem; }
             .docs-cards { grid-template-columns: 1fr; }
-            .future-grid { grid-template-columns: 1fr; }
+            .guide-grid { grid-template-columns: 1fr; }
+            .feature-grid { grid-template-columns: 1fr 1fr; }
             .topbar { padding: 10px 16px; }
             .brand { font-size: 1rem; }
             .container { border-radius: 20px; }
@@ -392,10 +458,12 @@
             .start-box h2 { font-size: 1.1rem; }
             .btn { padding: 10px 20px; font-size: .95rem; }
             .intro-box { padding: 18px; }
-            .future-box { padding: 18px; }
+            .feature-box { padding: 18px; }
+            .feature-grid { grid-template-columns: 1fr; }
             .folder-box { padding: 14px; }
             .folder-structure { font-size: .5rem; padding: 12px; line-height: 1.8; }
             .step { padding: 14px; }
+            .guide-card { padding: 16px; }
         }
     </style>
 </head>
@@ -428,11 +496,12 @@
                 🎯 کلیک کنید تا وارد پروژه شوید 🚀
             </a>
         </div>
+
+        <!-- بخش معرفی -->
         <div class="intro-box">
             <h3><span>🧪</span> درباره پروژه هندسیار</h3>
             <p>
                 <strong>هندسیار</strong> یک آزمایشگاه تعاملی برای یادگیری مفاهیم <strong>تبدیل‌های هندسی</strong>، <strong>هم‌نهشتی</strong> و <strong>تشابه مثلث‌ها</strong> در پایه هفتم تا نهم است.
-                این پروژه شامل بخش‌های زیر می‌باشد:
             </p>
             <ul>
                 <li><strong>صفحه اصلی</strong> : مثلث زنده کشیدنی، سیستم پیشرفت ۵ مرحله‌ای، گواهی تکمیل، تور راهنما و تم روز/شب</li>
@@ -440,6 +509,9 @@
                 <li><strong>آموزش کامل</strong> : انیمیشن منطبق شدن مثلث‌ها با ۵ حالت هم‌نهشتی</li>
                 <li><strong>سه سوال تعاملی</strong> : با پاپ‌آپ انتخاب گزینه و هایلایت شدن شکل</li>
                 <li><strong>چت‌بات هوشمند</strong> : مجهز به هوش مصنوعی Groq برای پاسخ به سوالات ریاضی</li>
+                <li><strong>سیستم ورود دانش‌آموز و معلم</strong> : با ذخیره‌سازی پیشرفت در Supabase</li>
+                <li><strong>داشبورد دانش‌آموز</strong> : مشاهده پیشرفت، نشان‌های افتخار و امتیاز</li>
+                <li><strong>داشبورد معلم</strong> : مدیریت دانش‌آموزان، مشاهده پیشرفت کلاس و گزارش‌گیری</li>
                 <li><strong>دفتر کارنما</strong> و <strong>شناسنامه اثر</strong> : مستندات کامل پروژه برای جشنواره خوارزمی</li>
                 <li><strong>دامنه اختصاصی</strong> : hendesyar.ir با HTTPS و QR Code</li>
             </ul>
@@ -448,8 +520,98 @@
                 <span class="badge-item">🏆 رتبه اول شهرستان</span>
                 <span class="badge-item">⭐ جشنواره خوارزمی</span>
                 <span class="badge-item">🌐 hendesyar.ir</span>
+                <span class="badge-item green">✅ همگام‌سازی لحظه‌ای</span>
             </div>
         </div>
+
+        <!-- بخش جدید: سیستم ورود و داشبوردها -->
+        <h2 class="section-title">
+            <span class="icon">👤</span>
+            سیستم ورود و مدیریت کاربران
+        </h2>
+
+        <div class="guide-grid">
+            <div class="guide-card">
+                <span class="icon">🧑‍🎓</span>
+                <h4>ورود دانش‌آموز</h4>
+                <p>هر دانش‌آموز با کد دانش‌آموزی و رمز عبور خود وارد می‌شود.</p>
+                <ul class="step-list">
+                    <li>انتخاب استان، شهرستان و مدرسه</li>
+                    <li>ورود با کد دانش‌آموزی و رمز عبور</li>
+                    <li>مشاهده پیشرفت در داشبورد شخصی</li>
+                    <li>دریافت نشان‌های افتخار</li>
+                </ul>
+                <div style="margin-top:10px;">
+                    <span class="btn-sample btn-login-sample">🧑‍🎓 ورود دانش‌آموز</span>
+                </div>
+            </div>
+
+            <div class="guide-card">
+                <span class="icon">👨‍🏫</span>
+                <h4>ورود معلم</h4>
+                <p>معلمان می‌توانند کلاس خود را مدیریت کنند.</p>
+                <ul class="step-list">
+                    <li>ثبت‌نام یا ورود با نام کاربری و رمز عبور</li>
+                    <li>مشاهده لیست دانش‌آموزان مدرسه</li>
+                    <li>مشاهده پیشرفت هر دانش‌آموز</li>
+                    <li>دریافت گزارش از کل کلاس</li>
+                    <li>افزودن دانش‌آموز جدید</li>
+                </ul>
+                <div style="margin-top:10px;">
+                    <span class="btn-sample" style="background:linear-gradient(135deg,#1abc9c,#27ae60);color:white;">👨‍🏫 ورود معلم</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- بخش جدید: همگام‌سازی پیشرفت -->
+        <div class="feature-box" style="border-right: 8px solid var(--secondary);">
+            <h3><span>🔄</span> همگام‌سازی خودکار پیشرفت</h3>
+            <p style="color:var(--text-dim);margin-bottom:16px;line-height:2;">
+                یکی از قابلیت‌های مهم هندسیار، <strong>همگام‌سازی لحظه‌ای</strong> پیشرفت دانش‌آموزان بین صفحات مختلف است.
+            </p>
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <span class="ficon">📊</span>
+                    <strong>ذخیره‌سازی خودکار</strong>
+                    هر مرحله که کامل می‌شود، پیشرفت شما ذخیره می‌شود.
+                </div>
+                <div class="feature-item">
+                    <span class="ficon">☁️</span>
+                    <strong>همگام‌سازی ابری</strong>
+                    اطلاعات در Supabase ذخیره می‌شود و از هر دستگاهی قابل دسترسی است.
+                </div>
+                <div class="feature-item">
+                    <span class="ficon">👨‍🏫</span>
+                    <strong>مشاهده توسط معلم</strong>
+                    معلم شما می‌تواند پیشرفتتان را در لحظه ببیند.
+                </div>
+                <div class="feature-item">
+                    <span class="ficon">📱</span>
+                    <strong>هماهنگ بین صفحات</strong>
+                    بین صفحه اصلی، کوییزها و داشبوردها همگام است.
+                </div>
+                <div class="feature-item">
+                    <span class="ficon">🏅</span>
+                    <strong>نشان‌های افتخار</strong>
+                    با تکمیل هر مرحله، نشان‌های جدید دریافت می‌کنید.
+                </div>
+                <div class="feature-item">
+                    <span class="ficon">📈</span>
+                    <strong>گزارش پیشرفت</strong>
+                    معلم می‌تواند گزارش پیشرفت کلاس را دریافت کند.
+                </div>
+            </div>
+            <div class="note-box" style="border-right-color:var(--secondary);">
+                <p>💡 <strong>نکته مهم:</strong> اگر معلم هستید، برای مشاهده آخرین تغییرات دانش‌آموزان، کافی است صفحه داشبورد را <strong>رفرش</strong> کنید یا از دکمه <strong>🔄 بروزرسانی</strong> استفاده کنید. سیستم به‌صورت خودکار اطلاعات جدید را از سرور دریافت می‌کند.</p>
+            </div>
+        </div>
+
+        <!-- مستندات -->
+        <h2 class="section-title">
+            <span class="icon">📄</span>
+            مستندات پروژه
+        </h2>
+
         <div class="docs-cards">
             <div class="doc-card" onclick="window.open('source/notebook.html', '_self')">
                 <div class="doc-icon">📓</div>
@@ -462,27 +624,8 @@
                 <p>مشخصات کامل پروژه، دانش‌آموز و مشاور<br>مطابق با شیوه‌نامه جشنواره</p>
             </div>
         </div>
-        <div class="future-box">
-            <h3><span>🌐</span> نسخه تحت وب و آینده‌نگری <span>🚀</span></h3>
-            <p>
-                این پروژه علاوه بر نسخه محلی، به صورت <strong>سایت اینترنتی</strong> نیز منتشر شده است و در حال حاضر از طریق آدرس زیر قابل دسترسی می‌باشد:
-            </p>
-            <p style="direction: ltr; font-size: .9rem; word-break: break-all; background: rgba(255,255,255,0.04); padding: 8px; border-radius: 10px; color: var(--primary-ink); font-family: 'JetBrains Mono', monospace;">
-                🔗 <strong>https:
-            </p>
-            <p style="font-size: .8rem; color: var(--text-dim);">
-                <span>🔒 اتصال امن (HTTPS)</span> &nbsp;|&nbsp; <span>📱 سازگار با موبایل و تبلت</span>
-            </p>
-            <p style="margin-top: 16px; color: var(--text);"><strong>برنامه‌های مرحله کشوری:</strong></p>
-            <div class="future-grid">
-                <div class="future-item"><span class="icon">🎮</span>مسابقه آنلاین</div>
-                <div class="future-item"><span class="icon">📊</span>داشبورد معلم</div>
-                <div class="future-item"><span class="icon">🧩</span>سازنده مسئله</div>
-                <div class="future-item"><span class="icon">🏅</span>نشان‌های افتخار</div>
-                <div class="future-item"><span class="icon">📱</span>نسخه PWA</div>
-            </div>
-            <a href="https://hendesyar.ir" target="_blank" class="future-link">🌐 مشاهده سایت پروژه</a>
-        </div>
+
+        <!-- ساختار فایل‌ها -->
         <div class="folder-box">
             <h3>📁 ساختار فایل‌های پروژه</h3>
             <div class="folder-structure">
@@ -492,23 +635,38 @@
                 &nbsp;&nbsp;├── <span class="folder">📁 اسناد/</span> <span class="comment">← پوشه تصاویر دفتر کارنما و شناسنامه</span><br>
                 &nbsp;&nbsp;└── <span class="folder">📁 source/</span> <span class="comment">← پوشه حاوی فایل‌های داخلی پروژه</span><br>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── <span class="folder">📁 images/</span> <span class="comment">← پوشه تصاویر کاربردها (1.jpg تا 4.jpg)</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── <span class="folder">📁 music/</span> <span class="comment">← فایل‌های صوتی (music_1.mp3 تا music_4.mp3)</span><br>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── <span class="file">📚 level8.html</span> <span class="comment">← آموزش هم‌نهشتی (پایه هشتم)</span><br>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── <span class="file">🔄 level7.html</span> <span class="comment">← تبدیل‌های هندسی (پایه هفتم)</span><br>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── <span class="file">🔺 level8_quiz1.html</span> <span class="comment">← سوال ۱: نقطه روی نیمساز</span><br>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── <span class="file">📐 level8_quiz2.html</span> <span class="comment">← سوال ۲: تشخیص متساوی‌الساقین</span><br>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── <span class="file">▭ level8_quiz3.html</span> <span class="comment">← سوال ۳: برابری در مستطیل</span><br>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── <span class="file">🔷 level9.html</span> <span class="comment">← تشابه مثلث‌ها (پایه نهم)</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── <span class="file">📐 level9_quiz.html</span> <span class="comment">← تمرین تشابه - ارتفاع با سایه</span><br>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── <span class="file">🤖 chatbot.html</span> <span class="comment">← چت‌بات هوشمند</span><br>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── <span class="file">📓 notebook.html</span> <span class="comment">← دفتر کارنما</span><br>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── <span class="file">📋 identity.html</span> <span class="comment">← شناسنامه اثر</span>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── <span class="file">📋 identity.html</span> <span class="comment">← شناسنامه اثر</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── <span class="file">🧑‍🎓 student-login.html</span> <span class="comment">← ورود دانش‌آموز</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── <span class="file">👨‍🏫 teacher-login.html</span> <span class="comment">← ورود معلم</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── <span class="file">📊 student-dashboard.html</span> <span class="comment">← داشبورد دانش‌آموز</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── <span class="file">📊 teacher-dashboard.html</span> <span class="comment">← داشبورد معلم</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── <span class="file">🔄 progress-sync.js</span> <span class="comment">← مدیریت یکپارچه پیشرفت</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── <span class="file">🎵 music-player.js</span> <span class="comment">← پخش‌کننده موسیقی</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── <span class="file">🎨 music-style.css</span> <span class="comment">← استایل پخش‌کننده</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── <span class="file">🏫 school-data.js</span> <span class="comment">← اطلاعات مدارس</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── <span class="file">☁️ supabase-config.js</span> <span class="comment">← تنظیمات Supabase</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── <span class="file">🛠️ support.html</span> <span class="comment">← صفحه پشتیبانی</span>
             </div>
             <div class="note-box">
                 <p>💡 <strong>نکته:</strong> شما فقط نیاز به اجرای فایل <strong>index.html</strong> دارید. بقیه فایل‌ها به صورت خودکار از طریق لینک‌های صفحه اصلی باز می‌شوند.</p>
-                <p style="margin-top: 8px;">🖼️ <strong>نکته تصاویر:</strong> عکس‌های بخش کاربردها در <strong>source/images/</strong> (۱.jpg تا ۴.jpg) و عکس‌های مستندات در پوشه <strong>اسناد/</strong> قرار دارند.</p>
                 <p style="margin-top: 8px;">🌐 <strong>دامنه اختصاصی:</strong> پروژه از طریق <strong>hendesyar.ir</strong> نیز در دسترس است.</p>
+                <p style="margin-top: 8px;">☁️ <strong>دیتابیس:</strong> اطلاعات کاربران و پیشرفت در <strong>Supabase</strong> ذخیره می‌شود.</p>
             </div>
         </div>
+
+        <!-- راهنمای استفاده -->
         <h2 class="steps-title"><span>📌</span> نحوه استفاده از هندسیار</h2>
+
         <div class="step">
             <div class="step-num">۱</div>
             <div class="step-content">
@@ -521,6 +679,7 @@
                 </div>
             </div>
         </div>
+
         <div class="step">
             <div class="step-num">۲</div>
             <div class="step-content">
@@ -529,13 +688,16 @@
                 <div class="example-box">تبدیل‌های هندسی → هم‌نهشتی → تمرین هم‌نهشتی → تشابه → تمرین تشابه</div>
             </div>
         </div>
+
         <div class="step">
             <div class="step-num">۳</div>
             <div class="step-content">
-                <h3>تور راهنما را فعال کنید</h3>
-                <p>با ورود به صفحه، از شما پرسیده می‌شود که آیا تور راهنما را می‌خواهید یا نه. این تور ۷ مرحله‌ای مهم‌ترین بخش‌های سایت را به شما نشان می‌دهد.</p>
+                <h3>وارد حساب کاربری خود شوید</h3>
+                <p>با ورود به عنوان <strong>دانش‌آموز</strong> یا <strong>معلم</strong>، پیشرفت شما ذخیره می‌شود و معلم شما می‌تواند آن را ببیند.</p>
+                <div class="example-box">🧑‍🎓 دانش‌آموز: ورود با کد دانش‌آموزی | 👨‍🏫 معلم: ورود با نام کاربری</div>
             </div>
         </div>
+
         <div class="step">
             <div class="step-num">۴</div>
             <div class="step-content">
@@ -543,6 +705,7 @@
                 <p>اگر در حل سوالات یا درک مفاهیم مشکل دارید، از چت‌بات هوشمند که با Groq API کار می‌کند کمک بگیرید.</p>
             </div>
         </div>
+
         <div class="step">
             <div class="step-num">۵</div>
             <div class="step-content">
@@ -550,6 +713,8 @@
                 <p>پس از تکمیل تمام ۵ مرحله، می‌توانید <strong>گواهی تکمیل</strong> را با نام خود دریافت و چاپ کنید.</p>
             </div>
         </div>
+
+        <!-- دکمه‌ها -->
         <div class="buttons-guide">
             <h3>🎮 دکمه‌های موجود در سوالات:</h3>
             <div>
@@ -557,14 +722,18 @@
                 <span class="btn-sample btn-solution-sample">📖 راه حل</span>
                 <span class="btn-sample btn-reset-sample">🔄 شروع مجدد</span>
                 <span class="btn-sample btn-home-sample">🏠 برگشت به خانه</span>
+                <span class="btn-sample btn-login-sample">🧑‍🎓 ورود دانش‌آموز</span>
             </div>
             <p>
                 ✅ <strong>بررسی پاسخ:</strong> پاسخ‌های شما را تصحیح می‌کند و در صورت درستی، انیمیشن نمایش داده می‌شود<br>
                 📖 <strong>راه حل:</strong> جواب تشریحی سوال را نشان می‌دهد<br>
                 🔄 <strong>شروع مجدد:</strong> همه جعبه‌ها را پاک می‌کند<br>
-                🏠 <strong>برگشت به خانه:</strong> به صفحه اصلی بازمی‌گردد
+                🏠 <strong>برگشت به خانه:</strong> به صفحه اصلی بازمی‌گردد<br>
+                🧑‍🎓 <strong>ورود دانش‌آموز:</strong> وارد حساب کاربری خود شوید
             </p>
         </div>
+
+        <!-- دکمه بازگشت -->
         <div class="home-button">
             <a href="index.html" class="home-btn">
                 <span>🏠</span>
@@ -573,6 +742,7 @@
             </a>
         </div>
     </div>
+
     <div class="footer">
         <p>طراحی شده برای دوازدهمین دوره جشنواره نوجوان خوارزمی | محور ریاضی و فناوری اطلاعات</p>
         <p style="margin-top: 4px;">✨ منطبق بر ۱۶ شاخص داوری - دارای چت‌بات هوشمند ✨</p>
@@ -580,6 +750,7 @@
         <p style="margin-top: 8px; font-size: .65rem;">🧪 ساخته شده توسط <span class="gold">عرشیا خسروی پور</span></p>
     </div>
 </div>
+
 <script>
     function toggleTheme() {
         document.body.classList.toggle('light');

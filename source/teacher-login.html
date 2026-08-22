@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>👨‍🏫 ورود معلم | هندسیار</title>
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/dist/font-face.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/estedad-font@v3.1.0/dist/font-face.css" rel="stylesheet">
+    <script src="school-data.js"></script>
+    <script src="teacher-data.js"></script>
+    <script src="student-data.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+    <style>
+        :root {
+            --bg: #0b1a2e;
+            --surface: #16283a;
+            --surface-light: #223a4e;
+            --text: #f2f5f7;
+            --text-dim: #a9b7c4;
+            --primary: #f39c12;
+            --secondary: #1abc9c;
+            --danger: #e74c3c;
+            --success: #27ae60;
+            --card-shadow: 0 12px 30px rgba(0,0,0,0.4);
+            --radius: 28px;
+            --card-border: rgba(243,156,18,0.12);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Estedad', 'Vazirmatn', 'Tahoma', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .login-container {
+            max-width: 480px;
+            width: 100%;
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: 40px 35px;
+            box-shadow: var(--card-shadow);
+            border: 1px solid var(--card-border);
+        }
+        .login-container .logo { text-align: center; font-size: 3rem; margin-bottom: 10px; }
+        .login-container h1 { text-align: center; font-size: 1.8rem; color: var(--primary); margin-bottom: 6px; }
+        .login-container .sub { text-align: center; color: var(--text-dim); font-size: 0.9rem; margin-bottom: 25px; }
+        .form-group { margin-bottom: 16px; }
+        .form-group label { display: block; color: var(--text-dim); font-size: 0.85rem; margin-bottom: 4px; }
+        .form-group input, .form-group select {
+            width: 100%; padding: 10px 14px; border-radius: 14px;
+            border: 2px solid var(--card-border); background: var(--surface-light);
+            color: var(--text); font-size: 0.95rem; font-family: inherit;
+            outline: none; transition: 0.3s;
+        }
+        .form-group input:focus, .form-group select:focus { border-color: var(--primary); }
+        .form-group select option { background: var(--surface); color: var(--text); }
+        .login-btn {
+            width: 100%; padding: 14px; border: none; border-radius: 14px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #0b1a2e; font-size: 1.1rem; font-weight: 700;
+            cursor: pointer; font-family: inherit; transition: 0.3s; margin-top: 10px;
+        }
+        .login-btn:hover { transform: scale(1.02); box-shadow: 0 6px 24px rgba(243,156,18,0.25); }
+        .login-btn.secondary {
+            background: var(--surface-light); color: var(--text);
+            border: 1px solid var(--card-border);
+        }
+        .login-btn.secondary:hover { border-color: var(--primary); }
+        .error-msg {
+            background: rgba(231,76,60,0.12); border: 1px solid var(--danger);
+            color: var(--danger); padding: 10px 14px; border-radius: 12px;
+            margin-bottom: 16px; display: none; font-size: 0.9rem; text-align: center;
+        }
+        .error-msg.show { display: block; }
+        .error-msg.success {
+            background: rgba(39,174,96,0.12); border-color: var(--success); color: var(--success);
+        }
+        .back-link { text-align: center; margin-top: 18px; }
+        .back-link a { color: var(--text-dim); text-decoration: none; font-size: 0.85rem; transition: 0.3s; }
+        .back-link a:hover { color: var(--primary); }
+        .mode-switch { text-align: center; margin-top: 16px; color: var(--text-dim); font-size: 0.85rem; }
+        .mode-switch a { color: var(--primary); text-decoration: none; font-weight: 700; cursor: pointer; }
+        .mode-switch a:hover { text-decoration: underline; }
+        .form-title { text-align: center; font-size: 1.2rem; color: var(--primary); margin-bottom: 16px; }
+        .hidden { display: none !important; }
+        .divider { height: 1px; background: var(--card-border); margin: 16px 0; }
+        .support-link {
+            display: block; text-align: center; margin-top: 12px;
+            color: var(--text-dim); font-size: 0.8rem; cursor: pointer;
+            transition: 0.3s; text-decoration: none;
+        }
+        .support-link:hover { color: var(--primary); }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .form-row .form-group { margin-bottom: 0; }
+        @media (max-width: 480px) {
+            .login-container { padding: 28px 20px; }
+            .login-container h1 { font-size: 1.4rem; }
+            .form-row { grid-template-columns: 1fr; }
+            .form-row .form-group { margin-bottom: 16px; }
+        }
+    </style>
+</head>
+<body>
+<div class="login-container">
+    <div class="logo" id="pageLogo">👨‍🏫</div>
+    <h1 id="pageTitle">ورود معلم</h1>
+    <div class="sub" id="pageSub">هندسیار · سیستم مدیریت کلاس</div>
+    <div class="error-msg" id="errorMsg"></div>
+    <div id="loginForm">
+        <div class="form-group">
+            <label>📍 استان</label>
+            <select id="provinceSelect">
+                <option value="">-- انتخاب استان --</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>🏙️ شهرستان</label>
+            <select id="citySelect">
+                <option value="">-- ابتدا استان را انتخاب کنید --</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>🏫 مدرسه</label>
+            <select id="schoolSelect">
+                <option value="">-- ابتدا استان و شهر را انتخاب کنید --</option>
+            </select>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>👤 نام کاربری</label>
+                <input type="text" id="username" placeholder="نام کاربری...">
+            </div>
+            <div class="form-group">
+                <label>🔑 رمز عبور</label>
+                <input type="password" id="password" placeholder="رمز عبور...">
+            </div>
+        </div>
+        <button class="login-btn" onclick="login()">🚪 ورود به داشبورد</button>
+        <div class="mode-switch">
+            👈 معلم جدید هستید؟ <a onclick="showRegister()">ثبت‌نام کنید</a>
+        </div>
+        <div class="divider"></div>
+        <a href="support.html" class="support-link">❓ مشکلی دارید؟ به پشتیبانی آنلاین مراجعه کنید</a>
+    </div>
+    <div id="registerForm" class="hidden">
+        <div class="form-title">📝 ثبت‌نام معلم جدید</div>
+        <div class="form-group">
+            <label>📍 استان</label>
+            <select id="regProvinceSelect">
+                <option value="">-- انتخاب استان --</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>🏙️ شهرستان</label>
+            <select id="regCitySelect">
+                <option value="">-- ابتدا استان را انتخاب کنید --</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>🏫 مدرسه</label>
+            <select id="regSchoolSelect">
+                <option value="">-- ابتدا استان و شهر را انتخاب کنید --</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>👤 نام و نام خانوادگی</label>
+            <input type="text" id="regFullName" placeholder="مثلاً: آقای احمدی">
+        </div>
+        <div class="form-group">
+            <label>👤 نام کاربری (یکتا)</label>
+            <input type="text" id="regUsername" placeholder="یک نام کاربری انتخاب کنید...">
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>🔑 رمز عبور</label>
+                <input type="password" id="regPassword" placeholder="حداقل ۴ کاراکتر">
+            </div>
+            <div class="form-group">
+                <label>🔐 تکرار رمز</label>
+                <input type="password" id="regPassword2" placeholder="دوباره وارد کنید...">
+            </div>
+        </div>
+        <button class="login-btn" onclick="register()">✅ ثبت‌نام</button>
+        <div class="mode-switch">
+            ↩️ قبلاً ثبت‌نام کرده‌اید؟ <a onclick="showLogin()">ورود</a>
+        </div>
+    </div>
+    <div class="back-link">
+        <a href="../index.html">🏠 بازگشت به صفحه اصلی</a>
+    </div>
+    <div style="text-align:center;margin-top:12px;">
+        <a href="support.html" style="color:var(--text-dim);font-size:0.75rem;cursor:pointer;text-decoration:none;">❓ پشتیبانی آنلاین</a>
+    </div>
+</div>
+<script>
+    let supabaseClient = null;
+    try {
+        supabaseClient = window.supabase.createClient(
+            window.SUPABASE_URL,
+            window.SUPABASE_ANON_KEY
+        );
+        console.log("✅ Supabase آماده است");
+    } catch (error) {
+        console.error("❌ خطای Supabase:", error);
+    }
+    function cleanText(value) {
+        if (value === null || value === undefined) return '';
+        return String(value).trim();
+    }
+    function getProvince(school) {
+        var province = cleanText(school.state_title);
+        if (province) return province;
+        if (school.state && typeof school.state === 'string') return cleanText(school.state);
+        return '';
+    }
+    function getCity(school) {
+        var city = cleanText(school.city_title);
+        if (city) return city;
+        var area = cleanText(school.area_title);
+        if (area) return area;
+        if (school.area && typeof school.area === 'string') return cleanText(school.area);
+        if (school.city && typeof school.city === 'string') return cleanText(school.city);
+        return '';
+    }
+    function getSchools() {
+        if (typeof schoolData === 'undefined' || !Array.isArray(schoolData.schools)) {
+            console.error('schoolData not found!');
+            return [];
+        }
+        return schoolData.schools;
+    }
+    function loadProvinces(selectId) {
+        var select = document.getElementById(selectId);
+        select.innerHTML = '<option value="">-- انتخاب استان --</option>';
+        var schools = getSchools();
+        var provinces = {};
+        schools.forEach(function(school) {
+            var province = getProvince(school);
+            if (province) {
+                provinces[province] = province;
+            }
+        });
+        Object.keys(provinces)
+            .sort(function(a, b) {
+                return a.localeCompare(b, 'fa');
+            })
+            .forEach(function(province) {
+                var option = document.createElement('option');
+                option.value = province;
+                option.textContent = province;
+                select.appendChild(option);
+            });
+        console.log('Provinces loaded:', Object.keys(provinces).length);
+    }
+    function loadCities(provinceSelectId, citySelectId) {
+        var province = document.getElementById(provinceSelectId).value;
+        var citySelect = document.getElementById(citySelectId);
+        var schoolSelectId = provinceSelectId === 'provinceSelect' ? 'schoolSelect' : 'regSchoolSelect';
+        var schoolSelect = document.getElementById(schoolSelectId);
+        citySelect.innerHTML = '<option value="">-- انتخاب شهرستان --</option>';
+        schoolSelect.innerHTML = '<option value="">-- ابتدا استان و شهر را انتخاب کنید --</option>';
+        if (!province) {
+            citySelect.innerHTML = '<option value="">-- ابتدا استان را انتخاب کنید --</option>';
+            return;
+        }
+        var schools = getSchools();
+        var cities = {};
+        schools.forEach(function(school) {
+            var schoolProvince = getProvince(school);
+            if (schoolProvince !== province) return;
+            var city = getCity(school);
+            if (city) {
+                cities[city] = city;
+            }
+        });
+        Object.keys(cities)
+            .sort(function(a, b) {
+                return a.localeCompare(b, 'fa');
+            })
+            .forEach(function(city) {
+                var option = document.createElement('option');
+                option.value = city;
+                option.textContent = city;
+                citySelect.appendChild(option);
+            });
+        console.log('Cities loaded for', province, ':', Object.keys(cities).length);
+    }
+    function loadSchools(provinceSelectId, citySelectId, schoolSelectId) {
+        var province = document.getElementById(provinceSelectId).value;
+        var city = document.getElementById(citySelectId).value;
+        var schoolSelect = document.getElementById(schoolSelectId);
+        schoolSelect.innerHTML = '<option value="">-- انتخاب مدرسه --</option>';
+        if (!province || !city) {
+            schoolSelect.innerHTML = '<option value="">-- ابتدا استان و شهر را انتخاب کنید --</option>';
+            return;
+        }
+        var schools = getSchools();
+        var filtered = schools.filter(function(school) {
+            return getProvince(school) === province && getCity(school) === city;
+        });
+        console.log('Schools found:', filtered.length);
+        if (filtered.length === 0) {
+            schoolSelect.innerHTML = '<option value="">-- مدرسه‌ای پیدا نشد --</option>';
+            return;
+        }
+        filtered
+            .sort(function(a, b) {
+                return cleanText(a.name).localeCompare(cleanText(b.name), 'fa');
+            })
+            .forEach(function(school) {
+                var option = document.createElement('option');
+                option.value = school.id;
+                option.textContent = cleanText(school.name);
+                schoolSelect.appendChild(option);
+            });
+    }
+    function showLogin() {
+        document.getElementById('loginForm').classList.remove('hidden');
+        document.getElementById('registerForm').classList.add('hidden');
+        document.getElementById('pageLogo').textContent = '👨‍🏫';
+        document.getElementById('pageTitle').textContent = 'ورود معلم';
+        document.getElementById('pageSub').textContent = 'هندسیار · سیستم مدیریت کلاس';
+        document.getElementById('errorMsg').className = 'error-msg';
+        document.getElementById('errorMsg').textContent = '';
+    }
+    function showRegister() {
+        document.getElementById('loginForm').classList.add('hidden');
+        document.getElementById('registerForm').classList.remove('hidden');
+        document.getElementById('pageLogo').textContent = '📝';
+        document.getElementById('pageTitle').textContent = 'ثبت‌نام معلم';
+        document.getElementById('pageSub').textContent = 'هندسیار · ایجاد حساب کاربری';
+        document.getElementById('errorMsg').className = 'error-msg';
+        document.getElementById('errorMsg').textContent = '';
+    }
+    async function login() {
+        const schoolId = parseInt(document.getElementById('schoolSelect').value);
+        const username = document.getElementById('username').value.trim();
+        const password = document.getElementById('password').value.trim();
+        const errorEl = document.getElementById('errorMsg');
+        if (!schoolId || !username || !password) {
+            errorEl.textContent = 'لطفاً همه فیلدها را پر کنید.';
+            errorEl.className = 'error-msg show';
+            return;
+        }
+        if (isNaN(schoolId) || schoolId <= 0) {
+            errorEl.textContent = 'لطفاً مدرسه را به درستی انتخاب کنید.';
+            errorEl.className = 'error-msg show';
+            return;
+        }
+        if (!supabaseClient) {
+            errorEl.textContent = 'خطا در اتصال به سرور. لطفاً دوباره تلاش کنید.';
+            errorEl.className = 'error-msg show';
+            return;
+        }
+        try {
+            const { data: teacher, error } = await supabaseClient
+                .from('teachers')
+                .select('*')
+                .eq('username', username)
+                .eq('school_id', schoolId)
+                .single();
+            if (error || !teacher) {
+                errorEl.textContent = 'نام کاربری، رمز عبور یا مدرسه اشتباه است.';
+                errorEl.className = 'error-msg show';
+                return;
+            }
+            if (teacher.password !== password) {
+                errorEl.textContent = 'رمز عبور اشتباه است.';
+                errorEl.className = 'error-msg show';
+                return;
+            }
+            localStorage.setItem('hendesyar_current_teacher', JSON.stringify(teacher));
+            window.location.href = 'teacher-dashboard.html';
+        } catch (err) {
+            console.error('Login error:', err);
+            errorEl.textContent = 'خطا در ارتباط با سرور.';
+            errorEl.className = 'error-msg show';
+        }
+    }
+    async function register() {
+        const fullName = document.getElementById('regFullName').value.trim();
+        const schoolId = parseInt(document.getElementById('regSchoolSelect').value);
+        const username = document.getElementById('regUsername').value.trim();
+        const password = document.getElementById('regPassword').value.trim();
+        const password2 = document.getElementById('regPassword2').value.trim();
+        const errorEl = document.getElementById('errorMsg');
+        if (!fullName || !schoolId || !username || !password || !password2) {
+            errorEl.textContent = 'لطفاً همه فیلدها را پر کنید.';
+            errorEl.className = 'error-msg show';
+            return;
+        }
+        if (isNaN(schoolId) || schoolId <= 0) {
+            errorEl.textContent = 'لطفاً مدرسه را به درستی انتخاب کنید.';
+            errorEl.className = 'error-msg show';
+            return;
+        }
+        if (password !== password2) {
+            errorEl.textContent = 'رمز عبور و تکرار آن مطابقت ندارند.';
+            errorEl.className = 'error-msg show';
+            return;
+        }
+        if (password.length < 4) {
+            errorEl.textContent = 'رمز عبور باید حداقل ۴ کاراکتر باشد.';
+            errorEl.className = 'error-msg show';
+            return;
+        }
+        if (!supabaseClient) {
+            errorEl.textContent = 'خطا در اتصال به سرور. لطفاً دوباره تلاش کنید.';
+            errorEl.className = 'error-msg show';
+            return;
+        }
+        try {
+            const { data: existing, error: checkError } = await supabaseClient
+                .from('teachers')
+                .select('username')
+                .eq('username', username)
+                .maybeSingle();
+            if (existing) {
+                errorEl.textContent = 'این نام کاربری قبلاً ثبت شده است.';
+                errorEl.className = 'error-msg show';
+                return;
+            }
+            const { data: newTeacher, error } = await supabaseClient
+                .from('teachers')
+                .insert([
+                    {
+                        username: username,
+                        password: password,
+                        name: fullName,
+                        school_id: schoolId
+                    }
+                ])
+                .select()
+                .single();
+            if (error) {
+                console.error('Supabase insert error:', error);
+                errorEl.textContent = 'خطا در ثبت‌نام: ' + (error.message || 'دوباره تلاش کنید.');
+                errorEl.className = 'error-msg show';
+                return;
+            }
+            errorEl.textContent = 'ثبت‌نام با موفقیت انجام شد! حالا وارد شوید.';
+            errorEl.className = 'error-msg show success';
+            document.getElementById('username').value = username;
+            document.getElementById('password').value = password;
+            document.getElementById('schoolSelect').value = schoolId;
+            setTimeout(function() {
+                showLogin();
+                errorEl.className = 'error-msg';
+                login();
+            }, 1500);
+        } catch (err) {
+            console.error('Register error:', err);
+            errorEl.textContent = 'خطا در ارتباط با سرور: ' + (err.message || 'دوباره تلاش کنید.');
+            errorEl.className = 'error-msg show';
+        }
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+        loadProvinces('provinceSelect');
+        loadProvinces('regProvinceSelect');
+        document.getElementById('provinceSelect').addEventListener('change', function() {
+            loadCities('provinceSelect', 'citySelect');
+        });
+        document.getElementById('citySelect').addEventListener('change', function() {
+            loadSchools('provinceSelect', 'citySelect', 'schoolSelect');
+        });
+        document.getElementById('regProvinceSelect').addEventListener('change', function() {
+            loadCities('regProvinceSelect', 'regCitySelect');
+        });
+        document.getElementById('regCitySelect').addEventListener('change', function() {
+            loadSchools('regProvinceSelect', 'regCitySelect', 'regSchoolSelect');
+        });
+        document.getElementById('password').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') login();
+        });
+        document.getElementById('regPassword2').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') register();
+        });
+        var current = localStorage.getItem('hendesyar_current_teacher');
+        if (current) {
+            try {
+                var teacher = JSON.parse(current);
+                if (schoolData && schoolData.schools) {
+                    var schoolExists = schoolData.schools.some(function(s) {
+                        return s.id === teacher.schoolId;
+                    });
+                    if (schoolExists) {
+                        window.location.href = 'teacher-dashboard.html';
+                        return;
+                    }
+                }
+            } catch(e) {}
+        }
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>🧑‍🎓 ورود دانش‌آموز | هندسیار</title>
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/dist/font-face.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/estedad-font@v3.1.0/dist/font-face.css" rel="stylesheet">
+    <script src="school-data.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        :root {
+            --bg: #0b1a2e;
+            --surface: #16283a;
+            --surface-light: #223a4e;
+            --text: #f2f5f7;
+            --text-dim: #a9b7c4;
+            --primary: #f39c12;
+            --primary-ink: #ffb347;
+            --secondary: #1abc9c;
+            --secondary-ink: #3fe0bd;
+            --success: #27ae60;
+            --danger: #e74c3c;
+            --card-border: rgba(243,156,18,0.12);
+            --card-shadow: 0 12px 30px rgba(0,0,0,0.4);
+            --radius: 28px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Estedad', 'Vazirmatn', 'Tahoma', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+        .login-container {
+            max-width: 480px;
+            width: 100%;
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: 40px 35px;
+            box-shadow: var(--card-shadow);
+            border: 1px solid var(--card-border);
+            transition: background 0.3s ease, border-color 0.3s ease;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .header .logo {
+            font-size: 3.5rem;
+            display: block;
+            margin-bottom: 8px;
+        }
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+        .header .sub {
+            font-size: 0.9rem;
+            color: var(--text-dim);
+        }
+        .form-group { margin-bottom: 16px; }
+        .form-group label {
+            display: block;
+            color: var(--text-dim);
+            font-size: 0.85rem;
+            margin-bottom: 4px;
+            font-weight: 500;
+        }
+        .form-group select, .form-group input {
+            width: 100%;
+            padding: 10px 14px;
+            border-radius: 14px;
+            border: 2px solid var(--card-border);
+            background: var(--surface-light);
+            color: var(--text);
+            font-size: 0.95rem;
+            font-family: inherit;
+            outline: none;
+            transition: 0.3s;
+        }
+        .form-group select:focus, .form-group input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(243,156,18,0.1);
+        }
+        .form-group select option { background: var(--surface); color: var(--text); }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        .form-row .form-group { margin-bottom: 0; }
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 14px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.3s;
+            margin-top: 8px;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #0b1a2e;
+        }
+        .btn-primary:hover {
+            transform: scale(1.02);
+            box-shadow: 0 6px 24px rgba(243,156,18,0.25);
+        }
+        .btn-outline {
+            background: transparent;
+            color: var(--primary-ink);
+            border: 2px solid var(--primary);
+            padding: 10px;
+            font-size: 0.95rem;
+        }
+        .btn-outline:hover { background: rgba(243,156,18,0.1); }
+        .error-msg {
+            background: rgba(231,76,60,0.12);
+            border: 1px solid var(--danger);
+            color: var(--danger);
+            padding: 10px 14px;
+            border-radius: 12px;
+            margin-top: 16px;
+            display: none;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+        .error-msg.show { display: block; }
+        .error-msg.success {
+            background: rgba(39,174,96,0.12);
+            border-color: var(--success);
+            color: var(--success);
+        }
+        .footer-links {
+            text-align: center;
+            margin-top: 18px;
+            font-size: 0.85rem;
+            color: var(--text-dim);
+        }
+        .footer-links a {
+            color: var(--primary-ink);
+            text-decoration: none;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .footer-links a:hover { text-decoration: underline; }
+        .divider {
+            height: 1px;
+            background: var(--card-border);
+            margin: 20px 0;
+        }
+        .hidden { display: none !important; }
+        @media (max-width: 480px) {
+            .login-container { padding: 28px 20px; }
+            .header .logo { font-size: 2.8rem; }
+            .header h1 { font-size: 1.4rem; }
+            .form-row { grid-template-columns: 1fr; }
+            .form-row .form-group { margin-bottom: 16px; }
+        }
+    </style>
+</head>
+<body>
+<div class="login-container">
+    <div class="header">
+        <span class="logo" id="pageLogo">🧑‍🎓</span>
+        <h1 id="pageTitle">ورود دانش‌آموز</h1>
+        <p class="sub" id="pageSub">هندسیار · مسیر یادگیری شخصی</p>
+    </div>
+    <div class="error-msg" id="errorMsg"></div>
+    <div id="loginForm">
+        <div class="form-group">
+            <label for="provinceSelect">📍 استان</label>
+            <select id="provinceSelect">
+                <option value="">-- انتخاب استان --</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="citySelect">🏙️ شهرستان</label>
+            <select id="citySelect">
+                <option value="">-- ابتدا استان را انتخاب کنید --</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="genderSelect">🧑‍🤝‍🧑 جنسیت</label>
+            <select id="genderSelect">
+                <option value="">-- انتخاب جنسیت --</option>
+                <option value="پسرانه">پسرانه</option>
+                <option value="دخترانه">دخترانه</option>
+                <option value="مختلط">مختلط</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="schoolSelect">🏫 مدرسه</label>
+            <select id="schoolSelect">
+                <option value="">-- ابتدا استان، شهر و جنسیت را انتخاب کنید --</option>
+            </select>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label for="classSelect">📚 پایه</label>
+                <select id="classSelect">
+                    <option value="">انتخاب</option>
+                    <option value="هفتم">هفتم</option>
+                    <option value="هشتم">هشتم</option>
+                    <option value="نهم">نهم</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="studentCode">🔑 کد دانش‌آموزی</label>
+                <input type="text" id="studentCode" placeholder="مثال: S1001">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="password">🔐 رمز عبور</label>
+            <input type="password" id="password" placeholder="رمز عبور خود را وارد کنید">
+        </div>
+        <button class="btn btn-primary" onclick="login()">🚪 ورود به داشبورد</button>
+        <div class="footer-links">
+            <a onclick="showReset()">🔄 فراموشی رمز عبور</a>
+        </div>
+    </div>
+    <div id="setPasswordForm" class="hidden">
+        <div style="text-align:center;font-size:1.2rem;color:var(--primary-ink);margin-bottom:16px;">🔐 تنظیم رمز عبور جدید</div>
+        <p style="color:var(--text-dim);text-align:center;margin-bottom:16px;">این اولین ورود شماست. لطفاً رمز عبور خود را تعیین کنید.</p>
+        <div class="form-group">
+            <label for="setStudentCode">🔑 کد دانش‌آموزی</label>
+            <input type="text" id="setStudentCode" readonly style="background:rgba(255,255,255,0.05);">
+        </div>
+        <div class="form-group">
+            <label for="newPassword">🔐 رمز عبور جدید</label>
+            <input type="password" id="newPassword" placeholder="حداقل ۴ کاراکتر">
+        </div>
+        <div class="form-group">
+            <label for="newPassword2">🔐 تکرار رمز عبور</label>
+            <input type="password" id="newPassword2" placeholder="دوباره وارد کنید">
+        </div>
+        <button class="btn btn-primary" onclick="setPassword()">✅ ثبت رمز عبور</button>
+        <div class="footer-links" style="margin-top:15px;">
+            ↩️ <a onclick="showLogin()">بازگشت به ورود</a>
+        </div>
+    </div>
+    <div id="resetPasswordForm" class="hidden">
+        <div style="text-align:center;font-size:1.2rem;color:var(--primary-ink);margin-bottom:16px;">🔄 بازنشانی رمز عبور</div>
+        <p style="color:var(--text-dim);text-align:center;margin-bottom:16px;">با وارد کردن کد دانش‌آموزی، رمز خود را تغییر دهید.</p>
+        <div class="form-group">
+            <label for="resetStudentCode">🔑 کد دانش‌آموزی</label>
+            <input type="text" id="resetStudentCode" placeholder="کد خود را وارد کنید">
+        </div>
+        <div class="form-group">
+            <label for="resetNewPassword">🔐 رمز عبور جدید</label>
+            <input type="password" id="resetNewPassword" placeholder="حداقل ۴ کاراکتر">
+        </div>
+        <div class="form-group">
+            <label for="resetNewPassword2">🔐 تکرار رمز عبور</label>
+            <input type="password" id="resetNewPassword2" placeholder="دوباره وارد کنید">
+        </div>
+        <button class="btn btn-primary" onclick="resetPassword()">✅ بازنشانی رمز</button>
+        <div class="footer-links" style="margin-top:15px;">
+            ↩️ <a onclick="showLogin()">بازگشت به ورود</a>
+        </div>
+    </div>
+    <div class="divider"></div>
+    <div style="text-align:center;font-size:0.85rem;color:var(--text-dim);margin-bottom:12px;">
+        👨‍🏫 معلم هستید؟
+    </div>
+    <a href="teacher-login.html" class="btn btn-outline" style="display:block;text-align:center;text-decoration:none;">
+        🚪 ورود به پنل معلم
+    </a>
+    <div class="footer-links" style="margin-top:16px;">
+        <a href="../index.html">🏠 بازگشت به صفحه اصلی</a>
+    </div>
+</div>
+<script>
+    var supabase = window.supabase.createClient(
+        'https://cvltwxxfkfckbixwhnhl.supabase.co',
+        'sb_publishable_wv9niqm-nwI8Gpfaoi_fKg_pHa-FocS'
+    );
+    function cleanText(value) {
+        if (value === null || value === undefined) return '';
+        return String(value).trim();
+    }
+    function getProvince(school) {
+        var province = cleanText(school.state_title);
+        if (province) return province;
+        if (school.state && typeof school.state === 'string') return cleanText(school.state);
+        return '';
+    }
+    function getCity(school) {
+        var city = cleanText(school.city_title);
+        if (city) return city;
+        var area = cleanText(school.area_title);
+        if (area) return area;
+        if (school.area && typeof school.area === 'string') return cleanText(school.area);
+        if (school.city && typeof school.city === 'string') return cleanText(school.city);
+        return '';
+    }
+    function getGender(school) {
+        return cleanText(school.sex_title);
+    }
+    function getSchools() {
+        if (typeof schoolData === 'undefined' || !Array.isArray(schoolData.schools)) {
+            console.error('schoolData not found!');
+            return [];
+        }
+        return schoolData.schools;
+    }
+    function loadProvinces() {
+        var select = document.getElementById('provinceSelect');
+        select.innerHTML = '<option value="">-- انتخاب استان --</option>';
+        var schools = getSchools();
+        var provinces = {};
+        schools.forEach(function(school) {
+            var province = getProvince(school);
+            if (province) {
+                provinces[province] = province;
+            }
+        });
+        Object.keys(provinces)
+            .sort(function(a, b) {
+                return a.localeCompare(b, 'fa');
+            })
+            .forEach(function(province) {
+                var option = document.createElement('option');
+                option.value = province;
+                option.textContent = province;
+                select.appendChild(option);
+            });
+        console.log('Provinces loaded:', Object.keys(provinces).length);
+    }
+    function loadCities() {
+        var province = document.getElementById('provinceSelect').value;
+        var citySelect = document.getElementById('citySelect');
+        var schoolSelect = document.getElementById('schoolSelect');
+        citySelect.innerHTML = '<option value="">-- انتخاب شهرستان --</option>';
+        schoolSelect.innerHTML = '<option value="">-- ابتدا شهر را انتخاب کنید --</option>';
+        if (!province) {
+            citySelect.innerHTML = '<option value="">-- ابتدا استان را انتخاب کنید --</option>';
+            return;
+        }
+        var schools = getSchools();
+        var cities = {};
+        schools.forEach(function(school) {
+            var schoolProvince = getProvince(school);
+            if (schoolProvince !== province) return;
+            var city = getCity(school);
+            if (city) {
+                cities[city] = city;
+            }
+        });
+        Object.keys(cities)
+            .sort(function(a, b) {
+                return a.localeCompare(b, 'fa');
+            })
+            .forEach(function(city) {
+                var option = document.createElement('option');
+                option.value = city;
+                option.textContent = city;
+                citySelect.appendChild(option);
+            });
+        console.log('Cities loaded for', province, ':', Object.keys(cities).length);
+    }
+    function loadSchools() {
+        var province = document.getElementById('provinceSelect').value;
+        var city = document.getElementById('citySelect').value;
+        var gender = document.getElementById('genderSelect').value;
+        var schoolSelect = document.getElementById('schoolSelect');
+        schoolSelect.innerHTML = '<option value="">-- انتخاب مدرسه --</option>';
+        if (!province || !city || !gender) {
+            schoolSelect.innerHTML = '<option value="">-- ابتدا استان، شهر و جنسیت را انتخاب کنید --</option>';
+            return;
+        }
+        var schools = getSchools();
+        var filtered = schools.filter(function(school) {
+            var schoolProvince = getProvince(school);
+            var schoolCity = getCity(school);
+            var schoolGender = getGender(school);
+            return (
+                schoolProvince === province &&
+                schoolCity === city &&
+                schoolGender === gender
+            );
+        });
+        console.log('Schools found:', filtered.length);
+        if (filtered.length === 0) {
+            schoolSelect.innerHTML = '<option value="">-- مدرسه‌ای پیدا نشد --</option>';
+            return;
+        }
+        filtered
+            .sort(function(a, b) {
+                return cleanText(a.name).localeCompare(cleanText(b.name), 'fa');
+            })
+            .forEach(function(school) {
+                var option = document.createElement('option');
+                option.value = school.id;
+                option.textContent = cleanText(school.name);
+                schoolSelect.appendChild(option);
+            });
+    }
+    function showLogin() {
+        document.getElementById('setPasswordForm').classList.add('hidden');
+        document.getElementById('resetPasswordForm').classList.add('hidden');
+        document.getElementById('loginForm').classList.remove('hidden');
+        document.getElementById('pageLogo').textContent = '🧑‍🎓';
+        document.getElementById('pageTitle').textContent = 'ورود دانش‌آموز';
+        document.getElementById('pageSub').textContent = 'هندسیار · مسیر یادگیری شخصی';
+        document.getElementById('errorMsg').className = 'error-msg';
+    }
+    function showReset() {
+        document.getElementById('loginForm').classList.add('hidden');
+        document.getElementById('setPasswordForm').classList.add('hidden');
+        document.getElementById('resetPasswordForm').classList.remove('hidden');
+        document.getElementById('pageLogo').textContent = '🔄';
+        document.getElementById('pageTitle').textContent = 'بازنشانی رمز';
+        document.getElementById('pageSub').textContent = 'هندسیار · رمز عبور خود را تغییر دهید';
+        document.getElementById('errorMsg').className = 'error-msg';
+    }
+    async function login() {
+        const schoolId = parseInt(document.getElementById('schoolSelect').value);
+        const studentClass = document.getElementById('classSelect').value;
+        const studentCode = document.getElementById('studentCode').value.trim();
+        const password = document.getElementById('password').value.trim();
+        const errorEl = document.getElementById('errorMsg');
+        if (!schoolId || !studentClass || !studentCode || !password) {
+            errorEl.textContent = 'لطفاً همه فیلدها را پر کنید.';
+            errorEl.className = 'error-msg show';
+            return;
+        }
+        try {
+            const { data: student, error } = await supabase
+                .from('students')
+                .select('*')
+                .eq('student_code', studentCode)
+                .eq('school_id', schoolId)
+                .single();
+            if (error || !student) {
+                errorEl.textContent = 'کد دانش‌آموزی یا مدرسه اشتباه است.';
+                errorEl.className = 'error-msg show';
+                return;
+            }
+            if (student.class !== studentClass) {
+                errorEl.textContent = 'پایه تحصیلی اشتباه است.';
+                errorEl.className = 'error-msg show';
+                return;
+            }
+            if (student.password !== password) {
+                errorEl.textContent = 'رمز عبور اشتباه است.';
+                errorEl.className = 'error-msg show';
+                return;
+            }
+            localStorage.setItem('hendesyar_current_student', JSON.stringify(student));
+            console.log('✅ اطلاعات دانش‌آموز در localStorage ذخیره شد:', student);
+            console.log('🔍 چک localStorage:', localStorage.getItem('hendesyar_current_student'));
+            window.location.href = 'student-dashboard.html';
+        } catch (err) {
+            errorEl.textContent = 'خطا در ارتباط با سرور.';
+            errorEl.className = 'error-msg show';
+            console.error(err);
+        }
+    }
+    async function setPassword() {
+        const studentCode = document.getElementById('setStudentCode').value.trim();
+        const newPass = document.getElementById('newPassword').value.trim();
+        const newPass2 = document.getElementById('newPassword2').value.trim();
+        const errorEl = document.getElementById('errorMsg');
+        if (!newPass || !newPass2) {
+            errorEl.textContent = 'لطفاً رمز عبور را وارد کنید.';
+            errorEl.className = 'error-msg show';
+            return;
+        }
+        if (newPass !== newPass2) {
+            errorEl.textContent = 'رمز عبور و تکرار آن مطابقت ندارند.';
+            errorEl.className = 'error-msg show';
+            return;
+        }
+        if (newPass.length < 4) {
+            errorEl.textContent = 'رمز عبور باید حداقل ۴ کاراکتر باشد.';
+            errorEl.className = 'error-msg show';
+            return;
+        }
+        try {
+            const { error } = await supabase
+                .from('students')
+                .update({ password: newPass })
+                .eq('student_code', studentCode);
+            if (error) {
+                errorEl.textContent = 'خطا در تنظیم رمز عبور.';
+                errorEl.className = 'error-msg show';
+                return;
+            }
+            errorEl.textContent = 'رمز عبور با موفقیت تنظیم شد! حالا وارد شوید.';
+            errorEl.className = 'error-msg show success';
+            setTimeout(function() {
+                document.getElementById('setPasswordForm').classList.add('hidden');
+                document.getElementById('loginForm').classList.remove('hidden');
+                document.getElementById('password').value = newPass;
+                document.getElementById('studentCode').value = studentCode;
+                errorEl.className = 'error-msg';
+                login();
+            }, 1500);
+        } catch (err) {
+            errorEl.textContent = 'خطا در ارتباط با سرور.';
+            errorEl.className = 'error-msg show';
+            console.error(err);
+        }
+    }
+    async function resetPassword() {
+        const studentCode = document.getElementById('resetStudentCode').value.trim();
+        const newPass = document.getElementById('resetNewPassword').value.trim();
+        const newPass2 = document.getElementById('resetNewPassword2').value.trim();
+        const errorEl = document.getElementById('errorMsg');
+        if (!studentCode || !newPass || !newPass2) {
+            errorEl.textContent = 'لطفاً همه فیلدها را پر کنید.';
+            errorEl.className = 'error-msg show';
+            return;
+        }
+        if (newPass !== newPass2) {
+            errorEl.textContent = 'رمز عبور و تکرار آن مطابقت ندارند.';
+            errorEl.className = 'error-msg show';
+            return;
+        }
+        if (newPass.length < 4) {
+            errorEl.textContent = 'رمز عبور باید حداقل ۴ کاراکتر باشد.';
+            errorEl.className = 'error-msg show';
+            return;
+        }
+        try {
+            const { data: student, error: findError } = await supabase
+                .from('students')
+                .select('*')
+                .eq('student_code', studentCode)
+                .single();
+            if (findError || !student) {
+                errorEl.textContent = 'کد دانش‌آموزی یافت نشد. با معلم خود تماس بگیرید.';
+                errorEl.className = 'error-msg show';
+                return;
+            }
+            const { error } = await supabase
+                .from('students')
+                .update({ password: newPass })
+                .eq('student_code', studentCode);
+            if (error) {
+                errorEl.textContent = 'خطا در بازنشانی رمز عبور.';
+                errorEl.className = 'error-msg show';
+                return;
+            }
+            errorEl.textContent = 'رمز عبور با موفقیت بازنشانی شد! حالا وارد شوید.';
+            errorEl.className = 'error-msg show success';
+            setTimeout(function() {
+                document.getElementById('resetPasswordForm').classList.add('hidden');
+                document.getElementById('loginForm').classList.remove('hidden');
+                document.getElementById('password').value = newPass;
+                document.getElementById('studentCode').value = studentCode;
+                errorEl.className = 'error-msg';
+                login();
+            }, 1500);
+        } catch (err) {
+            errorEl.textContent = 'خطا در ارتباط با سرور.';
+            errorEl.className = 'error-msg show';
+            console.error(err);
+        }
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+        loadProvinces();
+        document.getElementById('provinceSelect').addEventListener('change', loadCities);
+        document.getElementById('citySelect').addEventListener('change', loadSchools);
+        document.getElementById('genderSelect').addEventListener('change', loadSchools);
+        document.getElementById('password').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') login();
+        });
+        document.getElementById('newPassword2').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') setPassword();
+        });
+        document.getElementById('resetNewPassword2').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') resetPassword();
+        });
+    });
+</script>
+</body>
+</html>

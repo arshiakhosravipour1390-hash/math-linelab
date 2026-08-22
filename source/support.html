@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>🛠️ پشتیبانی | هندسیار</title>
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/dist/font-face.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/estedad-font@v3.1.0/dist/font-face.css" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0b1a2e;
+            --surface: #16283a;
+            --surface-light: #223a4e;
+            --text: #f2f5f7;
+            --text-dim: #a9b7c4;
+            --primary: #f39c12;
+            --secondary: #1abc9c;
+            --success: #27ae60;
+            --danger: #e74c3c;
+            --card-border: rgba(243, 156, 18, 0.12);
+            --card-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+            --radius: 28px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Estedad', 'Vazirmatn', 'Tahoma', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { max-width: 1000px; margin: 0 auto; }
+        header {
+            display: flex; justify-content: space-between; align-items: center;
+            flex-wrap: wrap; gap: 12px;
+            padding: 16px 24px;
+            background: var(--surface);
+            border-radius: var(--radius);
+            border: 1px solid var(--card-border);
+            margin-bottom: 25px;
+            box-shadow: var(--card-shadow);
+        }
+        header .left h1 {
+            color: var(--primary); font-size: 1.6rem;
+            display: flex; align-items: center; gap: 10px;
+        }
+        header .left .sub { color: var(--text-dim); font-size: 0.85rem; }
+        header .left .hendesyar {
+            font-weight: 700;
+            color: var(--primary-ink);
+        }
+        .back-link {
+            display: inline-block; color: var(--text-dim);
+            text-decoration: none; font-size: 0.85rem; transition: 0.3s;
+        }
+        .back-link:hover { color: var(--primary); }
+        .tabs {
+            display: flex; gap: 4px; background: var(--surface);
+            border-radius: 16px; padding: 4px; margin-bottom: 25px;
+            border: 1px solid var(--card-border); flex-wrap: wrap;
+        }
+        .tab-btn {
+            flex: 1; padding: 10px 16px; border: none; border-radius: 12px;
+            background: transparent; color: var(--text-dim);
+            font-family: inherit; font-size: 0.9rem; font-weight: 600;
+            cursor: pointer; transition: 0.3s; min-width: 100px;
+        }
+        .tab-btn:hover { color: var(--text); }
+        .tab-btn.active {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #0b1a2e;
+        }
+        .tab-content { display: none; animation: fadeIn 0.3s ease; }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .faq-item {
+            background: var(--surface); border-radius: 16px;
+            margin-bottom: 12px; border: 1px solid var(--card-border);
+            overflow: hidden;
+        }
+        .faq-question {
+            padding: 16px 20px; cursor: pointer; font-weight: 600;
+            display: flex; justify-content: space-between; align-items: center;
+            transition: 0.3s; color: var(--text);
+        }
+        .faq-question:hover { background: var(--surface-light); }
+        .faq-question .icon { transition: 0.3s; font-size: 1.2rem; }
+        .faq-question.open .icon { transform: rotate(180deg); }
+        .faq-answer {
+            padding: 0 20px 20px; color: var(--text-dim);
+            line-height: 1.8; display: none;
+        }
+        .faq-answer.show { display: block; }
+        .faq-answer .highlight { color: var(--primary); font-weight: 600; }
+        .messenger-section {
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: 35px 30px;
+            border: 1px solid var(--card-border);
+            text-align: center;
+        }
+        .messenger-section h2 {
+            color: var(--primary-ink);
+            font-size: 1.4rem;
+            margin-bottom: 6px;
+        }
+        .messenger-section .sub {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+        .messenger-section .main-id {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--primary);
+            font-family: 'JetBrains Mono', monospace;
+            margin: 10px 0 24px;
+            background: rgba(243, 156, 18, 0.06);
+            padding: 8px 28px;
+            border-radius: 30px;
+            display: inline-block;
+            border: 2px dashed var(--primary);
+        }
+        .messenger-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .messenger-item {
+            background: var(--surface-light);
+            border-radius: 20px;
+            padding: 24px 16px;
+            border: 2px solid var(--card-border);
+            transition: 0.3s;
+            cursor: pointer;
+            text-decoration: none;
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        .messenger-item:hover {
+            border-color: var(--primary);
+            transform: translateY(-6px);
+            box-shadow: 0 10px 40px rgba(243, 156, 18, 0.15);
+        }
+        .messenger-item .logo {
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 16px;
+            overflow: hidden;
+            background: var(--surface);
+        }
+        .messenger-item .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        .messenger-item .logo.telegram {
+            background: #0088cc;
+            padding: 12px;
+        }
+        .messenger-item .logo.soroush {
+            background: #00a859;
+            padding: 12px;
+        }
+        .messenger-item .logo.eitaa {
+            background: #e74c3c;
+            padding: 8px;
+        }
+        .messenger-item .name {
+            font-weight: 700;
+            font-size: 1rem;
+        }
+        .messenger-item .id {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .messenger-item .badge {
+            background: var(--primary);
+            color: #0b1a2e;
+            padding: 2px 14px;
+            border-radius: 30px;
+            font-size: 0.6rem;
+            font-weight: 700;
+        }
+        .note-box {
+            background: rgba(243, 156, 18, 0.06);
+            border: 1px solid rgba(243, 156, 18, 0.12);
+            border-radius: 12px;
+            padding: 12px 16px;
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            text-align: center;
+            margin-top: 20px;
+        }
+        .note-box .highlight {
+            color: var(--primary);
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        @media (max-width: 700px) {
+            .messenger-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+            }
+        }
+        @media (max-width: 480px) {
+            .messenger-grid { grid-template-columns: 1fr; }
+            header .left h1 { font-size: 1.2rem; }
+            .tab-btn { font-size: 0.75rem; padding: 8px 10px; min-width: 60px; }
+            .messenger-section .main-id { font-size: 1.4rem; padding: 6px 16px; }
+            .messenger-item .logo { width: 56px; height: 56px; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header>
+        <div class="left">
+            <h1>🛠️ پشتیبانی <span class="hendesyar">هندسیار</span></h1>
+            <div class="sub">ما اینجا هستیم تا به شما کمک کنیم</div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+            <a href="../index.html" class="back-link">🏠 صفحه اصلی</a>
+        </div>
+    </header>
+    <div class="tabs">
+        <button class="tab-btn active" data-tab="faq">❓ سوالات متداول</button>
+        <button class="tab-btn" data-tab="contact">📱 تماس با پشتیبانی</button>
+    </div>
+    <div class="tab-content active" id="tab-faq">
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFAQ(this)">
+                <span>🏫 مدرسه‌ام در لیست نیست! چکار کنم؟</span>
+                <span class="icon">▼</span>
+            </div>
+            <div class="faq-answer">
+                از طریق بخش <strong class="highlight">"تماس با پشتیبانی"</strong> یا ارسال پیام به <strong class="highlight">@Hendesyar</strong> در پیام‌رسان‌ها، درخواست اضافه کردن مدرسه را ثبت کنید.
+                <br><br>
+                📝 اطلاعات مورد نیاز:
+                <ul style="padding-right:20px;margin-top:6px;">
+                    <li>🔹 نام کامل مدرسه</li>
+                    <li>🔹 استان و شهرستان</li>
+                    <li>🔹 مقطع تحصیلی</li>
+                    <li>🔹 جنسیت</li>
+                </ul>
+            </div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFAQ(this)">
+                <span>🔑 چگونه وارد سیستم شوم؟</span>
+                <span class="icon">▼</span>
+            </div>
+            <div class="faq-answer">
+                روی دکمه "ورود دانش‌آموز" یا "ورود معلم" در صفحه اصلی کلیک کنید.
+            </div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFAQ(this)">
+                <span>🔄 چگونه رمز عبور خود را تغییر دهم؟</span>
+                <span class="icon">▼</span>
+            </div>
+            <div class="faq-answer">
+                در صفحه ورود، روی "بازنشانی رمز عبور" کلیک کنید.
+            </div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFAQ(this)">
+                <span>📚 چه بخش‌هایی در هندسیار وجود دارد؟</span>
+                <span class="icon">▼</span>
+            </div>
+            <div class="faq-answer">
+                مثلث زنده، مسیر یادگیری ۵ مرحله‌ای، چت‌بات هوشمند، تمرین‌های تعاملی هم‌نهشتی و تشابه، گواهی تکمیل مسیر.
+            </div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFAQ(this)">
+                <span>👨‍🏫 معلمان چه قابلیت‌هایی دارند؟</span>
+                <span class="icon">▼</span>
+            </div>
+            <div class="faq-answer">
+                ثبت دانش‌آموز، مشاهده پیشرفت، دریافت گزارش، شناسایی نقاط ضعف.
+            </div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFAQ(this)">
+                <span>🐛 چگونه یک باگ یا مشکل را گزارش دهم؟</span>
+                <span class="icon">▼</span>
+            </div>
+            <div class="faq-answer">
+                از طریق بخش <strong class="highlight">"تماس با پشتیبانی"</strong> در این صفحه یا ارسال پیام به <strong class="highlight">@Hendesyar</strong> در پیام‌رسان‌ها.
+            </div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFAQ(this)">
+                <span>📱 آیا هندسیار روی موبایل کار می‌کند؟</span>
+                <span class="icon">▼</span>
+            </div>
+            <div class="faq-answer">
+                بله! هندسیار کاملاً ریسپانسیو طراحی شده و روی تمام دستگاه‌ها کار می‌کند.
+            </div>
+        </div>
+    </div>
+    <div class="tab-content" id="tab-contact">
+        <div class="messenger-section">
+            <h2>📱 از طریق پیام‌رسان‌ها با ما در ارتباط باشید</h2>
+            <div class="sub">همیشه پاسخگوی شما هستیم</div>
+            <div class="main-id">@Hendesyar</div>
+            <div class="messenger-grid">
+                <a href="https://t.me/Hendesyar" target="_blank" class="messenger-item">
+                    <div class="logo telegram">
+                        <svg viewBox="0 0 24 24" fill="white">
+                            <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+                        </svg>
+                    </div>
+                    <span class="name">تلگرام</span>
+                    <span class="id">@Hendesyar</span>
+                    <span class="badge">پاسخگویی سریع</span>
+                </a>
+                <a href="https://sapp.ir/Hendesyar" target="_blank" class="messenger-item">
+                    <div class="logo soroush">
+                        <img src="https://sapp.ir/assets/images/SplusLogo.svg" alt="سروش" loading="lazy">
+                    </div>
+                    <span class="name">سروش</span>
+                    <span class="id">@Hendesyar</span>
+                    <span class="badge">پاسخگویی سریع</span>
+                </a>
+                <a href="https://eitaa.com/Hendesyar" target="_blank" class="messenger-item">
+                    <div class="logo eitaa">
+                        <img src="https://eitaa.com/assets/images/logos/site-logo.png" alt="ایتا" loading="lazy">
+                    </div>
+                    <span class="name">ایتا</span>
+                    <span class="id">@Hendesyar</span>
+                    <span class="badge">پاسخگویی سریع</span>
+                </a>
+            </div>
+            <div class="note-box">
+                💡 با کلیک روی هر کدام، مستقیماً به صفحه چت آن پیام‌رسان هدایت می‌شوید.
+                <br>
+                <span style="font-size:0.8rem;">آیدی ما در همه پیام‌رسان‌ها: <strong class="highlight">@Hendesyar</strong></span>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            document.getElementById('tab-' + this.dataset.tab).classList.add('active');
+        });
+    });
+    function toggleFAQ(el) {
+        el.classList.toggle('open');
+        const answer = el.nextElementSibling;
+        answer.classList.toggle('show');
+    }
+</script>
+</body>
+</html>
